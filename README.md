@@ -12,27 +12,30 @@ $ git clone https://github.com/cloudfoundry/bosh-deployment
 # Create a directory to keep Director deployment
 $ mkdir bosh-1 && cd bosh-1
 
+# Create a common `vars.yml` file
+az: us-east-1b
+default_key_name: bosh
+default_security_groups: [bosh]
+subnet_id: subnet-...
+internal_cidr: 10.0.0.0/24
+internal_gw: 10.0.0.1
+internal_ip: 10.0.0.6
+
 # Deploy a Director -- ./creds.yml is generated automatically
 $ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
   --state ./state.json \
   --ops-file ~/workspace/bosh-deployment/aws/cpi.yml \
   --vars-store ./creds.yml \
+  -l ./vars.yml \
   -v access_key_id=... \
   -v secret_access_key=... \
   -v region=us-east-1 \
-  -v az=us-east-1b \
-  -v default_key_name=bosh \
-  -v default_security_groups=[bosh] \
-  -v subnet_id=subnet-... \
   -v director_name=$(basename $PWD) \
-  -v internal_cidr=10.0.0.0/24 \
-  -v internal_gw=10.0.0.1 \
-  -v internal_ip=10.0.0.6 \
   -v private_key=...
 
 # Alias deployed Director
 $ bosh alias-env bosh-1 \
-  -e `bosh int ./creds.yml --path /internal_ip` \
+  -e `bosh int ./vars.yml --path /internal_ip` \
   --ca-cert <(bosh int ./creds.yml --path /director_ssl/ca)
 
 # Log in to the Director
@@ -40,7 +43,7 @@ $ export BOSH_USER=admin
 $ export BOSH_PASSWORD=`bosh int ./creds.yml --path /admin_password`
 
 # Update cloud config -- single az
-$ bosh -e bosh-1 update-cloud-config ~/workspace/bosh-deployment/aws/cloud-config.yml -l ./creds.yml
+$ bosh -e bosh-1 update-cloud-config ~/workspace/bosh-deployment/aws/cloud-config.yml -l ./vars.yml
 
 # Upload specific stemcell
 $ bosh -e bosh-1 upload-stemcell https://...
