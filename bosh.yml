@@ -22,7 +22,7 @@ networks:
   subnets:
   - range: ((internal_cidr))
     gateway: ((internal_gw))
-    static: [((internal_ip))]
+    static: [((internal_director_ip))]
     dns: [8.8.8.8]
 
 instance_groups:
@@ -38,7 +38,7 @@ instance_groups:
   persistent_disk_pool: disks
   networks:
   - name: private
-    static_ips: [((internal_ip))]
+    static_ips: [((internal_director_ip))]
   properties:
     nats:
       address: 127.0.0.1
@@ -52,7 +52,7 @@ instance_groups:
       database: bosh
       adapter: postgres
     blobstore:
-      address: ((internal_ip))
+      address: ((internal_director_ip))
       port: 25250
       provider: dav
       director:
@@ -93,10 +93,10 @@ instance_groups:
     - 0.pool.ntp.org
     - 1.pool.ntp.org
     agent:
-      mbus: nats://nats:((nats_password))@((internal_ip)):4222
+      mbus: nats://nats:((nats_password))@((internal_director_ip)):4222
 
 cloud_provider:
-  mbus: https://mbus:((mbus_bootstrap_password))@((internal_ip)):6868
+  mbus: https://mbus:((mbus_bootstrap_password))@((internal_director_ip)):6868
   properties:
     agent: {mbus: "https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868"}
     blobstore: {provider: local, path: /var/vcap/micro_bosh/data/cache}
@@ -125,5 +125,5 @@ variables:
   type: certificate
   options:
     ca: default_ca
-    common_name: ((internal_ip))
-    alternative_names: [((internal_ip))]
+    common_name: ((internal_director_ip))
+    alternative_names: [((internal_director_ip))]

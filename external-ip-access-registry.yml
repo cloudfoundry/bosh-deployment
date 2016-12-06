@@ -1,0 +1,3 @@
+- type: replace
+  path: /cloud_provider/ssh_tunnel/host
+  value: ((external_director_ip))
