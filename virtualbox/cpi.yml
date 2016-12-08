@@ -3,6 +3,7 @@
   path: /releases/-
   value:
     name: bosh-virtualbox-cpi
+    version: 0.0.2
     url: https://bosh.io/d/github.com/cppforlife/bosh-virtualbox-cpi-release?v=0.0.2
     sha1: 807fba203ca71bea7b686ce1301d98ee29885fcc
 

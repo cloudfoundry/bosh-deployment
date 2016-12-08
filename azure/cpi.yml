@@ -3,6 +3,7 @@
   path: /releases/-
   value:
     name: bosh-azure-cpi
+    version: 20
     url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-azure-cpi-release?v=20
     sha1: fb0180c685714d064b5a467eb6f2b34388fadf0a
 
