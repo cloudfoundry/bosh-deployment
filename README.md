@@ -27,7 +27,7 @@ $ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
   -v director_name=$(basename $PWD) \
   -v internal_cidr=10.0.0.0/24 \
   -v internal_gw=10.0.0.1 \
-  -v internal_ip=10.0.0.6 \
+  -v internal_director_ip=10.0.0.6 \
   --var-file private_key=~/Downloads/bosh.pem
 
 # Alias deployed Director
