@@ -40,6 +40,12 @@
 
     Note: Above assumes that you have configured Host-only network 'vboxnet0' with 192.168.50.0/24 and NAT network 'NatNetwork' with DHCP enabled.
 
+    To create the 'NatNetwork', run the command below. This is assuming 'NatNetwork' will be on the 10.0.2.0/24 subnet.
+
+    ```
+    VBoxManage natnetwork add --netname NatNetwork --network 10.0.2.0/24 --dhcp on
+    ```
+
 1. Alias and log into the Director
 
     ```
