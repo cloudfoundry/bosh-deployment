@@ -1,4 +1,5 @@
-# CredHub release file location must be provided 
+# Assumes CredHub v0.4.0+
+# CredHub release file location must be provided
 - type: replace
   path: /releases/-
   value:
@@ -26,8 +27,13 @@
           database: credhub
         tls: ((credhub_tls))
         encryption:
-          provider: dev_internal
-          dev_key: ((credhub_dev_key))
+          providers:
+          - name: internal
+            type: dev_internal
+          keys:
+          - provider_name: internal
+            dev_key: ((credhub_dev_key))
+            active: true
 
 - type: replace
   path: /instance_groups/name=bosh/properties/postgres/additional_databases?/-
@@ -58,7 +64,7 @@
     secret: ((uaa_clients_director_to_credhub))
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/credhub?
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/credhub_cli?
   value:
     override: true
     authorized-grant-types: password,refresh_token
