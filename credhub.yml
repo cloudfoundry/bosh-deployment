@@ -14,7 +14,7 @@
     release: credhub
     properties:
       credhub: 
-        user_management:
+        authentication:
           uaa:
             url: "https://((internal_ip)):8443"
             verification_key: ((uaa_jwt_signing_key.public_key))
