@@ -1,0 +1,26 @@
+---
+- type: remove
+  path: /releases/name=bosh-kubernetes-cpi/url
+
+- type: replace
+  path: /releases/name=bosh-kubernetes-cpi/version?
+  value: latest
+
+- type: replace
+  path: /instance_groups/name=bosh/vm_extensions?/-
+  value: bosh
+
+- type: replace
+  path: /stemcells/alias=default/version
+  value: latest
+
+- type: remove
+  path: /releases/name=bosh/url
+
+- type: replace
+  path: /releases/name=bosh/version
+  value: latest
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/port
+  value: 31250

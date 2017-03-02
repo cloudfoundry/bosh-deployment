@@ -1,0 +1,9 @@
+---
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/port
+  value: ((port_blobstore))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/mbus
+  value: nats://nats:((nats_password))@((internal_ip)):((port_nats))

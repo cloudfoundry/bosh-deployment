@@ -1,0 +1,39 @@
+---
+
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=ssh-gateway/nodePort
+  value:
+    ((port_ssh_gateway))
+
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=bosh-init/nodePort
+  value:
+    ((port_bosh_init))
+- type: replace
+  path: /cloud_provider/mbus
+  value: https://mbus:((mbus_bootstrap_password))@((internal_ip)):((port_bosh_init))
+
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=nats/nodePort
+  value:
+    ((port_nats))
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/mbus
+  value: nats://nats:((nats_password))@((internal_ip)):((port_nats))
+
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=blobstore/port
+  value:
+    ((port_blobstore))
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=blobstore/nodePort
+  value:
+    ((port_blobstore))
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/port
+  value: ((port_blobstore))
+
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=director/nodePort
+  value:
+    ((port_director))

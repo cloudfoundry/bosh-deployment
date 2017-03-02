@@ -1,0 +1,25 @@
+---
+
+- type: replace
+  path: /vm_extensions/name=bosh/cloud_properties/services/name=inner-bosh/ports/name=ssh-gateway/nodePort
+  value:
+    ((port_ssh_gateway))
+
+- type: replace
+  path: /vm_extensions/name=bosh/cloud_properties/services/name=inner-bosh/ports/name=nats/nodePort
+  value:
+    ((port_nats))
+
+- type: replace
+  path: /vm_extensions/name=bosh/cloud_properties/services/name=inner-bosh/ports/name=blobstore/port
+  value:
+    ((port_blobstore))
+- type: replace
+  path: /vm_extensions/name=bosh/cloud_properties/services/name=inner-bosh/ports/name=blobstore/nodePort
+  value:
+    ((port_blobstore))
+
+- type: replace
+  path: /vm_extensions/name=bosh/cloud_properties/services/name=inner-bosh/ports/name=director/nodePort
+  value:
+    ((port_director))
