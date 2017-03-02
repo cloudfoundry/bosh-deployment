@@ -470,3 +470,47 @@ bosh create-env bosh.yml \
 
 echo "- Docker (cloud-config)"
 bosh update-cloud-config docker/cloud-config.yml -v network=net3
+
+echo "- Kubernetes"
+bosh create-env bosh.yml \
+  -o kubernetes/cpi.yml \
+  --state=$vars_store_prefix \
+  --vars-store $(mktemp ${vars_store_prefix}.XXXXXX) \
+  -v director_name=test \
+  -v client_cert=test \
+  -v client_key=test \
+  -v internal_ip=test \
+  -v kube_api_server=test \
+  -v kube_namespace=test \
+  -v vcap_public_key=test
+
+echo "- Kubernetes (with node-port)"
+bosh create-env bosh.yml \
+  -o kubernetes/cpi.yml \
+  --state=$vars_store_prefix \
+  --vars-store $(mktemp ${vars_store_prefix}.XXXXXX) \
+  -v director_name=test \
+  -v client_cert=test \
+  -v client_key=test \
+  -v internal_ip=test \
+  -v kube_api_server=test \
+  -v kube_namespace=test \
+  -v vcap_public_key=test \
+  -o kubernetes/node-port.yml \
+  -v node_ip=test \
+  -v create_env_port=test
+
+echo "- Kubernetes (with loadbalancer)"
+bosh create-env bosh.yml \
+  -o kubernetes/cpi.yml \
+  --state=$vars_store_prefix \
+  --vars-store $(mktemp ${vars_store_prefix}.XXXXXX) \
+  -v director_name=test \
+  -v client_cert=test \
+  -v client_key=test \
+  -v internal_ip=test \
+  -v kube_api_server=test \
+  -v kube_namespace=test \
+  -v vcap_public_key=test \
+  -o kubernetes/loadbalancer.yml \
+  -v loadbalancer_ip=test

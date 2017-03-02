@@ -1,0 +1,11 @@
+# Use local bosh release -- useful for testing
+
+- type: replace
+  path: /releases/name=bosh-kubernetes-cpi/url?
+  value: file://((cpi_release_tarball))
+
+- type: remove
+  path: /releases/name=bosh-kubernetes-cpi/sha1?
+
+- type: remove
+  path: /releases/name=bosh-kubernetes-cpi/version?

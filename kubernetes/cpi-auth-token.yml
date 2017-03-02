@@ -1,0 +1,6 @@
+---
+
+- type: replace
+  path: /cloud_provider/properties/kubernetes/access/credentials
+  value:
+    token: ((kube_token))

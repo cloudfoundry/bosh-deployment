@@ -1,0 +1,16 @@
+- type: replace
+  path: /cloud_provider/mbus
+  value: https://mbus:((mbus_bootstrap_password))@((node_ip)):((create_env_port))
+
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties?/services?/-
+  value:
+    name: bosh-external
+
+- type: replace
+  path: /variables/name=mbus_bootstrap_ssl/options/alternative_names/-
+  value: ((node_ip))
+
+- type: replace
+  path: /variables/name=director_ssl/options/alternative_names/-
+  value: ((node_ip))

@@ -1,0 +1,70 @@
+---
+- type: replace
+  path: /releases/-
+  value:
+    name: bosh-kubernetes-cpi
+    url: http://bosh.io/d/github.com/SAP/bosh-kubernetes-cpi-release?v=6
+    sha1: da1f342a181220240404511db7b17e5412ad3f11
+
+- type: replace
+  path: /resource_pools/name=vms/stemcell?
+  value:
+    url: https://s3.eu-central-1.amazonaws.com/bosh-kubernetes-cpi-stemcells/bosh-stemcell-3445.11-kubernetes-ubuntu-trusty-go_agent.tgz
+    sha1: bd8ffffb060d1fae7009d5758289aec31f19865b
+
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties?
+  value:
+    services:
+      - name: bosh-internal
+
+- type: replace
+  path: /resource_pools/name=vms/env?/bosh?/authorized_keys?/-
+  value:
+    ((vcap_public_key))
+
+- type: remove
+  path: /instance_groups/name=bosh/networks/name=default/static_ips
+
+- type: replace
+  path: /networks/name=default
+  value:
+    name: default
+    type: dynamic
+
+# Add CPI job
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value: &cpi_job
+    name: kubernetes_cpi
+    release: bosh-kubernetes-cpi
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/cpi_job?
+  value: kubernetes_cpi
+
+- type: replace
+  path: /cloud_provider/template?
+  value: *cpi_job
+
+- type: replace
+  path: /disk_pools/name=disks/disk_size
+  value: 10_000
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/kubernetes?
+  value:
+    access:
+      server: ((kube_api_server))
+      namespace: ((kube_namespace))
+      credentials: ServiceAccount
+
+- type: replace
+  path: /cloud_provider/properties/kubernetes?
+  value:
+    access:
+      server: ((kube_api_server))
+      namespace: ((kube_namespace))
+      credentials:
+        certificate: ((client_cert))
+        private_key: ((client_key))

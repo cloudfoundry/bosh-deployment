@@ -1,0 +1,8 @@
+# Use local bosh release -- useful for testing
+
+- type: replace
+  path: /resource_pools/name=vms/stemcell?/url
+  value: file://((stemcell_tarball))
+
+- type: remove
+  path: /resource_pools/name=vms/stemcell?/sha1
