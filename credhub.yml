@@ -1,12 +1,12 @@
-# Assumes CredHub v0.4.0+
-# CredHub release file location must be provided
+# A chosen encryption key value must be provided in the form of 32 hex characters for variable 'credhub_dev_key' 
 - type: replace
   path: /releases/-
   value:
     name: credhub
-    url: ((file_path_to_credhub_release))
+    url: https://github.com/pivotal-cf/credhub-release/releases/download/0.5.1/credhub-0.5.1.tgz
+    version: 0.5.1
+    sha1: fcfa37835c813b175defe01d8fae7d57e7ef669c
 
-# A chosen dev_key value must be provided in the form of 32 hex characters 
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
   value:
