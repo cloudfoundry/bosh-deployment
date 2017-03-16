@@ -37,7 +37,7 @@
             nodePort: 30555
 
 - type: replace
-  path: /resource_pools/name=vms/env/bosh/authorized_keys?/-
+  path: /resource_pools/name=vms/env?/bosh?/authorized_keys?/-
   value:
     ((vcap_public_key))
 

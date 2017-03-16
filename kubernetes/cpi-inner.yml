@@ -22,5 +22,10 @@
   value: latest
 
 - type: replace
+  path: /instance_groups/name=bosh/env?/bosh?/authorized_keys?/-
+  value:
+    ((vcap_public_key))
+
+- type: replace
   path: /instance_groups/name=bosh/properties/blobstore/port
   value: 31250
