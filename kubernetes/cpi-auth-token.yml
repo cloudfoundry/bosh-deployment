@@ -3,5 +3,4 @@
 - type: replace
   path: /cloud_provider/properties/kubernetes/cluster-access/credentials
   value:
-    credentials:
-      token: ((kube_token))
+    token: ((kube_token))
