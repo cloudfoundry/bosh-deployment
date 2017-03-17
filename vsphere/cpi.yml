@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: bosh-vsphere-cpi
-    version: 34
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-vsphere-cpi-release?v=34
-    sha1: 6a4e6d05a4b50c3d4fa53bda1d5d552f5899f1a6
+    version: 38
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-vsphere-cpi-release?v=38
+    sha1: cd964bb1858d6533efb1192b00afac76e80cb602
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
@@ -48,14 +48,22 @@
     password: ((vcenter_password))
     datacenters:
     - name: ((vcenter_dc))
-      vm_folder: ((vcenter_vms))
-      template_folder: ((vcenter_templates))
-      datastore_pattern: ((vcenter_ds))
-      persistent_datastore_pattern: ((vcenter_ds))
-      disk_path: ((vcenter_disks))
-      clusters:
-      - ((vcenter_cluster)): {}
+      vm_folder: ((vcenter_vm_folder))
+      template_folder: ((vcenter_templates_folder))
+      datastore_pattern: ((vcenter_ds_ephemeral))
+      persistent_datastore_pattern: ((vcenter_ds_persistent))
+      disk_path: ((vcenter_disk_path))
+      clusters: ((vcenter_cluster))
 
 - type: replace
   path: /cloud_provider/properties/vcenter?
   value: *vcenter
+
+- type: replace
+  path: /cloud_provider/properties/vcenter/datacenters/0/clusters?
+  value: ((vcenter_bosh_director_cluster))
+
+- type: replace
+  path: /cloud_provider/properties/vcenter/datacenters/0/datastore_pattern?
+  value: ((vcenter_ds_persistent))
+

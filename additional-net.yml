@@ -1,0 +1,22 @@
+- type: replace
+  path: /networks/-
+  value:
+    name: ((secondary_net_name))
+    type: manual
+    subnets:
+    - range: ((secondary_net_range))
+      gateway: ((secondary_net_gateway))
+      dns: ((secondary_net_dns))
+      cloud_properties: ((secondary_net_cloud_properties))
+      static: [((secondary_net_ip))]
+
+- type: replace
+  path: /instance_groups/name=bosh/networks/0/default?
+  value: [dns, gateway]
+
+- type: replace
+  path: /instance_groups/name=bosh/networks/-
+  value:
+    name: ((secondary_net_name))
+    static_ips: [((secondary_net_ip))]
+
