@@ -3,8 +3,8 @@
   path: /releases/-
   value:
     name: bosh-kubernetes-cpi
-    url: https://github.com/SAP/bosh-kubernetes-cpi-release/releases/download/v3-alpha/bosh-kubernetes-cpi-3-alpha.tgz
-    sha1: 5124702e611bb22181ed348d80324d3244424105
+    url: https://github.com/SAP/bosh-kubernetes-cpi-release/releases/download/v4-alpha/bosh-kubernetes-cpi-4-alpha.tgz
+    sha1: 989d9dbe8f3514660a49a3d28d24342636ef68b4
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
@@ -22,19 +22,19 @@
         ports:
           - name: ssh-gateway
             port: 22
-            nodePort: 30022
+            node_port: 30022
           - name: bosh-init
             port: 6868
-            nodePort: 30068
+            node_port: 30068
           - name: nats
             port: 4222
-            nodePort: 30042
+            node_port: 30042
           - name: blobstore
             port: 30250
-            nodePort: 30250
+            node_port: 30250
           - name: director
             port: 25555
-            nodePort: 30555
+            node_port: 30555
 
 - type: replace
   path: /resource_pools/name=vms/env?/bosh?/authorized_keys?/-
@@ -82,14 +82,14 @@
 - type: replace
   path: /instance_groups/name=bosh/properties/kubernetes?
   value:
-    cluster-access: ServiceAccount
+    access: ServiceAccount
 
 - type: replace
   path: /cloud_provider/properties/kubernetes?
   value:
-    cluster-access:
+    access:
       server: ((kube_api_server))
       namespace: ((kube_namespace))
       credentials:
         certificate: ((client_cert))
-        private-key: ((client_key))
+        private_key: ((client_key))

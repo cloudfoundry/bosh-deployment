@@ -8,13 +8,13 @@
         ports:
           - name: ssh-gateway
             port: 22
-            nodePort: 31022
+            node_port: 31022
           - name: nats
             port: 4222
-            nodePort: 31042
+            node_port: 31042
           - name: blobstore
             port: 31250
-            nodePort: 31250
+            node_port: 31250
           - name: director
             port: 25555
-            nodePort: 31555
+            node_port: 31555

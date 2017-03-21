@@ -1,12 +1,12 @@
 ---
 
 - type: replace
-  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=ssh-gateway/nodePort
+  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=ssh-gateway/node_port
   value:
     ((port_ssh_gateway))
 
 - type: replace
-  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=bosh-init/nodePort
+  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=bosh-init/node_port
   value:
     ((port_bosh_init))
 - type: replace
@@ -14,7 +14,7 @@
   value: https://mbus:((mbus_bootstrap_password))@((internal_ip)):((port_bosh_init))
 
 - type: replace
-  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=nats/nodePort
+  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=nats/node_port
   value:
     ((port_nats))
 - type: replace
@@ -26,7 +26,7 @@
   value:
     ((port_blobstore))
 - type: replace
-  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=blobstore/nodePort
+  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=blobstore/node_port
   value:
     ((port_blobstore))
 - type: replace
@@ -34,6 +34,6 @@
   value: ((port_blobstore))
 
 - type: replace
-  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=director/nodePort
+  path: /resource_pools/name=vms/cloud_properties/services/name=outer-bosh/ports/name=director/node_port
   value:
     ((port_director))
