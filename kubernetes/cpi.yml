@@ -3,14 +3,14 @@
   path: /releases/-
   value:
     name: bosh-kubernetes-cpi
-    url: https://github.com/SAP/bosh-kubernetes-cpi-release/releases/download/v4-alpha/bosh-kubernetes-cpi-4-alpha.tgz
+    url: https://github.com/SAP/bosh-kubernetes-cpi-release/releases/download/v5/bosh-kubernetes-cpi-5-alpha.tgz
     sha1: 989d9dbe8f3514660a49a3d28d24342636ef68b4
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
   value:
-    url: https://github.com/SAP/bosh-kubernetes-cpi-release/releases/download/v1-alpha/bosh-stemcell-3363.9-kubernetes-ubuntu-trusty-go_agent.tgz
-    sha1: 319acc5aa020f12a2a20392c971ebf8ef3d0cd6e
+    url: https://s3.eu-central-1.amazonaws.com/bosh-kubernetes-cpi-stemcells/bosh-stemcell-3363.9-kubernetes-ubuntu-trusty-go_agent.tgz
+    sha1: b6c305bd20255fd3c935e134cb90a9e06fad92b2
 
 # Configure sizes
 - type: replace
