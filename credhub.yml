@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: credhub
-    url: https://github.com/pivotal-cf/credhub-release/releases/download/0.5.1/credhub-0.5.1.tgz
-    version: 0.5.1
-    sha1: fcfa37835c813b175defe01d8fae7d57e7ef669c
+    url: https://github.com/pivotal-cf/credhub-release/releases/download/0.6.0/credhub-0.6.0.tgz
+    version: 0.6.0
+    sha1: 0170bfa35e05e37d76c389e24bf5c339a871c1ac
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
@@ -29,10 +29,10 @@
         encryption:
           providers:
           - name: internal
-            type: dev_internal
+            type: internal
           keys:
           - provider_name: internal
-            dev_key: ((credhub_dev_key))
+            encryption_password: ((credhub_encryption_password))
             active: true
 
 - type: replace
@@ -105,7 +105,13 @@
     options:
       ca: credhub_ca
       common_name: ((internal_ip))
-      alternative_names: [((internal_ip))]
+      alternative_names: [((internal_ip)), "127.0.0.1"]
+
+- type: replace
+  path: /variables/-
+  value:
+    name: credhub_encryption_password
+    type: password
 
 - type: replace
   path: /variables/-
