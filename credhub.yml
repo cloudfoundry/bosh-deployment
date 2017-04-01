@@ -1,4 +1,3 @@
-# A chosen encryption key value must be provided in the form of 32 hex characters for variable 'credhub_dev_key' 
 - type: replace
   path: /releases/-
   value:
