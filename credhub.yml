@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: credhub
-    url: https://github.com/pivotal-cf/credhub-release/releases/download/0.6.0/credhub-0.6.0.tgz
-    version: 0.6.0
-    sha1: 0170bfa35e05e37d76c389e24bf5c339a871c1ac
+    url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=0.6.1 
+    version: 0.6.1
+    sha1: 5ab4c4ef3d67f8ea07d78b1a87707e7520a97ab7
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
