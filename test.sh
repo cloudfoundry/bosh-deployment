@@ -281,14 +281,16 @@ bosh create-env bosh.yml \
   -v internal_ip=test \
   -v network_name=test \
   -v vcenter_dc=test \
-  -v vcenter_ds=test \
+  -v vcenter_ds_ephemeral=test \
+  -v vcenter_ds_persistent=test \
   -v vcenter_ip=test \
   -v vcenter_user=test \
   -v vcenter_password=test \
-  -v vcenter_templates=test \
-  -v vcenter_vms=test \
-  -v vcenter_disks=test \
-  -v vcenter_cluster=test
+  -v vcenter_templates_folder=test \
+  -v vcenter_vm_folder=test \
+  -v vcenter_disk_path=test \
+  -v vcenter_cluster=test \
+  -v vcenter_bosh_director_cluster=test
 
 echo "- vSphere (cloud-config)"
 bosh update-cloud-config vsphere/cloud-config.yml \
