@@ -1,0 +1,12 @@
+- type: replace
+  path: /variables/name=credhub_tls/options/common_name
+  value: ((external_ip))
+
+- type: replace
+  path: /variables/name=credhub_tls/options/alternative_names/-
+  value: ((external_ip))
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=credhub?/properties/credhub/user_management/uaa/url
+  value: "https://((external_ip)):8443"
+
