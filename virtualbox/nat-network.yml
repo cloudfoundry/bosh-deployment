@@ -1,0 +1,25 @@
+# To set up a NAT network on Virtualbox, consult:
+# https://github.com/cppforlife/bosh-virtualbox-cpi-release/blob/master/docs/networks-nat-network.md
+
+- type: replace
+  path: /networks/-
+  value:
+    name: natnetwork
+    type: manual
+    subnets:
+    - range:   "((nat_network_cidr))" # Network CIDR from configuration dialog
+      gateway: "((nat_network_gw))"   # has to end with .1
+      dns:     ["8.8.8.8"]            # use public DNS
+      static:
+      - "((nat_network_ip))"
+      cloud_properties:
+        name: ((nat_network_name))    # Network Name from configuration dialog
+        type: natnetwork
+
+- type: replace
+  path: /instance_groups/name=bosh/networks/-
+  value:
+    name: natnetwork
+    default: [dns, gateway]
+    static_ips:
+    - "((nat_network_ip))"
