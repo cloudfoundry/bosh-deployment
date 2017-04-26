@@ -143,6 +143,21 @@ bosh update-cloud-config aws/cloud-config.yml \
   -v az=test \
   -v subnet_id=test
 
+echo "- AWS (cloud-config-multi-az)"
+bosh update-cloud-config aws/cloud-config-multi-az.yml \
+  -v internal_cidr1=test1 \
+  -v internal_gw1=test1 \
+  -v az1=test1 \
+  -v subnet_id1=test1 \
+  -v internal_cidr2=test2 \
+  -v internal_gw2=test2 \
+  -v az2=test2 \
+  -v subnet_id2=test2 \
+  -v internal_cidr3=test3 \
+  -v internal_gw3=test3 \
+  -v az3=test3 \
+  -v subnet_id3=test3
+
 echo "- GCP"
 bosh create-env bosh.yml \
   -o gcp/cpi.yml \
