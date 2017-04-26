@@ -176,6 +176,26 @@ bosh create-env bosh.yml \
   -v network=test \
   -v subnetwork=test
 
+echo "- GCP with UAA on external IP"
+bosh create-env bosh.yml \
+  -o gcp/cpi.yml \
+  -o uaa.yml \
+  -o external-ip-not-recommended.yml \
+  -o external-ip-not-recommended-uaa.yml \
+  --state=$vars_store_prefix \
+  --vars-store $(mktemp ${vars_store_prefix}.XXXXXX) \
+  -v director_name=test \
+  -v internal_cidr=test \
+  -v internal_gw=test \
+  -v internal_ip=test \
+  -v gcp_credentials_json=test \
+  -v project_id=test \
+  -v zone=test \
+  -v tags=[internal,no-ip] \
+  -v network=test \
+  -v subnetwork=test \
+  -v external_ip=test
+
 echo "- GCP with BOSH Lite"
 bosh create-env bosh.yml \
   -o gcp/cpi.yml \
@@ -338,7 +358,6 @@ bosh create-env bosh.yml \
 
 echo "- Azure (cloud-config)"
 bosh update-cloud-config azure/cloud-config.yml \
-  -v az=test \
   -v internal_cidr=10.0.16.0/24 \
   -v internal_gw=10.0.16.1 \
   -v vnet_name=boshvnet-crp \
