@@ -1,11 +1,11 @@
-# CredHub release file location must be provided 
 - type: replace
   path: /releases/-
   value:
     name: credhub
-    url: ((file_path_to_credhub_release))
+    url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=0.7.0
+    version: 0.7.0
+    sha1: c1d0eb7e0b1a03831cd102b740b47673cda9b350
 
-# A chosen dev_key value must be provided in the form of 32 hex characters 
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
   value:
@@ -13,7 +13,7 @@
     release: credhub
     properties:
       credhub: 
-        user_management:
+        authentication:
           uaa:
             url: "https://((internal_ip)):8443"
             verification_key: ((uaa_jwt_signing_key.public_key))
@@ -26,8 +26,13 @@
           database: credhub
         tls: ((credhub_tls))
         encryption:
-          provider: dev_internal
-          dev_key: ((credhub_dev_key))
+          providers:
+          - name: internal
+            type: internal
+          keys:
+          - provider_name: internal
+            encryption_password: ((credhub_encryption_password))
+            active: true
 
 - type: replace
   path: /instance_groups/name=bosh/properties/postgres/additional_databases?/-
@@ -38,7 +43,7 @@
   path: /instance_groups/name=bosh/properties/director/config_server?
   value:
     enabled: true
-    url: "https://((internal_ip)):8844/api/"
+    url: "https://127.0.0.1:8844/api/"
     ca_cert: ((credhub_tls.ca))
     uaa:
       url: "https://((internal_ip)):8443"
@@ -58,7 +63,7 @@
     secret: ((uaa_clients_director_to_credhub))
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/credhub?
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/credhub_cli?
   value:
     override: true
     authorized-grant-types: password,refresh_token
@@ -99,7 +104,13 @@
     options:
       ca: credhub_ca
       common_name: ((internal_ip))
-      alternative_names: [((internal_ip))]
+      alternative_names: [((internal_ip)), "127.0.0.1"]
+
+- type: replace
+  path: /variables/-
+  value:
+    name: credhub_encryption_password
+    type: password
 
 - type: replace
   path: /variables/-
