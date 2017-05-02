@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: bosh-genesis-cpi
-    version: 0.0.26
-    url: https://s3.amazonaws.com/bosh-genesis-cpi-cadidated-release/bosh-genesis-cpi-release-0.0.26.tgz
-    sha1: 24992ab7bd0d3fbdb67340ef8790df79f55e5c80
+    version: 0.0.29
+    url: https://s3.amazonaws.com/bosh-genesis-cpi-cadidated-release/bosh-genesis-cpi-release-0.0.29.tgz
+    sha1: a44eaff7ab42bd1af7dcf41611240f75fe448463
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
