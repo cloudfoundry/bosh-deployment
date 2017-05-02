@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: bosh-genesis-cpi
-    version: 0.0.29
-    url: https://s3.amazonaws.com/bosh-genesis-cpi-cadidated-release/bosh-genesis-cpi-release-0.0.29.tgz
-    sha1: a44eaff7ab42bd1af7dcf41611240f75fe448463
+    version: 0.0.30
+    url: https://s3.amazonaws.com/bosh-genesis-cpi-cadidated-release/bosh-genesis-cpi-release-0.0.30.tgz
+    sha1: 298661ec3ab647cb5f3a85d82af9d9101b1ee276
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
@@ -66,7 +66,6 @@
     user_id: ((user_id))
     username: ((username))
     password: ((password))
-    enable_registry: file
     docker:
       docker_host: ((docker_host))
       docker_cert_path: ((docker_cert_path))
@@ -76,4 +75,12 @@
 - type: replace
   path: /cloud_provider/properties?
   value:
+    agent:
+      mbus: "https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868"
+      ntp: []
+      blobstore:
+        provider: local
+        options:
+          blobstore_path: /var/vcap/micro_bosh/data/cache
     genesis_cpi: *genesis
+
