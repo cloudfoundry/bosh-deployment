@@ -12,8 +12,8 @@
     name: credhub
     release: credhub
     properties:
-      credhub: 
-        user_management:
+      credhub:
+        authentication:
           uaa:
             url: "https://((internal_ip)):8443"
             verification_key: ((uaa_jwt_signing_key.public_key))
@@ -26,8 +26,13 @@
           database: credhub
         tls: ((credhub_tls))
         encryption:
-          provider: dev_internal
-          dev_key: ((credhub_dev_key))
+          keys:
+            - provider_name: dev_internal
+              active: true
+              encryption_password: ((credhub_dev_key))
+          providers:
+            - name: dev_internal
+              dev_key: ((credhub_dev_key))
 
 - type: replace
   path: /instance_groups/name=bosh/properties/postgres/additional_databases?/-
