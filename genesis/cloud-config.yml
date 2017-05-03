@@ -22,14 +22,9 @@ networks:
     static: ((internal_static_ips))
     cloud_properties:
       net_id: ((network_id))
-- name: dynamic
-  type: dynamic
-  dns: [((internal_ip)), 8.8.8.8, 10.0.80.11, 10.0.80.12]
-  cloud_properties:
-    net_id: ((network_id))
 
 compilation:
   workers: 3
   reuse_compilation_vms: true
   vm_type: default
-  network: dynamic
+  network: default
