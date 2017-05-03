@@ -26,8 +26,15 @@ disk_types:
 networks:
 - name: default
   type: manual
-  cloud_properties:
-    net_id: ((network_id))
+  subnets:
+  - range: ((internal_cidr))
+    gateway: ((internal_gw))
+    azs: [z1, z2, z3]
+    dns: [((internal_ip)), 8.8.8.8, 10.0.80.11, 10.0.80.12]
+    static: ((internal_static_ips))
+    reserved: ((internal_reserved_ips))
+    cloud_properties:
+      net_id: ((network_id))
 
 - name: dynamic
   type: dynamic
@@ -36,7 +43,7 @@ networks:
     net_id: ((network_id))
 
 compilation:
-  workers: 5
+  workers: 3
   reuse_compilation_vms: true
   vm_type: default
   network: dynamic
