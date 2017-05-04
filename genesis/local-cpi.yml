@@ -3,7 +3,7 @@
   path: /releases/-
   value:
     name: bosh-genesis-cpi
-    file: //((local_cpi_release))
+    url: file://((local_cpi_release))
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
