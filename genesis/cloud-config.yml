@@ -18,7 +18,7 @@ networks:
   subnets:
   - range: ((internal_cidr))
     gateway: ((internal_gw))
-    dns: [((internal_ip)), 8.8.8.8, 10.0.80.11, 10.0.80.12]
+    dns: [8.8.8.8]
     static: ((internal_static_ips))
     cloud_properties:
       net_id: ((network_id))
