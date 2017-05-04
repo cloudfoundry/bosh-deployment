@@ -73,6 +73,15 @@
       docker_tls_verify: "1"
 
 - type: replace
+  path: /instance_groups/name=bosh/properties/agent/blobstore?
+  value:
+    provider: dav
+    options:
+      endpoint: http://((internal_ip)):25250
+      user: agent
+      password: ((blobstore_agent_password))
+
+- type: replace
   path: /cloud_provider/properties?
   value:
     agent:
