@@ -40,7 +40,6 @@
   path: /instance_groups/name=bosh/properties/registry?
   value:
     address: ((internal_ip))
-    host: ((internal_ip))
     db: # todo remove
       host: 127.0.0.1
       user: postgres
