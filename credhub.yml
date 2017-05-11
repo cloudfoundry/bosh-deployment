@@ -104,7 +104,9 @@
     options:
       ca: credhub_ca
       common_name: ((internal_ip))
-      alternative_names: [((internal_ip))]
+      alternative_names: 
+      - ((internal_ip))
+      - 127.0.0.1
 
 - type: replace
   path: /variables/-
