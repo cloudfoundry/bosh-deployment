@@ -123,3 +123,9 @@
   value:
     name: credhub_cli_password
     type: password
+
+- type: replace
+  path: /variables/-
+  value:
+    name: credhub_dev_key
+    type: password
