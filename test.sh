@@ -307,7 +307,8 @@ bosh create-env bosh.yml \
   -v vcenter_templates=test \
   -v vcenter_vms=test \
   -v vcenter_disks=test \
-  -v vcenter_cluster=test
+  -v vcenter_cluster=test \
+  -v vceneter_rp=test
 
 echo "- vCloud"
 bosh create-env bosh.yml \
