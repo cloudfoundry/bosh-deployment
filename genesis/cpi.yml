@@ -1,0 +1,79 @@
+---
+- type: replace
+  path: /releases/-
+  value:
+    name: bosh-genesis-cpi
+    version: 0.0.26
+    url: https://s3.amazonaws.com/bosh-genesis-cpi-cadidated-release/bosh-genesis-cpi-release-0.0.26.tgz
+    sha1: 24992ab7bd0d3fbdb67340ef8790df79f55e5c80
+
+- type: replace
+  path: /resource_pools/name=vms/stemcell?
+  value:
+    url: https://s3.amazonaws.com/bosh-softlayer-tmp/light-stemcell-genesis.tgz
+    sha1: b17362a59394c9d4efd1f184f565487f28c684d3
+
+- type: remove
+  path: /instance_groups/name=bosh/persistent_disk_pool
+
+- type: replace
+  path: /resource_pools/name=vms/env
+  value:
+    bosh:
+      keep_root_password: true
+      password: '*'
+
+- type: remove
+  path: /cloud_provider/properties
+
+# Configure sizes
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties?
+  value:
+    instance_type: "1"
+    availability_zone: lon02
+
+- type: replace
+  path: /disk_pools/name=disks/disk_size
+  value: 20_000
+
+- type: replace
+  path: /networks/name=default/subnets/0/cloud_properties?
+  value:
+    net_id: ((network_id))
+
+
+# Add CPI job
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value: &cpi_job
+    name: genesis_cpi
+    release: bosh-genesis-cpi
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/cpi_job?
+  value: genesis_cpi
+
+- type: replace
+  path: /cloud_provider/template?
+  value: *cpi_job
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/genesis_cpi?
+  value: &genesis
+    api_endpoint: ((api_endpoint))
+    account_id: ((account_id))
+    user_id: ((user_id))
+    username: ((username))
+    password: ((password))
+    enable_registry: file
+    docker:
+      docker_host: ((docker_host))
+      docker_cert_path: ((docker_cert_path))
+      docker_machine_name: ((docker_machine_name))
+      docker_tls_verify: "1"
+
+- type: replace
+  path: /cloud_provider/properties?
+  value:
+    genesis_cpi: *genesis
