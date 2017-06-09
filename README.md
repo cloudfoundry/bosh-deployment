@@ -41,7 +41,31 @@ $ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
   -v internal_gw=10.0.0.1 \
   -v internal_ip=10.0.0.6 \
   --var-file private_key=~/Downloads/bosh.pem
+```
+* GCP (below)
+```
+bosh create-env ~/workspace/bosh-deployment/bosh.yml \
+ -o ~/workspace/bosh-deployment/gcp/cpi.yml \
+ -o ~/workspace/bosh-deployment/bosh-lite.yml \
+ -o ~/workspace/bosh-deployment/jumpbox-user.yml \
+ -o ~/workspace/bosh-deployment/gcp/bosh-lite-vm-type.yml \
+ -o ~/workspace/bosh-deployment/external-ip-not-recommended.yml \
+ --state=./gcp-bosh-director.json \
+ --vars-store=./gcp-bosh-director-creds.yml \
+ -v director_name=gcp-bosh-cf \
+ -v internal_cidr=10.0.0.0/24 \
+ -v internal_gw=10.0.0.1     \
+ -v internal_ip=10.0.0.10 \
+ --var-file gcp_credentials_json="<gcp_credentials_json>.json" \
+ -v project_id=<your_gcp_project>\
+ -v zone=<zone>\
+ -v tags=[tag1] \
+ -v external_ip=<external_ip> \
+ -v network=<network> \
+ -v subnetwork=<network>
+```
 
+```
 # Alias deployed Director
 $ bosh -e 10.0.0.6 --ca-cert <(bosh int ./creds.yml --path /director_ssl/ca) alias-env bosh-1
 
@@ -63,6 +87,8 @@ $ bosh -e bosh-1 upload-stemcell https://...
 $ git clone https://github.com/cppforlife/zookeeper-release ~/workspace/zookeeper-release
 $ bosh -e bosh-1 -d zookeeper deploy ~/workspace/zookeeper-release/manifests/zookeeper.yml
 ```
+
+
 
 To generate creds (without deploying anything) or just to check if your manifest builds:
 
