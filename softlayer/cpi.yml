@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: bosh-softlayer-cpi
-    version: 10
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-softlayer-cpi-release
-    sha1: f0209e5565b64beccffa4482945c865890b5ca71
+    version: 16
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-softlayer-cpi-release?v=16
+    sha1: 4dd6a9c07d37d2a6d554f819d63c2833492955a0
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
