@@ -64,19 +64,22 @@ $ bosh -e 10.0.0.6 --ca-cert <(bosh int ./creds.yml --path /director_ssl/ca) ali
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=`bosh int ./creds.yml --path /admin_password`
 
+# Set the bosh environment so we don't have to keep typing "-e bosh-1"
+$ export BOSH_ENVIRONMENT=bosh-1
+
 # Update cloud config -- single az
-$ bosh -e bosh-1 update-cloud-config ~/workspace/bosh-deployment/aws/cloud-config.yml \
+$ bosh update-cloud-config ~/workspace/bosh-deployment/aws/cloud-config.yml \
   -v az=us-east-1b \
   -v subnet_id=subnet-... \
   -v internal_cidr=10.0.0.0/24 \
   -v internal_gw=10.0.0.1
 
 # Upload specific stemcell
-$ bosh -e bosh-1 upload-stemcell https://...
+$ bosh upload-stemcell https://...
 
 # Get a deployment running
 $ git clone https://github.com/cppforlife/zookeeper-release ~/workspace/zookeeper-release
-$ bosh -e bosh-1 -d zookeeper deploy ~/workspace/zookeeper-release/manifests/zookeeper.yml
+$ bosh -d zookeeper deploy ~/workspace/zookeeper-release/manifests/zookeeper.yml
 ```
 
 To generate creds (without deploying anything) or just to check if your manifest builds:
