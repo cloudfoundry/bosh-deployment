@@ -55,6 +55,7 @@ $ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
   -v internal_cidr=10.0.0.0/24 \
   -v internal_gw=10.0.0.1 \
   -v internal_ip=10.0.0.6 \
+  -v internal_dns=8.8.8.8 \
   --var-file private_key=~/Downloads/bosh.pem
 
 # Alias deployed Director
@@ -69,7 +70,8 @@ $ bosh -e bosh-1 update-cloud-config ~/workspace/bosh-deployment/aws/cloud-confi
   -v az=us-east-1b \
   -v subnet_id=subnet-... \
   -v internal_cidr=10.0.0.0/24 \
-  -v internal_gw=10.0.0.1
+  -v internal_gw=10.0.0.1 \
+  -v internal_dns=8.8.8.8
 
 # Upload specific stemcell
 $ bosh -e bosh-1 upload-stemcell https://...

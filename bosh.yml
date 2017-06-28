@@ -27,7 +27,7 @@ networks:
   - range: ((internal_cidr))
     gateway: ((internal_gw))
     static: [((internal_ip))]
-    dns: [8.8.8.8]
+    dns: [((internal_dns))]
 
 instance_groups:
 - name: bosh

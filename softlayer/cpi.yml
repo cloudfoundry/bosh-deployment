@@ -39,14 +39,14 @@
 
 - type: replace
   path: /networks/name=default/subnets/0/dns
-  value: [8.8.8.8, 10.0.80.11, 10.0.80.12]
+  value: [((internal_dns)), 10.0.80.11, 10.0.80.12]
 
 - type: replace
   path: /networks/-
   value:
     name: dynamic
     type: dynamic
-    dns: [8.8.8.8, 10.0.80.11, 10.0.80.12]
+    dns: [((internal_dns)), 10.0.80.11, 10.0.80.12]
     cloud_properties:
       PrimaryNetworkComponent:
         NetworkVlan:
