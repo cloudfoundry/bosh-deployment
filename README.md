@@ -15,7 +15,7 @@ Requires BOSH CLI v2:
 
 - `bosh.yml`: Base manifest that is meant to be used with different CPI configurations
 - `[aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cpi.yml`: CPI configuration
-- `<cloud>/cpi.yml`: Simple cloud configs
+- `<cloud>/cloud-config.yml`: Simple cloud configs
 - `jumpbox-user.yml`: Adds user `jumpbox` for SSH-ing into the Director (see [Jumpbox User](docs/jumpbox-user.md))
 - `uaa.yml`: Deploys UAA and enables UAA user management in the Director
 - `credhub.yml`: Deploys CredHub and enables CredHub integration in the Director
