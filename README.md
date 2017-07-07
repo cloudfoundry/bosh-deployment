@@ -34,15 +34,15 @@ See [test.sh](test.sh) for example usage of different ops files.
 * AWS (below)
 
 ```
-$ git clone https://github.com/cloudfoundry/bosh-deployment ~/workspace/bosh-deployment
+git clone https://github.com/cloudfoundry/bosh-deployment ~/workspace/bosh-deployment
 
 # Create a directory to keep Director deployment
-$ mkdir -p ~/deployments/bosh-1
+mkdir -p ~/deployments/bosh-1
 
-$ cd ~/deployments/bosh-1
+cd ~/deployments/bosh-1
 
 # Deploy a Director -- ./creds.yml is generated automatically
-$ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
+bosh create-env ~/workspace/bosh-deployment/bosh.yml \
   --state ./state.json \
   -o ~/workspace/bosh-deployment/aws/cpi.yml \
   --vars-store ./creds.yml \
@@ -60,31 +60,31 @@ $ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
   --var-file private_key=~/Downloads/bosh.pem
 
 # Alias deployed Director
-$ bosh -e 10.0.0.6 --ca-cert <(bosh int ./creds.yml --path /director_ssl/ca) alias-env bosh-1
+bosh -e 10.0.0.6 --ca-cert <(bosh int ./creds.yml --path /director_ssl/ca) alias-env bosh-1
 
 # Log in to the Director
-$ export BOSH_CLIENT=admin
-$ export BOSH_CLIENT_SECRET=`bosh int ./creds.yml --path /admin_password`
+export BOSH_CLIENT=admin
+export BOSH_CLIENT_SECRET=`bosh int ./creds.yml --path /admin_password`
 
 # Update cloud config -- single az
-$ bosh -e bosh-1 update-cloud-config ~/workspace/bosh-deployment/aws/cloud-config.yml \
+bosh -e bosh-1 update-cloud-config ~/workspace/bosh-deployment/aws/cloud-config.yml \
   -v az=us-east-1b \
   -v subnet_id=subnet-... \
   -v internal_cidr=10.0.0.0/24 \
   -v internal_gw=10.0.0.1
 
 # Upload specific stemcell
-$ bosh -e bosh-1 upload-stemcell https://...
+bosh -e bosh-1 upload-stemcell https://...
 
 # Get a deployment running
-$ git clone https://github.com/cppforlife/zookeeper-release ~/workspace/zookeeper-release
-$ bosh -e bosh-1 -d zookeeper deploy ~/workspace/zookeeper-release/manifests/zookeeper.yml
+git clone https://github.com/cppforlife/zookeeper-release ~/workspace/zookeeper-release
+bosh -e bosh-1 -d zookeeper deploy ~/workspace/zookeeper-release/manifests/zookeeper.yml
 ```
 
 To generate creds (without deploying anything) or just to check if your manifest builds:
 
 ```
-$ bosh int ~/workspace/bosh-deployment/bosh.yml \
+bosh int ~/workspace/bosh-deployment/bosh.yml \
   --var-errs \
   -o ~/workspace/bosh-deployment/aws/cpi.yml \
   --vars-store ./creds.yml \
