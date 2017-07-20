@@ -33,6 +33,16 @@ resources:
     source:
       repository: cppforlife/bosh-warden-cpi-release
 
+  - name: vsphere-cpi
+    type: bosh-io-release
+    source:
+      repository: cloudfoundry-incubator/bosh-vsphere-cpi-release
+
+  - name: aws-cpi
+    type: bosh-io-release
+    source:
+      repository: cloudfoundry-incubator/bosh-aws-cpi-release
+
   - name: garden-linux
     type: bosh-io-release
     source:
@@ -307,6 +317,46 @@ jobs:
         input_mapping:
           stemcell: ubuntu-trusty-3421-stemcell
           release: config-server-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+  - name: compile-vsphere-cpi-ubuntu-trusty-3421
+    plan:
+      - aggregate:
+          - get: bosh-deployment
+          - get: vsphere-cpi
+            version:
+              version: "42"
+          - get: ubuntu-trusty-3421-stemcell
+            version:
+              version: "3421.9"
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-3421-stemcell
+          release: vsphere-cpi
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+  - name: compile-aws-cpi-ubuntu-trusty-3421
+    plan:
+      - aggregate:
+          - get: bosh-deployment
+          - get: aws-cpi
+            version:
+              version: "65"
+          - get: ubuntu-trusty-3421-stemcell
+            version:
+              version: "3421.9"
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-3421-stemcell
+          release: aws-cpi
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
