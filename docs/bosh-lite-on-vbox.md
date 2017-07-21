@@ -16,17 +16,17 @@
 1. Install Director
 
     ```
-    $ git clone https://github.com/cloudfoundry/bosh-deployment ~/workspace/bosh-deployment
+    git clone https://github.com/cloudfoundry/bosh-deployment ~/workspace/bosh-deployment
 
-    $ mkdir -p ~/deployments/vbox
+    mkdir -p ~/deployments/vbox
 
-    $ cd ~/deployments/vbox
+    cd ~/deployments/vbox
     ```
 
     Below command will try automatically create/enable Host-only network 192.168.50.0/24 ([details](https://github.com/cppforlife/bosh-virtualbox-cpi-release/blob/master/docs/networks-host-only.md)) and NAT network 'NatNetwork' with DHCP enabled ([details](https://github.com/cppforlife/bosh-virtualbox-cpi-release/blob/master/docs/networks-nat-network.md)).
 
     ```
-    $ bosh create-env ~/workspace/bosh-deployment/bosh.yml \
+    bosh create-env ~/workspace/bosh-deployment/bosh.yml \
       --state ./state.json \
       -o ~/workspace/bosh-deployment/virtualbox/cpi.yml \
       -o ~/workspace/bosh-deployment/virtualbox/outbound-network.yml \
@@ -44,36 +44,36 @@
 1. Alias and log into the Director
 
     ```
-    $ bosh -e 192.168.50.6 --ca-cert <(bosh int ./creds.yml --path /director_ssl/ca) alias-env vbox
-    $ export BOSH_CLIENT=admin
-    $ export BOSH_CLIENT_SECRET=`bosh int ./creds.yml --path /admin_password`
+    bosh -e 192.168.50.6 --ca-cert <(bosh int ./creds.yml --path /director_ssl/ca) alias-env vbox
+    export BOSH_CLIENT=admin
+    export BOSH_CLIENT_SECRET=`bosh int ./creds.yml --path /admin_password`
     ```
 
 1. Upload BOSH Lite stemcell
 
     ```
-    $ bosh -e vbox upload-stemcell https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=3421.9 \
+    bosh -e vbox upload-stemcell https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=3421.9 \
       --sha1 1396d7877204e630b9e77ae680f492d26607461d
     ```
 
 1. Update cloud config
 
     ```
-    $ bosh -e vbox update-cloud-config ~/workspace/bosh-deployment/warden/cloud-config.yml
+    bosh -e vbox update-cloud-config ~/workspace/bosh-deployment/warden/cloud-config.yml
     ```
 
 1. Deploy example deployment
 
     ```
-    $ bosh -e vbox -d zookeeper deploy <(wget -O- https://raw.githubusercontent.com/cppforlife/zookeeper-release/master/manifests/zookeeper.yml)
+    bosh -e vbox -d zookeeper deploy <(wget -O- https://raw.githubusercontent.com/cppforlife/zookeeper-release/master/manifests/zookeeper.yml)
     ```
 
 1. Optionally, set up a local route for `bosh ssh` command
 
     ```
-    $ sudo route add -net 10.244.0.0/16    192.168.50.6 # Mac OS X
-    $ sudo route add -net 10.244.0.0/16 gw 192.168.50.6 # Linux
-    $ route add           10.244.0.0/16    192.168.50.6 # Windows
+    sudo route add -net 10.244.0.0/16    192.168.50.6 # Mac OS X
+    sudo route add -net 10.244.0.0/16 gw 192.168.50.6 # Linux
+    route add           10.244.0.0/16    192.168.50.6 # Windows
     ```
 
 1. In case you need to SSH into the Director VM, see [Jumpbox user](jumpbox-user.md).
