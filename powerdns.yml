@@ -13,7 +13,7 @@
   value:
     address: ((internal_ip))
     db:
-      database: powerdns
+      database: bosh
       host: 127.0.0.1
       user: postgres
       password: ((postgres_password))
