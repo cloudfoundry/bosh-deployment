@@ -3,7 +3,7 @@
   path: /releases/-
   value:
     name: bosh-softlayer-cpi
-    version: 10
+    version: 23
     url: https://bosh.io/d/github.com/cloudfoundry/bosh-softlayer-cpi-release?v=23
     sha1: 960f6068c7823bc3822c5e7ec6c855060c5582d0
 
@@ -29,6 +29,8 @@
     startCpus: 4
     maxMemory: 8192
     deployedByBoshcli: true
+    datacenter:
+      name: ((sl_datacenter))
     hourlyBillingFlag: true
     networkComponents:
     - maxSpeed: 100
@@ -84,6 +86,12 @@
   value: &softlayer
     username: ((sl_username))
     apiKey: ((sl_api_key))
+    featureOptions:
+      apiEndpoint: api.service.softlayer.com
+      apiRetryCount: 10
+      apiWaitTime: 5
+      createIscsiVolumeTimeout: 3600
+      createIscsiVolumePollingInterval: 5
 
 - type: replace
   path: /cloud_provider/properties/softlayer?
