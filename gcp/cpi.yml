@@ -3,15 +3,15 @@
   path: /releases/-
   value:
     name: bosh-google-cpi
-    version: 25.6.2
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-google-cpi-release?v=25.6.2
-    sha1: b4865397d867655fdcc112bc5a7f9a5025cdf311
+    version: 25.9.0
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-google-cpi-release?v=25.9.0
+    sha1: 3fbda22fde33878b54dec77f4182f8044be72687
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
   value:
-    url: https://bosh.io/d/stemcells/bosh-google-kvm-ubuntu-trusty-go_agent?v=3312.15
-    sha1: 3ac3ee83750f75bd74e8d3e3ad97808db23c30ba
+    url: https://bosh.io/d/stemcells/bosh-google-kvm-ubuntu-trusty-go_agent?v=3421.9
+    sha1: 408f78a2091d108bb5418964026e73c822def32d
 
 # Configure sizes
 - type: replace

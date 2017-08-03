@@ -3,9 +3,9 @@ name: bosh
 
 releases:
 - name: bosh
-  version: 260.5
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-260.5-ubuntu-trusty-3312.15-20170124-025145-688314225-20170124025151.tgz?versionId=XdnsJBm4uh.wTJ1aKy5BZ.B.NtBOZFTD
-  sha1: 16966c90fb3535a2de6e2e19bf8252524d2f2d27
+  version: "262.3"
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-262.3-ubuntu-trusty-3421.9-20170706-183731-831697577-20170706183736.tgz?versionId=7GmwKfufgb5JwWhJ.cwIWLnejOtm2Hu4
+  sha1: 1eae3f06282417e54ebb199656458f9d6c38e2af
 
 resource_pools:
 - name: vms
@@ -13,6 +13,8 @@ resource_pools:
   env:
     bosh:
       password: '*'
+      mbus:
+        cert: ((mbus_bootstrap_ssl))
 
 disk_pools:
 - name: disks
@@ -71,6 +73,7 @@ instance_groups:
       enable_post_deploy: true
       generate_vm_passwords: true
       enable_dedicated_status_worker: true
+      enable_nats_delivered_templates: true
       workers: 4
       events:
         record_events: true
@@ -101,6 +104,7 @@ instance_groups:
 
 cloud_provider:
   mbus: https://mbus:((mbus_bootstrap_password))@((internal_ip)):6868
+  cert: ((mbus_bootstrap_ssl))
   properties:
     agent: {mbus: "https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868"}
     blobstore: {provider: local, path: /var/vcap/micro_bosh/data/cache}
@@ -125,7 +129,13 @@ variables:
   type: certificate
   options:
     is_ca: true
-    common_name: ca # todo fix
+    common_name: ca
+- name: mbus_bootstrap_ssl
+  type: certificate
+  options:
+    ca: default_ca
+    common_name: ((internal_ip))
+    alternative_names: [((internal_ip))]
 - name: director_ssl
   type: certificate
   options:

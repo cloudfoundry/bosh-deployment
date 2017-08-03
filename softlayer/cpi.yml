@@ -14,10 +14,8 @@
     sha1: b10cdc25cc2daf2ce2bb6b3c6f539579c0ff6ba0
 
 - type: replace
-  path: /resource_pools/name=vms/env
-  value:
-    bosh:
-      keep_root_password: true
+  path: /resource_pools/name=vms/env/bosh/keep_root_password?
+  value: true
 
 # Configure sizes
 - type: replace
@@ -68,10 +66,7 @@
   path: /instance_groups/name=bosh/networks/-
   value:
     name: dynamic
-
-- type: replace
-  path: /instance_groups/name=bosh/networks/name=default/default?
-  value: [gateway, dns]
+    default: [gateway, dns]
 
 - type: replace
   path: /instance_groups/name=bosh/properties/director/cpi_job?

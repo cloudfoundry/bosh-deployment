@@ -1,8 +1,34 @@
 # bosh-deployment
 
-- Requires new [BOSH CLI v2.0.1+](https://github.com/cloudfoundry/bosh-cli)
+Requires BOSH CLI v2:
 
-Sample installation instructions:
+* [CLI v2](https://bosh.io/docs/cli-v2.html)
+    * [`create-env` Dependencies](https://bosh.io/docs/cli-env-deps.html)
+    * [Differences between CLI v2 vs v1](https://bosh.io/docs/cli-global-flags.html)
+    * [Global Flags](https://bosh.io/docs/cli-global-flags.html)
+    * [Environments](https://bosh.io/docs/cli-envs.html)
+    * [Operations files](https://bosh.io/docs/cli-ops-files.html)
+    * [Variable Interpolation](https://bosh.io/docs/cli-int.html)
+    * [Tunneling](https://bosh.io/docs/cli-tunnel.html)
+
+## Ops files
+
+- `bosh.yml`: Base manifest that is meant to be used with different CPI configurations
+- `[aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cpi.yml`: CPI configuration
+- `<cloud>/cloud-config.yml`: Simple cloud configs
+- `jumpbox-user.yml`: Adds user `jumpbox` for SSH-ing into the Director (see [Jumpbox User](docs/jumpbox-user.md))
+- `uaa.yml`: Deploys UAA and enables UAA user management in the Director
+- `credhub.yml`: Deploys CredHub and enables CredHub integration in the Director
+- `bosh-lite.yml`: Configures Director to use Garden CPI within the Director VM (see [BOSH Lite](docs/bosh-lite-on-vbox.md))
+- `config-server.yml`: Deploys config-server (see `credhub.yml`)
+- `syslog.yml`: Configures syslog to forward logs to some destination
+- `local-dns.yml`: Enables Director DNS beta functionality
+- `misc/proxy.yml`: Configure HTTP proxy for Director and CPI
+- `runtime-configs/syslog.yml`: Runtime config to enable syslog forwarding
+
+See [test.sh](test.sh) for example usage of different ops files.
+
+## Sample installation instructions
 
 * [BOSH Lite on VirtualBox](docs/bosh-lite-on-vbox.md)
 * AWS (below)

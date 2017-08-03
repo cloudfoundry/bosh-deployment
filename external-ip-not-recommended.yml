@@ -17,9 +17,8 @@
     static_ips: [((external_ip))]
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/director/default_ssh_options?
-  value:
-    gateway_host: ((external_ip))
+  path: /instance_groups/name=bosh/properties/director/default_ssh_options?/gateway_host
+  value: ((external_ip))
 
 # todo should not access non-defined vars
 - type: replace
@@ -27,7 +26,9 @@
   value: https://mbus:((mbus_bootstrap_password))@((external_ip)):6868
 
 - type: replace
-  path: /variables/name=director_ssl/options/alternative_names/-
+  path: /variables/name=mbus_bootstrap_ssl/options/alternative_names/-
   value: ((external_ip))
 
-# switch uaa to external_ip
+- type: replace
+  path: /variables/name=director_ssl/options/alternative_names/-
+  value: ((external_ip))
