@@ -6,17 +6,58 @@
     address: ((internal_ip))
     user: nats
     password: ((nats_password))
-    certificate: ((nats_ssl.certificate))
-    private_key: ((nats_ssl.private_key))    
-    cert:
-      ca: ((nats_ssl.ca))
+    tls:
+      ca: ((nats_server_cert.ca))
+      server:
+        certificate: ((nats_server_cert.certificate))
+        private_key: ((nats_server_cert.private_key))
+      director:
+        certificate: ((director_client_cert.certificate))
+        private_key: ((director_client_cert.private_key))
+      health_monitor:
+        certificate: ((health_monitor_client_cert.certificate))
+        private_key: ((health_monitor_client_cert.private_key))
+      agent:
+        certificate: ((health_monitor_client_cert.certificate))
+        private_key: ((health_monitor_client_cert.private_key))
 
 - type: replace
   path: /variables/-
   value:
-    name: nats_ssl
+    name: nats_server_cert
     type: certificate
     options:
       ca: default_ca
-      common_name: ((internal_ip))
       alternative_names: [((internal_ip))]
+      extended_key_usage:
+        - server_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: director_client_cert
+    type: certificate
+    options:
+      ca: default_ca
+      alternative_names: [director_client_cert]
+      extended_key_usage:
+        - client_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: health_monitor_client_cert
+    type: certificate
+    options:
+      ca: default_ca
+      alternative_names: [health_monitor_client_cert]
+      extended_key_usage:
+        - client_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: agent_client_cert
+    type: certificate
+    options:
+      ca: default_ca
+      alternative_names: [agent_client_cert]
+      extended_key_usage:
+        - client_auth
