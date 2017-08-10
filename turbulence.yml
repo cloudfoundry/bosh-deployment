@@ -16,7 +16,7 @@
       cert: ((turbulence_api_ssl))
       director:
         host: ((internal_ip))
-        ca_cert: ((director_ssl.ca))
+        cert: ((director_ssl))
         client: director_turbulence_api
         client_secret: ((director_turbulence_api_client_secret))
 
