@@ -48,7 +48,6 @@
     options:
       ca: nats_default_ca
       common_name: default.director.bosh
-      alternative_names: [director_client_cert]
       extended_key_usage:
         - client_auth
 - type: replace
@@ -59,6 +58,5 @@
     options:
       ca: nats_default_ca
       common_name: default.hm.bosh
-      alternative_names: [health_monitor_client_cert]
       extended_key_usage:
         - client_auth
