@@ -85,12 +85,6 @@
   value: &softlayer
     username: ((sl_username))
     apiKey: ((sl_api_key))
-    featureOptions:
-      apiEndpoint: api.service.softlayer.com
-      apiRetryCount: 10
-      apiWaitTime: 5
-      createIscsiVolumeTimeout: 3600
-      createIscsiVolumePollingInterval: 5
 
 - type: replace
   path: /cloud_provider/properties/softlayer?
