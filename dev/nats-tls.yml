@@ -6,17 +6,57 @@
     address: ((internal_ip))
     user: nats
     password: ((nats_password))
-    certificate: ((nats_ssl.certificate))
-    private_key: ((nats_ssl.private_key))    
-    cert:
-      ca: ((nats_ssl.ca))
+    tls:
+      ca: ((nats_server_cert.ca))
+      client_ca:
+        certificate: ((nats_default_ca.certificate))
+        private_key: ((nats_default_ca.private_key))
+      server:
+        certificate: ((nats_server_cert.certificate))
+        private_key: ((nats_server_cert.private_key))
+      director:
+        certificate: ((director_client_cert.certificate))
+        private_key: ((director_client_cert.private_key))
+      health_monitor:
+        certificate: ((health_monitor_client_cert.certificate))
+        private_key: ((health_monitor_client_cert.private_key))
 
 - type: replace
   path: /variables/-
   value:
-    name: nats_ssl
+    name: nats_default_ca
     type: certificate
     options:
-      ca: default_ca
-      common_name: ((internal_ip))
+      is_ca: true
+      common_name: BOSH NATS CA
+- type: replace
+  path: /variables/-
+  value:
+    name: nats_server_cert
+    type: certificate
+    options:
+      ca: nats_default_ca
+      common_name: default.nats.bosh
       alternative_names: [((internal_ip))]
+      extended_key_usage:
+        - server_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: director_client_cert
+    type: certificate
+    options:
+      ca: nats_default_ca
+      common_name: default.director.bosh
+      extended_key_usage:
+        - client_auth
+- type: replace
+  path: /variables/-
+  value:
+    name: health_monitor_client_cert
+    type: certificate
+    options:
+      ca: nats_default_ca
+      common_name: default.hm.bosh
+      extended_key_usage:
+        - client_auth

@@ -19,7 +19,7 @@
   value:
     cpu: 2
     ram: 4_096
-    disk: 20_000
+    disk: 40_000
 
 - type: replace
   path: /networks/name=default/subnets/0/cloud_properties?
