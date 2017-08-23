@@ -10,8 +10,8 @@
 - type: replace
   path: /resource_pools/name=vms/stemcell?
   value:
-    url: https://bosh.io/d/stemcells/bosh-softlayer-xen-ubuntu-trusty-go_agent?v=3421.11.5
-    sha1: b10cdc25cc2daf2ce2bb6b3c6f539579c0ff6ba0
+    url: https://bosh.io/d/stemcells/bosh-softlayer-xen-ubuntu-trusty-go_agent?v=3445.2.1
+    sha1: b53d3d4d0207fb19ad2ea2b5c9f234c54417307a
 
 - type: replace
   path: /resource_pools/name=vms/env/bosh/keep_root_password?
