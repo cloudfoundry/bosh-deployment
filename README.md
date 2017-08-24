@@ -33,13 +33,18 @@ See [test.sh](test.sh) for example usage of different ops files.
 * [Create an environment](https://bosh.io/docs/init.html)
     * [On Local machine (BOSH Lite)](https://bosh.io/docs/bosh-lite.html)
     * [On AWS](https://bosh.io/docs/init-aws.html)
-      * [Expose Director on a Public IP](https://bosh.io/docs/init-external-ip.html)
     * [On Azure](https://bosh.io/docs/init-azure.html)
     * [On OpenStack](https://bosh.io/docs/init-openstack.html)
     * [On vSphere](https://bosh.io/docs/init-vsphere.html)
     * [On vCloud](https://bosh.io/docs/init-vcloud.html)
     * [On SoftLayer](https://bosh.io/docs/init-softlayer.html)
     * [On Google Compute Platform](https://bosh.io/docs/init-google.html)
+* Access your BOSH director
+    * Through a VPN
+	    * [`bosh create-env`, OpenVPN option](https://github.com/dpb587/openvpn-bosh-release)
+    * Through a jumpbox
+	    * [`bosh create-env` option](https://github.com/cppforlife/jumpbox-deployment)
+    * [Expose Director on a Public IP](https://bosh.io/docs/init-external-ip.html) (not recommended)
 
 Please ensure you have security groups setup correctly. i.e:
 
