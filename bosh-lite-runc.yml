@@ -14,7 +14,7 @@
     sha1: 8028f7e832b32f305bbd45b1636be23334805e2f
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/garden
+  path: /instance_groups/name=bosh/jobs/name=garden/properties?/garden
   value:
     listen_network: tcp
     listen_address: 127.0.0.1:7777
