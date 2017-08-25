@@ -83,7 +83,7 @@
 - type: replace
   path: /cloud_provider/ssh_tunnel?
   value:
-    host: ((internal_ip))
+    host: ((external_ip))
     port: 22
     user: vcap
     private_key: ((ssh.private_key))
