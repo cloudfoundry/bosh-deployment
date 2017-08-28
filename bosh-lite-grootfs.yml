@@ -1,0 +1,41 @@
+- type: replace
+  path: /releases/-
+  value:
+    name: grootfs
+    version: "0.24.0"
+    url: https://bosh.io/d/github.com/cloudfoundry/grootfs-release?v=0.24.0
+    sha1: b342db5da3a7bd7bb2e81c2f6456d75cf38e9e0c
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=garden/properties?/garden/image_plugin?
+  value: /var/vcap/packages/grootfs/bin/grootfs
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=garden/properties/garden/image_plugin_extra_args?
+  value:
+    - --config
+    - /var/vcap/jobs/grootfs/config/grootfs_config.yml
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=garden/properties/garden/privileged_image_plugin?
+  value: /var/vcap/packages/grootfs/bin/grootfs
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=garden/properties/garden/privileged_image_plugin_extra_args?
+  value:
+    - --config
+    - /var/vcap/jobs/grootfs/config/privileged_grootfs_config.yml
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: grootfs
+    release: grootfs
+    properties:
+      grootfs:
+        driver: btrfs
+        log_level: debug
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/warden_cpi/actions?/expand_stemcell_tarball
+  value: false
