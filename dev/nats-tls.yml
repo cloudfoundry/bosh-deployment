@@ -28,7 +28,7 @@
     type: certificate
     options:
       is_ca: true
-      common_name: BOSH NATS CA
+      common_name: bosh-nats-ca
 - type: replace
   path: /variables/-
   value:
