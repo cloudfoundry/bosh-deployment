@@ -3,8 +3,8 @@
   value:
     name: grootfs
     version: "0.24.0"
-    url: https://bosh.io/d/github.com/cloudfoundry/grootfs-release?v=0.24.0
-    sha1: b342db5da3a7bd7bb2e81c2f6456d75cf38e9e0c
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/grootfs-0.24.0-ubuntu-trusty-3445.7-20170901-233410-125583009-20170901233415.tgz?versionId=lBvgCDLDAFFjnbaL6YpAdG5OmP0KTJ5e
+    sha1: b59d4ce4152013c21a4b136b43660d220c5f274a
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/name=garden/properties?/garden/image_plugin?

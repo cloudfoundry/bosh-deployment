@@ -459,7 +459,7 @@ jobs:
           - get: bosh-deployment
           - get: grootfs
             version:
-              version: "0.21.0"
+              version: "0.24.0"
           - get: ubuntu-trusty-stemcell
             version:
               version: "3445.7"
