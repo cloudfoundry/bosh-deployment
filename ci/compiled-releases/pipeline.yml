@@ -379,7 +379,7 @@ jobs:
           - get: bosh-deployment
           - get: warden-cpi
             version:
-              version: "34"
+              version: "35"
           - get: ubuntu-trusty-stemcell
             version:
               version: "3445.7"
@@ -439,7 +439,7 @@ jobs:
           - get: bosh-deployment
           - get: garden-runc
             version:
-              version: "1.9.0"
+              version: "1.9.2"
           - get: ubuntu-trusty-stemcell
             version:
               version: "3445.7"
