@@ -36,7 +36,7 @@
     type: certificate
     options:
       ca: nats_default_ca
-      common_name: default.nats.bosh
+      common_name: default.nats.bosh-internal
       alternative_names: [((internal_ip))]
       extended_key_usage:
         - server_auth
@@ -47,7 +47,7 @@
     type: certificate
     options:
       ca: nats_default_ca
-      common_name: default.director.bosh
+      common_name: default.director.bosh-internal
       extended_key_usage:
         - client_auth
 - type: replace
@@ -57,6 +57,6 @@
     type: certificate
     options:
       ca: nats_default_ca
-      common_name: default.hm.bosh
+      common_name: default.hm.bosh-internal
       extended_key_usage:
         - client_auth
