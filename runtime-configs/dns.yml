@@ -7,6 +7,6 @@ releases:
 addons:
 - name: dns
   jobs:
-  - name: dns
+  - name: bosh-dns
     release: bosh-dns
     properties: {}
