@@ -3,7 +3,13 @@
   path: /resource_pools/name=vms/cloud_properties/access_key_id?
 
 - type: remove
+  path: /cloud_provider/properties/aws/access_key_id
+
+- type: remove
   path: /resource_pools/name=vms/cloud_properties/secret_access_key?
+
+- type: remove
+  path: /cloud_provider/properties/aws/secret_access_key
 
 - type: replace
   path: /resource_pools/name=vms/cloud_properties/iam_instance_profile?
@@ -17,4 +23,8 @@
 
 - type: replace
   path: /instance_groups/name=bosh/properties/aws/credentials_source?
+  value: env_or_profile
+
+- type: replace
+  path: /cloud_provider/properties/aws/credentials_source?
   value: env_or_profile
