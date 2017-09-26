@@ -331,6 +331,26 @@ jobs:
         params:
           file: "compiled-release/*.tgz"
 
+  - name: compile-credhub-release-1.0.6-ubuntu-trusty-3445
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: credhub-release
+          version:
+            version: "1.0.6"
+        - get: ubuntu-trusty-stemcell
+          version:
+            version: "3421.26"
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: credhub-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
   - name: compile-config-server-release-0-ubuntu-trusty-3445
     plan:
       - aggregate:
