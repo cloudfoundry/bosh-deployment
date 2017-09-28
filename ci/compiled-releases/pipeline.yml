@@ -459,7 +459,7 @@ jobs:
           - get: bosh-deployment
           - get: garden-runc
             version:
-              version: "1.9.2"
+              version: "1.9.4"
           - get: ubuntu-trusty-stemcell
             version:
               version: "3445.11"
