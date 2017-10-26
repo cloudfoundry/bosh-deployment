@@ -15,11 +15,11 @@
         certificate: ((nats_server_cert.certificate))
         private_key: ((nats_server_cert.private_key))
       director:
-        certificate: ((director_client_cert.certificate))
-        private_key: ((director_client_cert.private_key))
+        certificate: ((nats_director_client_cert.certificate))
+        private_key: ((nats_director_client_cert.private_key))
       health_monitor:
-        certificate: ((health_monitor_client_cert.certificate))
-        private_key: ((health_monitor_client_cert.private_key))
+        certificate: ((nats_health_monitor_client_cert.certificate))
+        private_key: ((nats_health_monitor_client_cert.private_key))
 
 - type: replace
   path: /variables/-
@@ -43,7 +43,7 @@
 - type: replace
   path: /variables/-
   value:
-    name: director_client_cert
+    name: nats_director_client_cert
     type: certificate
     options:
       ca: nats_default_ca
@@ -53,7 +53,7 @@
 - type: replace
   path: /variables/-
   value:
-    name: health_monitor_client_cert
+    name: nats_health_monitor_client_cert
     type: certificate
     options:
       ca: nats_default_ca
