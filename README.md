@@ -41,7 +41,7 @@
 - `misc/proxy.yml`: Configure HTTP proxy for Director and CPI
 - `runtime-configs/syslog.yml`: Runtime config to enable syslog forwarding
 
-See [tests/run-checks.sh](run-checks.sh) for example usage of different ops files.
+See [tests/run-checks.sh](tests/run-checks.sh) for example usage of different ops files.
 
 ## Security Groups
 
