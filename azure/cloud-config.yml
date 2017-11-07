@@ -27,6 +27,7 @@ networks:
     dns: [168.63.129.16]
     reserved: [((internal_gw))/30]
     cloud_properties:
+      resource_group_name: ((vnet_resource_group_name))
       virtual_network_name: ((vnet_name))
       subnet_name: ((subnet_name))
       security_group: ((security_group))
