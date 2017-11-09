@@ -61,13 +61,13 @@ jobs:
         params:
           file: "compiled-release/*.tgz"
 
-  - name: compile-uaa-release-41
+  - name: compile-uaa-release-45
     plan:
       - aggregate:
           - get: bosh-deployment
           - get: uaa-release
             version:
-              version: "41.1"
+              version: "45.4"
           - get: ubuntu-trusty-stemcell
             version:
               version: "3421.31"

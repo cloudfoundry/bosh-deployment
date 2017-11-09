@@ -66,13 +66,13 @@ resources:
       regexp: ".*-(\\d+).tgz"
 
 jobs:
-  - name: compile-bosh-release-263
+  - name: compile-bosh-release-264
     plan:
       - aggregate:
         - get: bosh-deployment
         - get: bosh-release
           version:
-            version: "263.4.0"
+            version: "264.1"
         - get: ubuntu-trusty-stemcell
           version:
             version: "3468.1"
