@@ -1,11 +1,11 @@
 ---
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/blobstore/ssl?
+  path: /instance_groups/name=bosh/properties/blobstore/tls?/cert
   value:
-    ca_cert: ((blobstore_ca_cert.ca))
-    cert: ((blobstore_ssl.certificate))
-    key: ((blobstore_ssl.private_key))
+    ca: ((blobstore_ca_cert.ca))
+    certificate: ((blobstore_ssl.certificate))
+    private_key: ((blobstore_ssl.private_key))
 
 - type: replace
   path: /variables/-
@@ -25,3 +25,15 @@
       ca: blobstore_ca_cert
       common_name: ((internal_ip))
       alternative_names: [((internal_ip))]
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/env?/bosh/blobstores
+  value:
+    - provider: dav
+      options:
+        endpoint: 'https://((internal_ip)):25250'
+        user: 'agent'
+        password: ((blobstore_agent_password))
+        tls:
+          cert:
+            ca: ((blobstore_ca_cert.ca))
