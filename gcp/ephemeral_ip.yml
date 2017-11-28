@@ -1,0 +1,5 @@
+---
+# add ephemeral ip for internet access
+- type: replace
+  path: /networks/name=default/subnets/0/cloud_properties/ephemeral_external_ip
+  value: true
