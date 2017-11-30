@@ -89,6 +89,8 @@ instance_groups:
       enable_dedicated_status_worker: true
       enable_nats_delivered_templates: true
       workers: 4
+      local_dns:
+        enabled: true
       events:
         record_events: true
       ssl:
