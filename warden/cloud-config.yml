@@ -5,6 +5,10 @@ azs:
 
 vm_types:
 - name: default
+- name: minimal
+- name: small
+- name: small-highmem
+- name: large
 
 disk_types:
 - name: default

@@ -13,6 +13,15 @@ vm_types:
 - name: default
   cloud_properties:
     instance_type: m1.small
+- name: minimal
+  cloud_properties:
+    instance_type: m1.small
+- name: small
+  cloud_properties:
+    instance_type: m1.small
+- name: small-highmem
+  cloud_properties:
+    instance_type: m1.xlarge
 - name: large
   cloud_properties:
     instance_type: m1.xlarge

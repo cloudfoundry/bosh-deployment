@@ -15,6 +15,21 @@ vm_types:
     machine_type: n1-standard-2
     root_disk_size_gb: 20
     root_disk_type: pd-ssd
+- name: minimal
+  cloud_properties:
+    machine_type: n1-standard-2
+    root_disk_size_gb: 20
+    root_disk_type: pd-ssd
+- name: small
+  cloud_properties:
+    machine_type: n1-standard-2
+    root_disk_size_gb: 20
+    root_disk_type: pd-ssd
+- name: small-highmem
+  cloud_properties:
+    machine_type: n1-standard-2
+    root_disk_size_gb: 50
+    root_disk_type: pd-ssd
 - name: large
   cloud_properties:
     machine_type: n1-standard-2

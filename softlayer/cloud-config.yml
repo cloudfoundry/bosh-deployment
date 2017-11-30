@@ -21,6 +21,50 @@ vm_types:
     domain: ((sl_vm_domain))
     datacenter:
       name: ((sl_datacenter))
+- name: minimal
+  cloud_properties:
+    bosh_ip: ((internal_ip))
+    startCpus:  4
+    maxMemory:  8192
+    ephemeralDiskSize: 100
+    hourlyBillingFlag: true
+    vmNamePrefix: ((sl_vm_name_prefix))
+    domain: ((sl_vm_domain))
+    datacenter:
+      name: ((sl_datacenter))
+- name: small
+  cloud_properties:
+    bosh_ip: ((internal_ip))
+    startCpus:  4
+    maxMemory:  8192
+    ephemeralDiskSize: 100
+    hourlyBillingFlag: true
+    vmNamePrefix: ((sl_vm_name_prefix))
+    domain: ((sl_vm_domain))
+    datacenter:
+      name: ((sl_datacenter))
+- name: small-highmem
+  cloud_properties:
+    bosh_ip: ((internal_ip))
+    startCpus:  4
+    maxMemory:  8192
+    ephemeralDiskSize: 100
+    hourlyBillingFlag: true
+    vmNamePrefix: ((sl_vm_name_prefix))
+    domain: ((sl_vm_domain))
+    datacenter:
+      name: ((sl_datacenter))
+- name: large
+  cloud_properties:
+    bosh_ip: ((internal_ip))
+    startCpus:  4
+    maxMemory:  8192
+    ephemeralDiskSize: 100
+    hourlyBillingFlag: true
+    vmNamePrefix: ((sl_vm_name_prefix))
+    domain: ((sl_vm_domain))
+    datacenter:
+      name: ((sl_datacenter))
 
 disk_types:
 - name: default

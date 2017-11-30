@@ -14,6 +14,18 @@ vm_types:
   cloud_properties:
     instance_type: m4.large
     ephemeral_disk: {size: 25_000}
+- name: minimal
+  cloud_properties:
+    instance_type: m4.large
+    ephemeral_disk: {size: 25_000}
+- name: small
+  cloud_properties:
+    instance_type: m4.large
+    ephemeral_disk: {size: 25_000}
+- name: small-highmem
+  cloud_properties:
+    instance_type: m4.xlarge
+    ephemeral_disk: {size: 50_000}
 - name: large
   cloud_properties:
     instance_type: m4.xlarge
