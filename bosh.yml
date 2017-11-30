@@ -3,9 +3,9 @@ name: bosh
 
 releases:
 - name: bosh
-  version: "264.1"
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-264.1-ubuntu-trusty-3468.1-20171109-004207-628092428-20171109004211.tgz?versionId=46RkXfd52MvTfE_IXpC.P9x1Tfv09qkB
-  sha1: f262d1c35f3646a3f0394132f2705719c9d2bb6a
+  version: "264.3.0"
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-264.3.0-ubuntu-trusty-3468.11-20171129-221922-037689141-20171129221925.tgz?versionId=4xxaLXdXJFDkf7H3ww5YGz.HH7I_nm0Y
+  sha1: 8dff3f38acba0947e764f8afd51c2efbef6c608c
 
 resource_pools:
 - name: vms
