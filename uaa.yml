@@ -3,8 +3,8 @@
   value:
     name: uaa
     version: "52.4"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-52.4-ubuntu-trusty-3468.11-20171129-192736-0357857-20171129192743.tgz?versionId=bYcMirsdLTD0dA7823lDm1mNEqOprCDL
-    sha1: b3ad07f3498cc1750624c4f3e7e6719582573cbd
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-52.4-ubuntu-trusty-3468.13-20171209-003153-486864753-20171209003200.tgz?versionId=_NrqFWkxlSlVlaoZR5nSZRzKhEdu.qN3
+    sha1: 09a83ee0dff8a7791f99cd2261a92b38cc5001ff
 
 # Switch Director to use UAA
 - type: replace

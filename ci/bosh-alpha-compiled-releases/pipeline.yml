@@ -34,7 +34,7 @@ jobs:
           trigger: true
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3468.11"
+            version: "3468.13"
       - task: build-release
         file: bosh-deployment/ci/bosh-alpha-compiled-releases/tasks/build-release.yml
       - task: export-release
