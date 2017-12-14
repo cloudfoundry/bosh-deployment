@@ -21,6 +21,22 @@ addons:
   include:
     stemcells:
     - os: ubuntu-trusty
+- name: bosh-dns-windows
+  jobs:
+  - name: bosh-dns-windows
+    release: bosh-dns
+    properties:
+      cache:
+        enabled: true
+      health:
+        enabled: true
+        server:
+          tls: ((/dns_healthcheck_server_tls))
+        client:
+          tls: ((/dns_healthcheck_client_tls))
+  include:
+    stemcells:
+    - os: windows2012R2
 
 variables:
 - name: /dns_healthcheck_tls_ca
