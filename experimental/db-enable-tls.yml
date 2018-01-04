@@ -5,10 +5,3 @@
     enabled: true
     cert:
       ca: ((db_ca))
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/registry/db/tls?
-  value:
-    enabled: true
-    cert:
-      ca: ((db_ca))
