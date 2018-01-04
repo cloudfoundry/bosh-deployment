@@ -77,13 +77,14 @@
     secret: ""
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/scim/users?/-
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/credhub_client?
   value:
-    name: credhub-cli
-    password: ((credhub_cli_password))
-    groups:
-    - credhub.read
-    - credhub.write
+    override: true
+    authorized-grant-types: client_credentials
+    scope: ""
+    authorities: credhub.read,credhub.write
+    access-token-validity: 3600
+    secret: ((credhub_client_password))
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/jwt/revocable?
@@ -124,5 +125,5 @@
 - type: replace
   path: /variables/-
   value:
-    name: credhub_cli_password
+    name: credhub_client_password
     type: password
