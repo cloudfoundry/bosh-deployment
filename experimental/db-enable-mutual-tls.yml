@@ -1,0 +1,9 @@
+---
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/db/tls/cert/certificate?
+  value: ((db_client_certificate))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/db/tls/cert/private_key?
+  value: ((db_client_private_key))
