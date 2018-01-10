@@ -6,6 +6,10 @@ releases:
   version: "264.5.0"
   url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-264.5.0-ubuntu-trusty-3468.13-20171214-231004-994547171-20171214231009.tgz?versionId=66MJhlOuDZn3SM18oBXxVP6DuV2BOXZi
   sha1: 0ff5b856bbdb901691e98283823fd1f112768569
+- name: bpm
+  version: "0.2.0"
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.2.0
+  sha1: f2bd126b17b3591160f501d88d79ccf0aba1ae54
 
 resource_pools:
 - name: vms
@@ -38,6 +42,7 @@ instance_groups:
   - {name: blobstore, release: bosh}
   - {name: director, release: bosh}
   - {name: health_monitor, release: bosh}
+  - {name: bpm, release: bpm}
   resource_pool: vms
   persistent_disk_pool: disks
   networks:
