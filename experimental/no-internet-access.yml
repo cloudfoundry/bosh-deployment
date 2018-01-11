@@ -17,27 +17,3 @@
 
 - type: remove
   path: /resource_pools/name=vms/stemcell/sha1
-
-# Use local UAA releases
-- type: replace
-  path: /releases/name=uaa/url
-  value: file://((local_uaa_release))
-
-- type: remove
-  path: /releases/name=uaa/sha1
-
-- type: replace
-  path: /releases/name=uaa/version
-  value: latest
-
-# Use local CredHub releases
-- type: replace
-  path: /releases/name=credhub/url
-  value: file://((local_credhub_release))
-
-- type: remove
-  path: /releases/name=credhub/sha1
-
-- type: replace
-  path: /releases/name=credhub/version
-  value: latest
