@@ -9,8 +9,8 @@
 - type: replace
   path: /resource_pools/name=vms/stemcell?
   value:
-    url: https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=3468.13
-    sha1: 12c26118ce656520f8996d47c4f45b9626c66b9d
+    url: https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=3468.19
+    sha1: 64fdbbf3de0d01408790e011b6784b3d3eb5f443
 
 # Configure VM size
 - type: replace
