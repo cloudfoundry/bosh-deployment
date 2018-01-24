@@ -1,4 +1,4 @@
-# Use local CPI and Stemcell -- useful for deployments without Internet access
+# Use local vSphere CPI
 
 - type: replace
   path: /releases/name=bosh-vsphere-cpi/url
@@ -10,10 +10,3 @@
 - type: replace
   path: /releases/name=bosh-vsphere-cpi/version
   value: latest
-
-- type: replace
-  path: /resource_pools/name=vms/stemcell/url
-  value: file://((local_stemcell))
-
-- type: remove
-  path: /resource_pools/name=vms/stemcell/sha1

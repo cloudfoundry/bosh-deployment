@@ -1,4 +1,5 @@
-# Use local UAA releases
+# Use local UAA release
+
 - type: replace
   path: /releases/name=uaa/url
   value: file://((local_uaa_release))
