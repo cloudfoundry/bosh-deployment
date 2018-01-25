@@ -3,16 +3,16 @@
   value:
     name: bosh-warden-cpi
     version: "37"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-37-ubuntu-trusty-3468.19-20180120-020633-056789648-20180120020636.tgz?versionId=uGGHADkiTytQDfNJ5dyrflts8fOQJs4p
-    sha1: 8948dd2a163026a0f93a5b1605500465323cc87f
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-37-ubuntu-trusty-3468.21-20180125-031924-498857068-20180125031928.tgz?versionId=aH2ugBoIsLJ0YwluCO8GB9KJzJ7IkQS.
+    sha1: 3ff9b922e620a89c6fc098f08eba84f1c56b93f6
 
 - type: replace
   path: /releases/-
   value:
     name: garden-linux
     version: "0.342.0"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-linux-0.342.0-ubuntu-trusty-3468.19-20180120-013149-075884607-20180120013153.tgz?versionId=HMtZedoarVfYShgb93dhWbr3XJkEDM4L
-    sha1: fb91e7d03d7812e1cc757e367ce851bcbe256796
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-linux-0.342.0-ubuntu-trusty-3468.21-20180125-031714-495392008-20180125031719.tgz?versionId=nWnYXOboNPqBGgi6WJUYN5Lnsnd8RsF.
+    sha1: 750b550d79e1cb44a917b7e696e29537e5328bbb
 
 - type: replace
   path: /releases/name=os-conf?
