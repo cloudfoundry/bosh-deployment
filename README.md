@@ -53,6 +53,7 @@ SSH                  TCP      22          <IP you run bosh CLI from> SSH (if Reg
 Custom TCP Rule      TCP      6868        <IP you run bosh CLI from> Agent for bootstrapping
 Custom TCP Rule      TCP      25555       <IP you run bosh CLI from> Director API
 Custom TCP Rule      TCP      8443        <IP you run bosh CLI from> UAA API (if UAA is used)
+Custom TCP Rule      TCP      8844        <IP you run bosh CLI from> Credhub API (if Credhub is used)
 SSH                  TCP      22          <((internal_cidr))>        BOSH SSH (optional)
 Custom TCP Rule      TCP      4222        <((internal_cidr))>        NATS
 Custom TCP Rule      TCP      25250       <((internal_cidr))>        Blobstore
