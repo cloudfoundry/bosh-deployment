@@ -1,0 +1,64 @@
+azs:
+- name: z1
+  cpi: oracle-cpi-ref
+  cloud_properties:
+    availability_domain: ((ad1))
+- name: z2
+  cpi: oracle-cpi-ref
+  cloud_properties:
+    availability_domain: ((ad2))
+- name: z3
+  cpi: oracle-cpi-ref
+  cloud_properties:
+    availability_domain: ((ad3))
+
+vm_types:
+- name: default
+  cloud_properties:
+    instance_shape: VM.Standard1.2
+- name: vm4
+  cloud_properties:
+    instance_shape: VM.Standard1.4
+- name: bm_default
+  cloud_properties:
+    instance_shape: BM.Standard1.36
+
+disk_types:
+- name: default
+  disk_size: 51200
+- name: large
+  disk_size: 262144
+
+networks:
+- name: default 
+  type: manual
+  subnets:
+  - range: ((internal_cidr_n1))
+    gateway: ((internal_gw_n1))
+    az: z1
+    dns: [8.8.8.8]
+    cloud_properties:
+      vcn: ((vcn))
+      subnet_name: ((subnet1))
+  - range: ((internal_cidr_n2))
+    gateway: ((internal_gw_n2))
+    az: z2
+    dns: [8.8.8.8]
+    cloud_properties:
+      vcn: ((vcn))
+      subnet_name: ((subnet2))
+
+  - range: ((internal_cidr_n3))
+    gateway: ((internal_gw_n3))
+    az: z3
+    dns: [8.8.8.8]
+    cloud_properties:
+      vcn: ((vcn))
+      subnet_name: ((subnet3))
+
+compilation:
+  workers: 5
+  reuse_compilation_vms: true
+  az: z1
+  vm_type: default
+  network: default 
