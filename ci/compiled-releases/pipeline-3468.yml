@@ -52,10 +52,10 @@ jobs:
         - get: bosh-deployment
         - get: bosh-release
           version:
-            version: "264.7.0"
+            version: "264.9.0"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3468.25"
+            version: "3468.27"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -75,7 +75,7 @@ jobs:
               version: "52.7"
           - get: ubuntu-trusty-stemcell
             version:
-              version: "3468.25"
+              version: "3468.27"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -95,7 +95,7 @@ jobs:
               version: "53.3"
           - get: ubuntu-trusty-stemcell
             version:
-              version: "3468.25"
+              version: "3468.27"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -115,7 +115,7 @@ jobs:
             version: "1.6.5"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3468.25"
+            version: "3468.27"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -135,7 +135,7 @@ jobs:
             version: "1.2.1"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3468.25"
+            version: "3468.27"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
