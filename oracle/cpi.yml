@@ -61,9 +61,7 @@
     compartment: ((compartment))
     apikey: ((apikey))
     cpikey: ((cpikeys.private_key))
-    cpiuser: ((provisioned_username))
     authorized_keys:
-       user: ((ssh_key))
        cpi: ((cpikeys.public_key))
 
 # Add CPI job
@@ -87,7 +85,7 @@
   value:
     host: ((internal_ip))
     port: 22
-    user: ((provisioned_username))
+    user: vcap
     private_key: ((cpikeys.private_key))
 
 

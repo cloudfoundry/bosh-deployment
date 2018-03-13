@@ -1,6 +1,6 @@
 cpis:
 - name: oracle-cpi-ref
-  type: oracle  #CPI binary name. Director appends _cpi to this name
+  type: oracle
   properties:
     tenancy: ((tenancy))
     compartment: ((compartment))
