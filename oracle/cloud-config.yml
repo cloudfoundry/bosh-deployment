@@ -2,24 +2,24 @@ azs:
 - name: z1
   cpi: oracle-cpi-ref
   cloud_properties:
-    availability_domain: ((ad1))
+    availability_domain: ((ad))
 - name: z2
   cpi: oracle-cpi-ref
   cloud_properties:
-    availability_domain: ((ad2))
+    availability_domain: ((ad))
 - name: z3
   cpi: oracle-cpi-ref
   cloud_properties:
-    availability_domain: ((ad3))
+    availability_domain: ((ad))
 
 vm_types:
 - name: default
   cloud_properties:
     instance_shape: VM.Standard1.2
-- name: vm4
+- name: large
   cloud_properties:
     instance_shape: VM.Standard1.4
-- name: bm_default
+- name: baremetal
   cloud_properties:
     instance_shape: BM.Standard1.36
 
@@ -33,28 +33,13 @@ networks:
 - name: default 
   type: manual
   subnets:
-  - range: ((internal_cidr_n1))
-    gateway: ((internal_gw_n1))
+  - range: ((internal_cidr))
+    gateway: ((internal_gw))
     az: z1
     dns: [8.8.8.8]
     cloud_properties:
       vcn: ((vcn))
-      subnet_name: ((subnet1))
-  - range: ((internal_cidr_n2))
-    gateway: ((internal_gw_n2))
-    az: z2
-    dns: [8.8.8.8]
-    cloud_properties:
-      vcn: ((vcn))
-      subnet_name: ((subnet2))
-
-  - range: ((internal_cidr_n3))
-    gateway: ((internal_gw_n3))
-    az: z3
-    dns: [8.8.8.8]
-    cloud_properties:
-      vcn: ((vcn))
-      subnet_name: ((subnet3))
+      subnet_name: ((subnet))
 
 compilation:
   workers: 5

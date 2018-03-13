@@ -2,29 +2,28 @@
 director_name: sample-bosh-director
 local_oracle_cpi_release: /full/path/to/cpi/release.tgz
 local_oracle_light_stemcell: /full/path/to/light/stemcell.tgz
-# Tenancy
+# Tenancy OCID
 tenancy: "ocid1.tenancy.oc1..."
-# Connect to OCI using this user. Specify the user OCID
+# User OCID
 user: "ocid1.user.oc1..."
-# OCID of the compartment to deploy to
+# Compartment OCID
 compartment: "ocid1.compartment.oc1.."
-# VCN name, subnet name,  region name, and availability domain name
-# to create the director VM in
+# Region name
 region: "us-phoenix-1"
+# VCN name
 vcn: "BoshDirectorVCN"
+# Subnet name
 subnet: "director-subnet-ad1"
+# Availability Domain name
 ad: WZYX:PHX-AD-1
+# CIDR range of the subnet listed above.
 internal_cidr: 10.0.1.0/24
+# Subnet gateway
 internal_gw: 10.0.1.1
-# First user provisioned in the stemcell
-provisioned_username: vcap
 # Private IP that will be assigned to the BOSH director VM
 # Must fall within the subnet CIDR range above and must be available
 internal_ip: 10.0.1.XX
-# Contents of the public part of a SSH keypair that will be added to the provisioned user account.
-# Must conform to the ssh-rsa key format. Typically the public key is in ~/.ssh/id_rsa.pub
-ssh_key: ""
-#Fingerprint and contents of the API signing key
+#Fingerprint and contents of the API signing key associated with the User
 fingerprint:
 apikey: |
        -----BEGIN RSA PRIVATE KEY-----
