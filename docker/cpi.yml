@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: bosh-docker-cpi
-    version: "0.0.3"
-    url: https://bosh.io/d/github.com/cppforlife/bosh-docker-cpi-release?v=0.0.3
-    sha1: 9eb1457a5f268a8e3a21765d151366e28f7d5ea3
+    version: "0.0.4"
+    url: https://bosh.io/d/github.com/cppforlife/bosh-docker-cpi-release?v=0.0.4
+    sha1: 5c8185e3bc2a1f0bf839aa911ac2afd2b16e754e
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
