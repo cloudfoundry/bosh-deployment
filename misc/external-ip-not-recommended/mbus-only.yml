@@ -1,6 +1,5 @@
 # WARNING: We do not recommend to expose Director and any other services over public addresses.
 
-# todo should not access non-defined vars
 - type: replace
   path: /cloud_provider/mbus
   value: https://mbus:((mbus_bootstrap_password))@((external_ip)):6868
