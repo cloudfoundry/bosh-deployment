@@ -1,0 +1,17 @@
+- type: replace
+  path: /networks/name=floating?
+  value:
+    name: floating
+    type: vip
+    cloud_properties:
+      net_id: ((openstack_vip_net_id))
+
+- type: replace
+  path: /instance_groups/name=bosh/networks/name=default/default?
+  value: [dns, gateway]
+
+- type: replace
+  path: /instance_groups/name=bosh/networks/name=floating?
+  value:
+    name: floating
+    static_ips: [((openstack_vip_ip))]
