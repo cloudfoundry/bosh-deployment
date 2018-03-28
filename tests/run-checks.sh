@@ -475,3 +475,24 @@ bosh create-env bosh.yml \
 
 echo "- Docker (cloud-config)"
 bosh update-cloud-config docker/cloud-config.yml -v network=net3
+
+echo "- Secondary CPIs"
+bosh create-env bosh.yml \
+  -o aws/cpi.yml \
+  -o docker/cpi-secondary.yml \
+  -o azure/cpi-secondary.yml \
+  -o vsphere/cpi-secondary.yml \
+  --state=$tmp_file \
+  --vars-store $(mktemp ${tmp_file}.XXXXXX) \
+  -v director_name=test \
+  -v internal_cidr=test \
+  -v internal_gw=test \
+  -v internal_ip=test \
+  -v access_key_id=test \
+  -v secret_access_key=test \
+  -v az=test \
+  -v region=test \
+  -v default_key_name=test \
+  -v default_security_groups=[test] \
+  -v private_key=test \
+  -v subnet_id=test
