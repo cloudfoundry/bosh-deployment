@@ -1,0 +1,7 @@
+---
+- type: replace
+  path: /disk_pools/name=disks/cloud_properties?
+  value:
+    type: gp2
+    encrypted: true
+    kms_key_arn: ((kms_key_arn))
