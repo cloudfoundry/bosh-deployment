@@ -3,9 +3,9 @@
   path: /releases/name=bosh-warden-cpi
   value:
     name: bosh-warden-cpi
-    version: "35"
-    url: https://bosh.io/d/github.com/cppforlife/bosh-warden-cpi-release?v=35
-    sha1: d1c79c61c5a1c3664e5456cc6cbce34f2111f2d7
+    version: "40"
+    url: https://bosh.io/d/github.com/cppforlife/bosh-warden-cpi-release?v=40
+    sha1: 9f579b1615bc95494eaa8579728fe4764e3b1e16
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
