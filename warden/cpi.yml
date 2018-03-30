@@ -1,6 +1,6 @@
 ---
 - type: replace
-  path: /releases/name=bosh-warden-cpi
+  path: /releases/-
   value:
     name: bosh-warden-cpi
     version: "40"
