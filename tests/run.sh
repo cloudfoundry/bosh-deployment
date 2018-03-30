@@ -34,8 +34,8 @@ echo "-----> `date`: Update cloud config"
 bosh -n update-cloud-config warden/cloud-config.yml
 
 echo "-----> `date`: Upload stemcell"
-bosh -n upload-stemcell "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=3468.21" \
-  --sha1 72ff179da486fc4a5578740d33f0a1915b7c68f0
+bosh -n upload-stemcell "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=3541.10" \
+  --sha1 11c07b63953710d68b7f068e0ecb9cb8f7e64f6a
 
 echo "-----> `date`: Deploy"
 bosh -n -d zookeeper deploy <(wget -O- https://raw.githubusercontent.com/cppforlife/zookeeper-release/master/manifests/zookeeper.yml) \

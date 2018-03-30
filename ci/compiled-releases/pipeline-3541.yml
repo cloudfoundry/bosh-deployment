@@ -86,6 +86,26 @@ jobs:
         params:
           file: "compiled-release/*.tgz"
 
+  - name: compile-uaa-release-52
+    plan:
+      - aggregate:
+          - get: bosh-deployment
+          - get: uaa-release
+            version:
+              version: "52.8"
+          - get: ubuntu-trusty-stemcell
+            version:
+              version: "3541.10"
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: uaa-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
   - name: compile-uaa-release-55
     plan:
       - aggregate:
@@ -102,6 +122,26 @@ jobs:
         input_mapping:
           stemcell: ubuntu-trusty-stemcell
           release: uaa-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+  - name: compile-credhub-release-1.6
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: credhub-release
+          version:
+            version: "1.6.5"
+        - get: ubuntu-trusty-stemcell
+          version:
+            version: "3541.10"
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: credhub-release
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -154,7 +194,7 @@ jobs:
           - get: bosh-deployment
           - get: warden-cpi
             version:
-              version: "37"
+              version: "40"
           - get: ubuntu-trusty-stemcell
             version:
               version: "3541.10"
