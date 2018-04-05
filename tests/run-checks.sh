@@ -476,6 +476,24 @@ bosh create-env bosh.yml \
 echo "- Docker (cloud-config)"
 bosh update-cloud-config docker/cloud-config.yml -v network=net3
 
+echo "- Softlayer (bosh-lite)"
+bosh create-env bosh.yml \
+  -o jumpbox-user.yml \
+  -o softlayer/cpi-dynamic.yml \
+  -o bosh-lite.yml \
+  -o bosh-lite-runc.yml \
+  -o softlayer/add-sl-domain-to-lite-director.yml \
+  --vars-store  $(mktemp ${tmp_file}.XXXXXX) \
+  -v director_name=bosh-lite \
+  -v sl_vm_name_prefix=bosh-lite \
+  -v sl_vm_domain=test \
+  -v sl_username=user \
+  -v sl_api_key=api-key \
+  -v sl_datacenter=dc \
+  -v sl_vlan_public=12345 \
+  -v sl_vlan_private=54321 \
+  -v internal_ip=bosh-lite.test
+
 echo "- Warden"
 bosh create-env bosh.yml \
   -o warden/cpi.yml \

@@ -1,0 +1,28 @@
+# INFO:
+# This OPS file is required to be able to ssh into bosh-lite instances using Socks 5 proxy.
+
+
+# Pre-start script is available from release version v19
+- type: replace
+  path: /releases/name=os-conf?
+  value:
+    name: os-conf
+    version: 19
+    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=19
+    sha1: f515406949ee0bba0329d1ce4a7eb1679521eabd
+
+# map IP with internal Softlayer domain name
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: pre-start-script
+    release: os-conf
+    properties:
+      script: |-
+        #!/bin/bash
+        mkdir -p /var/vcap/sys/log/pre-start-script
+        echo "ifconfig" >> /var/vcap/sys/log/pre-start-script/out.log
+        ifconfig >> /var/vcap/sys/log/pre-start-script/out.log
+        echo "$(ifconfig | grep -C1 eth0 | tail -n1 | grep -oE 'addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' \
+          | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') ((sl_vm_name_prefix)).((sl_vm_domain))" \
+          >> /etc/hosts
