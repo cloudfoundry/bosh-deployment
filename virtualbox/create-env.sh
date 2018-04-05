@@ -2,16 +2,31 @@
 
 set -eu
 
-echo "This will create BOSH using VirtualBox with a default configuration."
-echo
+STEP() { echo ; echo ; echo "==\\" ; echo "===>" "$@" ; echo "==/" ; echo ; }
 
-read -p "Continue? [yN] "
-[[ $REPLY =~ ^[Yy]$ ]] || exit 1
 
-echo
-echo
-echo "===> Creating BOSH Director ===="
-echo
+if [ ! -e bosh-deployment ]; then
+  ####
+  STEP "Cloning cloudfoundry/bosh-deployment"
+  ####
+
+  if [ -e virtualbox/create-env.sh ] || [ -e ../virtualbox/create-env.sh ]; then
+    echo "It looks like you are running this within the bosh-deployment repository."
+    echo "To avoid secrets ending up in this repo, run this from your parent directory."
+    echo
+
+    exit 1
+  fi
+
+  git clone https://github.com/cloudfoundry/bosh-deployment.git
+
+  echo
+fi
+
+
+####
+STEP "Creating BOSH Director"
+####
 
 bosh create-env bosh-deployment/bosh.yml \
   --state state.json \
@@ -19,6 +34,8 @@ bosh create-env bosh-deployment/bosh.yml \
   --ops-file bosh-deployment/virtualbox/outbound-network.yml \
   --ops-file bosh-deployment/bosh-lite.yml \
   --ops-file bosh-deployment/bosh-lite-runc.yml \
+  --ops-file bosh-deployment/uaa.yml \
+  --ops-file bosh-deployment/credhub.yml \
   --ops-file bosh-deployment/jumpbox-user.yml \
   --vars-store creds.yml \
   --var director_name=bosh-lite \
@@ -27,10 +44,10 @@ bosh create-env bosh-deployment/bosh.yml \
   --var internal_cidr=192.168.50.0/24 \
   --var outbound_network_name=NatNetwork
 
-echo
-echo
-echo "===> Adding Network Routes (sudo is required) ===="
-echo
+
+####
+STEP "Adding Network Routes (sudo is required)"
+####
 
 if [ `uname` = "Darwin" ]; then
   sudo route add -net 10.244.0.0/16 192.168.50.6
@@ -46,16 +63,21 @@ elif [ `uname` = "Linux" ]; then
 fi
 
 
-echo
-echo
-echo "===> Generating .envrc"
-echo
+####
+STEP "Generating .envrc"
+####
 
 cat > .envrc <<"EOF"
 export BOSH_ENVIRONMENT=vbox
 export BOSH_CA_CERT=$( bosh interpolate creds.yml --path /director_ssl/ca )
 export BOSH_CLIENT=admin
 export BOSH_CLIENT_SECRET=$( bosh interpolate creds.yml --path /admin_password )
+
+export CREDHUB_SERVER=https://192.168.50.6:8844
+export CREDHUB_CA_CERT="$( bosh interpolate creds.yml --path=/credhub_tls/ca )
+$( bosh interpolate creds.yml --path=/uaa_ssl/ca )"
+export CREDHUB_CLIENT=credhub-admin
+export CREDHUB_SECRET=$( bosh interpolate creds.yml --path=/credhub_admin_client_secret )
 EOF
 
 source .envrc
@@ -63,10 +85,9 @@ source .envrc
 echo Succeeded
 
 
-echo
-echo
-echo "===> Configuring Environment Alias"
-echo
+####
+STEP "Configuring Environment Alias"
+####
 
 bosh \
   --environment 192.168.50.6 \
@@ -74,32 +95,25 @@ bosh \
   alias-env vbox
 
 
-echo
-echo
-echo "===> Updating Cloud Config"
-echo
+####
+STEP "Updating Cloud Config"
+####
 
 bosh -n update-cloud-config bosh-deployment/warden/cloud-config.yml \
   > /dev/null
 
 echo Succeeded
 
-echo
-echo
-echo "===> Completed"
-echo
+
+####
+STEP "Completed"
+####
 
 echo "Credentials for your environment have been generated and stored in creds.yml."
 echo "Details about the state of your VM have been stored in state.json."
 echo "You should keep these files for future updates and to destroy your environment."
 echo
-echo "BOSH Director is now running. You may need to run the following before using"
-echo "bosh commands."
+echo "BOSH Director is now running. You may need to run the following before using bosh commands:"
 echo
 echo "    source .envrc"
 echo
-
-if which direnv > /dev/null 2>&1; then
-  echo "Alternatively, run `direnv allow` to automatically load your .envrc settings."
-  echo
-fi

@@ -2,16 +2,18 @@
 
 set -eu
 
+STEP() { echo ; echo ; echo "==\\" ; echo "===>" "$@" ; echo "==/" ; echo ; }
+
 echo "This will destroy BOSH from VirtualBox."
 echo
 
 read -p "Continue? [yN] "
 [[ $REPLY =~ ^[Yy]$ ]] || exit 1
 
-echo
-echo
-echo "===> Deleting BOSH Director ===="
-echo
+
+####
+STEP "Deleting BOSH Director"
+####
 
 bosh delete-env bosh-deployment/bosh.yml \
   --state state.json \
