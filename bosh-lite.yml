@@ -1,5 +1,5 @@
 - type: replace
-  path: /releases/-
+  path: /releases/name=bosh-warden-cpi?
   value:
     name: bosh-warden-cpi
     version: "40"
@@ -7,7 +7,7 @@
     sha1: edaa548ac956d75ba416edfbd2621ef43ebb7f78
 
 - type: replace
-  path: /releases/-
+  path: /releases/name=garden-linux?
   value:
     name: garden-linux
     version: "0.342.0"
