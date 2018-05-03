@@ -1,42 +1,33 @@
 #!/bin/bash
 
-set -eu
+set -eu -o pipefail
 
 STEP() { echo ; echo ; echo "==\\" ; echo "===>" "$@" ; echo "==/" ; echo ; }
 
+bosh_deployment="$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd ..; pwd)"
+bosh_deployment_sha="$(cd "${bosh_deployment}"; git rev-parse --short HEAD)"
 
-if [ ! -e bosh-deployment ]; then
-  ####
-  STEP "Cloning cloudfoundry/bosh-deployment"
-  ####
-
-  if [ -e virtualbox/create-env.sh ] || [ -e ../virtualbox/create-env.sh ]; then
-    echo "It looks like you are running this within the bosh-deployment repository."
-    echo "To avoid secrets ending up in this repo, run this from your parent directory."
-    echo
-
-    exit 1
-  fi
-
-  git clone https://github.com/cloudfoundry/bosh-deployment.git
-
+if [ "${PWD##${bosh_deployment}}" != "${PWD}" ] || [ -e virtualbox/create-env.sh ] || [ -e ../virtualbox/create-env.sh ]; then
+  echo "It looks like you are running this within the ${bosh_deployment} repository."
+  echo "To avoid secrets ending up in this repo, run this from another directory."
   echo
-fi
 
+  exit 1
+fi
 
 ####
 STEP "Creating BOSH Director"
 ####
 
-bosh create-env bosh-deployment/bosh.yml \
+bosh create-env "${bosh_deployment}/bosh.yml" \
   --state state.json \
-  --ops-file bosh-deployment/virtualbox/cpi.yml \
-  --ops-file bosh-deployment/virtualbox/outbound-network.yml \
-  --ops-file bosh-deployment/bosh-lite.yml \
-  --ops-file bosh-deployment/bosh-lite-runc.yml \
-  --ops-file bosh-deployment/uaa.yml \
-  --ops-file bosh-deployment/credhub.yml \
-  --ops-file bosh-deployment/jumpbox-user.yml \
+  --ops-file "${bosh_deployment}/virtualbox/cpi.yml" \
+  --ops-file "${bosh_deployment}/virtualbox/outbound-network.yml" \
+  --ops-file "${bosh_deployment}/bosh-lite.yml" \
+  --ops-file "${bosh_deployment}/bosh-lite-runc.yml" \
+  --ops-file "${bosh_deployment}/uaa.yml" \
+  --ops-file "${bosh_deployment}/credhub.yml" \
+  --ops-file "${bosh_deployment}/jumpbox-user.yml" \
   --vars-store creds.yml \
   --var director_name=bosh-lite \
   --var internal_ip=192.168.50.6 \
@@ -49,9 +40,9 @@ bosh create-env bosh-deployment/bosh.yml \
 STEP "Adding Network Routes (sudo is required)"
 ####
 
-if [ `uname` = "Darwin" ]; then
+if [ "$(uname)" = "Darwin" ]; then
   sudo route add -net 10.244.0.0/16 192.168.50.6
-elif [ `uname` = "Linux" ]; then
+elif [ "$(uname)" = "Linux" ]; then
   if type ip > /dev/null 2>&1; then
     sudo ip route add 10.244.0.0/16 via 192.168.50.6
   elif type route > /dev/null 2>&1; then
@@ -78,7 +69,10 @@ export CREDHUB_CA_CERT="$( bosh interpolate creds.yml --path=/credhub_tls/ca )
 $( bosh interpolate creds.yml --path=/uaa_ssl/ca )"
 export CREDHUB_CLIENT=credhub-admin
 export CREDHUB_SECRET=$( bosh interpolate creds.yml --path=/credhub_admin_client_secret )
+
 EOF
+echo "export BOSH_DEPLOYMENT_SHA=${bosh_deployment_sha}" >> .envrc
+
 
 source .envrc
 
@@ -99,7 +93,7 @@ bosh \
 STEP "Updating Cloud Config"
 ####
 
-bosh -n update-cloud-config bosh-deployment/warden/cloud-config.yml \
+bosh -n update-cloud-config "${bosh_deployment}/warden/cloud-config.yml" \
   > /dev/null
 
 echo Succeeded
