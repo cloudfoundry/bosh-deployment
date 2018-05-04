@@ -132,7 +132,7 @@ bosh create-env bosh.yml \
   -v internal_cidr=test \
   -v internal_gw=test \
   -v internal_ip=test \
-  -v internal_dns=[8.8.8.8] \
+  -v internal_dns=[1.1.1.1] \
   -v access_key_id=test \
   -v secret_access_key=test \
   -v az=test \
