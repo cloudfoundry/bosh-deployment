@@ -76,6 +76,11 @@
           serviceProviderKey: ((uaa_service_provider_ssl.private_key))
           serviceProviderKeyPassword: "" # TODO: Remove this when UAA defaults this value
           serviceProviderCertificate: ((uaa_service_provider_ssl.certificate))
+      encryption:
+        active_key_label: key-1
+        encryption_keys:
+        - label: key-1
+          passphrase: ((uaa_encryption_key))
       uaadb:
         address: 127.0.0.1
         port: 5432
@@ -117,6 +122,12 @@
   path: /variables/-
   value:
     name: uaa_login_client_secret
+    type: password
+
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_encryption_key
     type: password
 
 - type: replace
