@@ -18,7 +18,7 @@
     * [Expose Director on a Public IP](https://bosh.io/docs/init-external-ip.html) (not recommended)
 
 * [CLI v2](https://bosh.io/docs/cli-v2.html)
-    * [`create-env` Dependencies](https://bosh.io/docs/cli-env-deps.html)
+    * [`create-env` Dependencies](https://bosh.io/docs/cli-v2-install/#additional-dependencies)
     * [Differences between CLI v2 vs v1](https://bosh.io/docs/cli-v2-diff.html)
     * [Global Flags](https://bosh.io/docs/cli-global-flags.html)
     * [Environments](https://bosh.io/docs/cli-envs.html)
