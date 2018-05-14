@@ -494,6 +494,7 @@ bosh create-env bosh.yml \
   -o docker/cpi-secondary.yml \
   -o azure/cpi-secondary.yml \
   -o vsphere/cpi-secondary.yml \
+  -o openstack/cpi-secondary.yml \
   --state=$tmp_file \
   --vars-store $(mktemp ${tmp_file}.XXXXXX) \
   -v director_name=test \
