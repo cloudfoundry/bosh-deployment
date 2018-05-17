@@ -3,7 +3,7 @@
 - type: replace
   path: /instance_groups/name=bosh/properties/blobstore/tls?/cert
   value:
-    ca: ((blobstore_ca_cert.ca))
+    ca: ((blobstore_ssl.ca))
     certificate: ((blobstore_ssl.certificate))
     private_key: ((blobstore_ssl.private_key))
 
