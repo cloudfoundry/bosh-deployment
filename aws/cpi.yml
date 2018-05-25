@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: bosh-aws-cpi
-    version: "69"
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-aws-cpi-release?v=69
-    sha1: 8abe70219244896ea6f7208fc01f2eac56179170
+    version: "70"
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-aws-cpi-release?v=70
+    sha1: 6ac0abef1fc6598238c0c6ef1033d89861999014
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
@@ -79,6 +79,7 @@
   value: &aws
     access_key_id: ((access_key_id))
     secret_access_key: ((secret_access_key))
+    session_token: ((session_token))
     default_key_name: ((default_key_name))
     default_security_groups: ((default_security_groups))
     region: ((region))
