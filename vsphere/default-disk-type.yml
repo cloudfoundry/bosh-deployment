@@ -1,0 +1,5 @@
+---
+# set default disk type - either 'thin' or 'preallocated' must be provided
+- type: replace
+  path: /instance_groups/name=bosh/properties/vcenter/default_disk_type?
+  value: ((vcenter_default_disk_type))
