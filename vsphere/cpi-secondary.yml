@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: bosh-vsphere-cpi
-    version: "47"
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-vsphere-cpi-release?v=47
-    sha1: e17bac89169b158e3f8a45244624c635ecadd955
+    version: "49"
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-vsphere-cpi-release?v=49
+    sha1: 7dff58b0ceef77bc0b2f5d03d9ff837aa6f06e27
 
 - type: replace
   path: /instance_groups/name=bosh/properties/vcenter?
