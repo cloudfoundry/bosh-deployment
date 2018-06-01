@@ -9,6 +9,7 @@ fly -t production set-pipeline -n \
 
 fly -t production check-resource -r compiled-releases-3586/uaa-release -f version:52.2
 fly -t production check-resource -r compiled-releases-3586/credhub-release -f version:1.6.0
+fly -t production check-resource -r compiled-releases-3586/bpm-release -f version:0.6.0
 fly -t production check-resource -r compiled-releases-3586/backup-and-restore-sdk-release -f version:1.2.1
 fly -t production check-resource -r compiled-releases-3586/ubuntu-trusty-stemcell -f version:3541
 

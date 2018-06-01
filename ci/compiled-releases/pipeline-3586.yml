@@ -18,6 +18,11 @@ resources:
     source:
       repository: pivotal-cf/credhub-release
 
+  - name: bpm-release
+    type: bosh-io-release
+    source:
+      repository: cloudfoundry-incubator/bpm-release
+
   - name: backup-and-restore-sdk-release
     type: bosh-io-release
     source:
@@ -50,7 +55,7 @@ jobs:
               version: "57"
           - get: ubuntu-trusty-stemcell
             version:
-              version: "3586.7"
+              version: "3586.16"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -70,7 +75,7 @@ jobs:
             version: "1.8.3"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3586.7"
+            version: "3586.16"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -90,13 +95,53 @@ jobs:
             version: "1.7.1"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3586.7"
+            version: "3586.16"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
           stemcell: ubuntu-trusty-stemcell
           release: credhub-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+  - name: compile-credhub-release-1.9
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: credhub-release
+          version:
+            version: "1.9.1"
+        - get: ubuntu-trusty-stemcell
+          version:
+            version: "3586.16"
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: credhub-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+  - name: compile-bpm-release-0.6.0
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: bpm-release
+          version:
+            version: "0.6.0"
+        - get: ubuntu-trusty-stemcell
+          version:
+            version: "3586.16"
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: bpm-release
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -110,7 +155,7 @@ jobs:
             version: "1.6.0"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3586.7"
+            version: "3586.16"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
