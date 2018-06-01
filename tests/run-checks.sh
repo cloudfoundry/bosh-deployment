@@ -20,6 +20,9 @@ function bosh() {
   command bosh int --var-errs --var-errs-unused ${@//--state=*/} > /dev/null
 }
 
+echo -e "\nCheck YAML syntax\n"
+find .|grep yml|xargs -n1 bosh int
+
 echo -e "\nUsed compiled releases\n"
 grep -r -i s3.amazonaws.com/bosh-compiled-release-tarballs . | grep -v grep | grep -v ./.git
 
