@@ -28,26 +28,6 @@ resources:
     source:
       repository: cloudfoundry-incubator/backup-and-restore-sdk-release
 
-  - name: warden-cpi
-    type: bosh-io-release
-    source:
-      repository: cppforlife/bosh-warden-cpi-release
-
-  - name: garden-linux
-    type: bosh-io-release
-    source:
-      repository: cloudfoundry/garden-linux-release
-
-  - name: garden-runc
-    type: bosh-io-release
-    source:
-      repository: cloudfoundry/garden-runc-release
-
-  - name: grootfs
-    type: bosh-io-release
-    source:
-      repository: cloudfoundry/grootfs-release
-
   # stemcells
 
   - name: ubuntu-trusty-stemcell
@@ -182,88 +162,6 @@ jobs:
         input_mapping:
           stemcell: ubuntu-trusty-stemcell
           release: backup-and-restore-sdk-release
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-
-  # bosh-lite related
-
-  - name: compile-warden-cpi
-    plan:
-      - aggregate:
-          - get: bosh-deployment
-          - get: warden-cpi
-            version:
-              version: "40"
-          - get: ubuntu-trusty-stemcell
-            version:
-              version: "3541.30"
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: ubuntu-trusty-stemcell
-          release: warden-cpi
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-
-  - name: compile-garden-linux
-    plan:
-      - aggregate:
-          - get: bosh-deployment
-          - get: garden-linux
-            version:
-              version: "0.342.0"
-          - get: ubuntu-trusty-stemcell
-            version:
-              version: "3541.30"
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: ubuntu-trusty-stemcell
-          release: garden-linux
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-
-  - name: compile-garden-runc-1-9
-    plan:
-      - aggregate:
-          - get: bosh-deployment
-          - get: garden-runc
-            version:
-              version: "1.9.4"
-          - get: ubuntu-trusty-stemcell
-            version:
-              version: "3541.30"
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: ubuntu-trusty-stemcell
-          release: garden-runc
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-
-  - name: compile-grootfs
-    plan:
-      - aggregate:
-          - get: bosh-deployment
-          - get: grootfs
-            version:
-              version: "0.24.0"
-          - get: ubuntu-trusty-stemcell
-            version:
-              version: "3541.30"
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: ubuntu-trusty-stemcell
-          release: grootfs
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
