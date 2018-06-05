@@ -40,10 +40,6 @@
 # This is the client representing the forwarder. It has the
 # `bosh.system_metrics.read` authority which the server requires
 # to authenticate the client before sending it bosh metrics.
-# This is a property that needs to exist on the Credentials tab
-# of Ops Man so the operator can copy and paste into ERT config.
-# That is, username: system_metrics_client
-#          password: ((system_metrics_uaa_client_secret))
 - type: replace
   path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/system_metrics_client?
   value:
@@ -61,8 +57,7 @@
 # This is the client representing the `system-metrics-server`
 # so it can call /check_token on uaa. It doesn't necessarily
 # need to be a new client, but it has to have the `uaa.resource`
-# authority. It is not required to be visible to the operator
-# in Ops Man UI.
+# authority. 
 - type: replace
   path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/system_metrics_server?
   value:
@@ -79,8 +74,6 @@
 
 # This is the cert-key pair for the `system-metrics-server`
 # in order to encrypt bosh system metrics to its clients.
-# We would like to use the default_ca so the operator does
-# not need to copy and paste another property into ERT config.
 - type: replace
   path: /variables/-
   value:
