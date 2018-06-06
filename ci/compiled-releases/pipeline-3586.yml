@@ -111,6 +111,26 @@ jobs:
         params:
           file: "compiled-release/*.tgz"
 
+  - name: compile-uaa-release-59
+    plan:
+      - aggregate:
+          - get: bosh-deployment
+          - get: uaa-release
+            version:
+              version: "59"
+          - get: ubuntu-trusty-stemcell
+            version:
+              version: "3586.16"
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: uaa-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
   - name: compile-credhub-release-1.8
     plan:
       - aggregate:

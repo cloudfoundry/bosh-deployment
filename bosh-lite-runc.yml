@@ -10,8 +10,8 @@
   value:
     name: garden-runc
     version: "1.9.4"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.9.4-ubuntu-trusty-3541.10-20180327-211719-803260725-20180327211729.tgz?versionId=8U1S6rZxKqooVheW8zO3oVmEBsJlcXEa
-    sha1: d1149f3f28c4d77d418a01fd2190f92b499fa987
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.9.4-ubuntu-trusty-3586.16-20180601-214407-167941812-20180601214412.tgz?versionId=nwU5YaY6nEUHEWTKeWMgyGfUyJgfmKXE
+    sha1: 4b755514aacc723640f35d785d01a05b4257f385
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/name=garden/properties?/garden
