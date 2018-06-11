@@ -18,6 +18,8 @@ bosh create-env bosh.yml \
   -o uaa.yml \
   -o credhub.yml \
   -o jumpbox-user.yml \
+  -o misc/blobstore-tls.yml \
+  -o misc/nats-strict-tls.yml \
   --vars-store $tests_dir/creds.yml \
   -v director_name=bosh-lite \
   -v internal_ip=192.168.50.10 \
