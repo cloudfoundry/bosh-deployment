@@ -91,6 +91,26 @@ jobs:
         params:
           file: "compiled-release/*.tgz"
 
+  - name: compile-bosh-release-266
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: bosh-release
+          version:
+            version: "266.2.0"
+        - get: ubuntu-trusty-stemcell
+          version:
+            version: "3586.16"
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: bosh-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
   - name: compile-uaa-release-57
     plan:
       - aggregate:
