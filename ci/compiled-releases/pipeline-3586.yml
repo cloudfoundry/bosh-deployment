@@ -80,7 +80,7 @@ jobs:
             version: "265.2.0"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3586.23"
+            version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -100,7 +100,7 @@ jobs:
             version: "266.3.0"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3586.23"
+            version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -120,7 +120,7 @@ jobs:
               version: "57"
           - get: ubuntu-trusty-stemcell
             version:
-              version: "3586.23"
+              version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -140,7 +140,7 @@ jobs:
               version: "59"
           - get: ubuntu-trusty-stemcell
             version:
-              version: "3586.23"
+              version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -160,7 +160,7 @@ jobs:
             version: "1.8.3"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3586.23"
+            version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -180,7 +180,7 @@ jobs:
             version: "1.7.1"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3586.23"
+            version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -200,7 +200,7 @@ jobs:
             version: "1.9.3"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3586.23"
+            version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -220,7 +220,7 @@ jobs:
             version: "0.6.0"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3586.23"
+            version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -240,7 +240,7 @@ jobs:
             version: "1.6.0"
         - get: ubuntu-trusty-stemcell
           version:
-            version: "3586.23"
+            version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -262,7 +262,7 @@ jobs:
               version: "40"
           - get: ubuntu-trusty-stemcell
             version:
-              version: "3586.23"
+              version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -282,7 +282,7 @@ jobs:
               version: "0.342.0"
           - get: ubuntu-trusty-stemcell
             version:
-              version: "3586.23"
+              version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -302,7 +302,7 @@ jobs:
               version: "1.9.4"
           - get: ubuntu-trusty-stemcell
             version:
-              version: "3586.23"
+              version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -322,7 +322,7 @@ jobs:
               version: "0.24.0"
           - get: ubuntu-trusty-stemcell
             version:
-              version: "3586.23"
+              version: "3586.24"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
