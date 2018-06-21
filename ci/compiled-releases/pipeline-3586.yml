@@ -97,7 +97,7 @@ jobs:
         - get: bosh-deployment
         - get: bosh-release
           version:
-            version: "266.3.0"
+            version: "266.4.0"
         - get: ubuntu-trusty-stemcell
           version:
             version: "3586.24"
