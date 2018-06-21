@@ -78,9 +78,12 @@
         zones: {internal: {hostnames: []}}
       login:
         saml:
-          serviceProviderKey: ((uaa_service_provider_ssl.private_key))
-          serviceProviderKeyPassword: "" # TODO: Remove this when UAA defaults this value
-          serviceProviderCertificate: ((uaa_service_provider_ssl.certificate))
+          activeKeyId: uaa-saml-key-1
+          keys:
+            uaa-saml-key-1:
+              key: ((uaa_service_provider_ssl.private_key))
+              certificate: ((uaa_service_provider_ssl.certificate))
+              passphrase: ""
       uaadb:
         address: 127.0.0.1
         port: 5432
