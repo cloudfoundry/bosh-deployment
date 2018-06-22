@@ -51,7 +51,7 @@
           bosh_cli:
             override: true
             authorized-grant-types: password,refresh_token
-            scope: openid,bosh.admin,bosh.read,bosh.*.admin,bosh.*.read
+            scope: openid,bosh.admin,bosh.read,bosh.*.admin,bosh.*.read,bosh.teams.*.admin,bosh.teams.*.read
             authorities: uaa.none
             access-token-validity: 120 # 2 min
             refresh-token-validity: 86400 # 1 day
