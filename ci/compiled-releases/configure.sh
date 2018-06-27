@@ -35,7 +35,7 @@ fly -t production set-pipeline -n \
 
 fly -t production check-resource -r compiled-releases-3468/bosh-release -f version:263.4.0
 fly -t production check-resource -r compiled-releases-3468/uaa-release -f version:52.2
-# fly -t production check-resource -r compiled-releases-3468/credhub-release -f version:1.6.0
+fly -t production check-resource -r compiled-releases-3468/credhub-release -f version:1.6.0
 fly -t production check-resource -r compiled-releases-3468/ubuntu-trusty-stemcell -f version:3468
 
 fly -t production set-pipeline -n \
