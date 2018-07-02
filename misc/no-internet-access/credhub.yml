@@ -1,5 +1,3 @@
-# Use local CredHub releases
-
 - type: replace
   path: /releases/name=credhub/url
   value: file://((local_credhub_release))

@@ -1,0 +1,10 @@
+- type: replace
+  path: /releases/name=bpm/url
+  value: file://((local_bpm_release))
+
+- type: remove
+  path: /releases/name=bpm/sha1
+
+- type: replace
+  path: /releases/name=bpm/version
+  value: latest
