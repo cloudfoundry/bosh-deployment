@@ -43,6 +43,11 @@
           signing_key: ((uaa_jwt_signing_key.private_key))
           verification_key: ((uaa_jwt_signing_key.public_key))
         scim:
+          groups:
+            bosh.admin: 'User has admin access on any Director'
+            bosh.read: 'User has read access on any Director'
+            bosh.stemcells.upload: 'User can upload new stemcells'
+            bosh.releases.upload: 'User can upload new releases'
           users:
           - name: admin
             groups: [bosh.admin]
