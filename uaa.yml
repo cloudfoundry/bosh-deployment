@@ -42,6 +42,13 @@
         jwt:
           signing_key: ((uaa_jwt_signing_key.private_key))
           verification_key: ((uaa_jwt_signing_key.public_key))
+        user:
+          authorities:
+          - bosh.admin          # admin access to all BOSH directors
+          - openid              # User identity from OpenID Connect
+          - scim.me             # read/query access current user's account
+          - password.write      # can update own password
+          - uaa.user            # allows authentication as a user
         scim:
           groups:
             bosh.admin: 'User has admin access on any Director'
