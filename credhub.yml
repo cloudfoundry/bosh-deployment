@@ -13,6 +13,9 @@
     release: credhub
     properties:
       credhub:
+        authorization:
+          acls:
+            enabled: false
         authentication:
           uaa:
             url: "https://((internal_ip)):8443"
