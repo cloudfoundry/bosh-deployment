@@ -1,0 +1,8 @@
+---
+- type: replace
+  path: /releases/name=credhub?
+  value:
+    name: credhub
+    version: "1.9.3"
+    url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=1.9.3
+    sha1: 648658efdef2ff18a69914d958bcd7ebfa88027a
