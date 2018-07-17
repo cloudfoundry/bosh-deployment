@@ -34,7 +34,8 @@
             type: internal
           keys:
           - provider_name: internal
-            encryption_password: ((credhub_encryption_password))
+            key_properties:
+              encryption_password: ((credhub_encryption_password))
             active: true
 
 - type: replace
