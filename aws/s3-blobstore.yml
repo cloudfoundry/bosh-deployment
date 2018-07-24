@@ -1,0 +1,35 @@
+---
+- type: remove
+  path: /instance_groups/name=bosh/jobs/name=blobstore
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore?/provider
+  value: s3
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore?/bucket_name
+  value: ((s3-bucket-name))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore?/access_key_id
+  value: ((s3-access-key-id))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore?/secret_access_key
+  value: ((s3-secret-access-key))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore?/s3_region
+  value: ((s3-region))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent?/blobstore/access_key_id
+  value: ((s3-access-key-id))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent?/blobstore/secret_access_key
+  value: ((s3-secret-access-key))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent?/blobstore/s3_region
+  value: ((s3-region))

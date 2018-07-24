@@ -1,0 +1,16 @@
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: s3-unversioned-blobstore-backup-restorer
+    release: backup-and-restore-sdk
+    properties:
+      enabled: true
+      buckets:
+        director_blobs:
+          name: "((s3-bucket-name))"
+          region: "((s3-region))"
+          aws_access_key_id: "((s3-access-key-id))"
+          aws_secret_access_key: "((s3-secret-access-key))"
+          backup:
+            name: "((s3-backup-bucket-name))"
+            region: "((s3-backup-region))"
