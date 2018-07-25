@@ -9,7 +9,7 @@ delete_deployment() {
 
 bbl_down() {
   set +e
-  bbl --debug down
+  bbl --debug down --no-confirm
   set -e
 }
 
