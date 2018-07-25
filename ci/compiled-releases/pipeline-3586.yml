@@ -217,6 +217,24 @@ jobs:
         params:
           file: "compiled-release/*.tgz"
 
+  - name: compile-bpm-release-0.9.0
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: bpm-release
+          version:
+            version: "0.9.0"
+        - get: ubuntu-trusty-stemcell
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: bpm-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
   - name: compile-bbr-sdk-release-1.6
     plan:
       - aggregate:
