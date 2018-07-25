@@ -59,6 +59,7 @@ resources:
     type: bosh-io-stemcell
     source:
       name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+      version_family: '3586.latest'
 
   # outputs
 
@@ -77,10 +78,8 @@ jobs:
         - get: bosh-deployment
         - get: bosh-release
           version:
-            version: "266.6.0"
+            version: "266.7.0"
         - get: ubuntu-trusty-stemcell
-          version:
-            version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -99,8 +98,6 @@ jobs:
             version:
               version: "57.3"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -119,8 +116,6 @@ jobs:
             version:
               version: "59"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -139,8 +134,6 @@ jobs:
             version:
               version: "60.2"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -160,8 +153,6 @@ jobs:
           version:
             version: "1.8.3"
         - get: ubuntu-trusty-stemcell
-          version:
-            version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -180,8 +171,6 @@ jobs:
           version:
             version: "1.7.1"
         - get: ubuntu-trusty-stemcell
-          version:
-            version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -200,8 +189,6 @@ jobs:
           version:
             version: "1.9.3"
         - get: ubuntu-trusty-stemcell
-          version:
-            version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -220,8 +207,6 @@ jobs:
           version:
             version: "0.6.0"
         - get: ubuntu-trusty-stemcell
-          version:
-            version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -240,8 +225,6 @@ jobs:
           version:
             version: "1.6.0"
         - get: ubuntu-trusty-stemcell
-          version:
-            version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -262,8 +245,6 @@ jobs:
             version:
               version: "40"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -282,8 +263,6 @@ jobs:
             version:
               version: "0.342.0"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -302,8 +281,6 @@ jobs:
             version:
               version: "1.9.4"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -322,8 +299,6 @@ jobs:
             version:
               version: "0.24.0"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3586.25"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
