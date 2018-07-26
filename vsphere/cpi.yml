@@ -54,7 +54,8 @@
       persistent_datastore_pattern: ((vcenter_ds))
       disk_path: ((vcenter_disks))
       clusters:
-      - ((vcenter_cluster)): {}
+      - ((vcenter_cluster)):
+        resource_pool: ((vcenter_rp))
 
 - type: replace
   path: /cloud_provider/properties/vcenter?
