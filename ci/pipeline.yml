@@ -7,14 +7,14 @@ groups:
     - promote
 
 jobs:
-  - name: test-gcp
+  - name: test-bosh-lite-gcp
     serial: true
     build_logs_to_retain: 250
     plan:
       - get: bosh-deployment
         trigger: true
-      - task: test-gcp
-        file: bosh-deployment/ci/tasks/test-gcp.yml
+      - task: test-bosh-lite-gcp
+        file: bosh-deployment/ci/tasks/test-bosh-lite-gcp.yml
         params:
           BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_json))
           BBL_GCP_REGION: us-west1
