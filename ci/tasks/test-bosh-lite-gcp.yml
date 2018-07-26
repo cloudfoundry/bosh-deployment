@@ -16,4 +16,4 @@ params:
   BBL_GCP_REGION: replace-me
 
 run:
-  path: bosh-deployment/ci/tasks/test-gcp.sh
+  path: bosh-deployment/ci/tasks/test-bosh-lite-gcp.sh
