@@ -8,15 +8,17 @@ delete_deployment() {
 }
 
 bbl_down() {
-  set +e
-  bbl --debug down --no-confirm
-  set -e
+  pushd ${BUILD_DIR}/bbl-state
+    bbl --debug down --no-confirm
+  popd
 }
 
 clean_up() {
   delete_deployment
   bbl_down
 }
+
+export BUILD_DIR=$PWD
 
 mkdir bbl-state
 pushd bbl-state
