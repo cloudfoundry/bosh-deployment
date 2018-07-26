@@ -2,7 +2,7 @@
 groups:
   - name: bosh-deployment
     jobs:
-    - test-gcp
+    - test-bosh-lite-gcp
     - test-smoke
     - promote
 
@@ -36,7 +36,7 @@ jobs:
       trigger: true
       passed:
       - test-smoke
-      - test-gcp
+      - test-bosh-lite-gcp
     - put: bosh-deployment-master
       params:
         repository: bosh-deployment
