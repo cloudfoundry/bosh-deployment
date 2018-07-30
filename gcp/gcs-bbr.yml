@@ -1,0 +1,11 @@
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: gcs-blobstore-backup-restorer
+    release: backup-and-restore-sdk
+    properties:
+      enabled: true
+      buckets:
+        director_blobs:
+          name: ((bucket_name))
+          gcp_service_account_key: "((director_gcs_credentials_json))"
