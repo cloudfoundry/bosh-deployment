@@ -1,0 +1,162 @@
+---
+
+- type: replace
+  path: /releases/-
+  value:
+    name: bosh-go-cpi-cloudstack
+    version: 1.22
+    url: https://github.com/orange-cloudfoundry/bosh-go-cpi-cloudstack/releases/download/v1.22/bosh-go-cpi-cloudstack-1.22.tgz
+    sha1: b1f71fbf6f6d62e77134cc85bd409dca7e2bdb02
+
+- type: replace
+  path: /resource_pools/name=vms/stemcell?
+  value:
+    url: https://github.com/orange-cloudfoundry/bosh-linux-stemcell-builder/releases/download/v3586.26/bosh-stemcell-3586.26-cloudstack-xen-ubuntu-trusty-go_agent.tgz
+    sha1: 07eefba3b194554a3030d17e672222ac93a84367
+
+# Configure sizes
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties?
+  value:
+    disk: 20_000
+
+- type: replace
+  path: /networks/name=default/subnets/0/cloud_properties?
+  value: {name: ((network_name))}
+
+# Add CPI job
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value: &cpi_job
+    name: cloudstack_cpi
+    release: bosh-go-cpi-cloudstack
+
+# Configure sizes
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties?
+  value:
+    compute_offering: ((cloudstack_compute_offering))
+    disk: 25_000
+    ephemeral_disk_offering: shared.custom
+    root_disk_size: 15000
+
+- type: replace
+  path: /disk_pools/name=disks/cloud_properties?
+  value:
+    disk_offering: shared.custom
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/cpi_job?
+  value: cloudstack_cpi
+
+- type: replace
+  path: /cloud_provider/template?
+  value: *cpi_job
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/cloudstack?
+  value: &cloudstack
+    endpoint: ((cloudstack_endpoint))
+    api_key: ((cloudstack_api_key))
+    secret_access_key: ((cloudstack_secret_access_key))
+    default_key_name: ((cloudstack_default_key_name))
+    default_zone: ((cloudstack_zone))
+    private_key: not_used
+    stemcell:
+      public_visibility: true
+      requires_hvm: false
+      os_type: "Other PV (64-bit)"
+    timeout:
+      global: 1800
+      reboot_vm: 1800
+      create_vm: 1800
+      delete_vm: 1800
+      stop_vm: 1800
+      create_volume: 1800
+      delete_volume: 1800
+      resize_volume: 1800
+      poll_template: 1800
+      snapshot_volume: 1800
+      delete_snapshot_volume: 1800
+      attach_volume: 36000
+      detach_volume: 1800
+    proxy_host: ""
+    proxy_user: ""
+    proxy_password: ""
+    proxy_port: ""
+    clean_disk: true
+    interval_clean_disk: 1
+    expunge_vm: true
+    calculate:
+      disk_tags: []
+      not_disk_tags: []
+      compute_tags: []
+      not_compute_tags: []
+    default_offer:
+      disk: ""
+      ephemeral_disk: ""
+      custom_disk: "shared.custom"
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: registry
+    release: bosh
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/registry?
+  value:
+    address: ((internal_ip))
+    host: ((internal_ip))
+    db: # todo remove
+      host: 127.0.0.1
+      user: postgres
+      password: ((postgres_password))
+      database: bosh
+      adapter: postgres
+    http:
+      user: registry
+      password: ((registry_password))
+      port: 25777
+    username: registry
+    password: ((registry_password))
+    port: 25777
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/blobstore?
+  value:
+    provider: dav
+    options:
+      endpoint: http://((internal_ip)):25250
+      user: agent
+      password: ((blobstore_agent_password))
+      tls:
+        cert:
+          ca: ((blobstore_ca.certificate))
+
+- type: replace
+  path: /cloud_provider/properties/agent/blobstore?
+  value:
+    provider: local
+    options:
+      path: /var/vcap/micro_bosh/data/cache
+
+- type: replace
+  path: /cloud_provider/ssh_tunnel?
+  value:
+    host: ((internal_ip))
+    port: 22
+    user: vcap
+    private_key: ((private_key))
+
+
+
+- type: replace
+  path: /cloud_provider/properties/cloudstack?
+  value: *cloudstack
+
+- type: replace
+  path: /variables/-
+  value:
+    name: registry_password
+    type: password
