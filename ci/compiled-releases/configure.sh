@@ -7,7 +7,7 @@ fly -t production set-pipeline -n \
  -c ./pipeline-xenial-97.yml \
  -l <(lpass show --note "concourse:production pipeline:compiled-releases")
 
-fly -t production check-resource -r compiled-releases-xenial-97/bosh-release -f version:267.2.0
+fly -t production check-resource -r compiled-releases-xenial-97/bosh-release -f version:266.4.0
 fly -t production check-resource -r compiled-releases-xenial-97/ubuntu-xenial-stemcell -f version:97.3
 
 fly -t production set-pipeline -n \
