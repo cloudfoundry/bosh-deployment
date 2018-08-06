@@ -4,9 +4,9 @@
   path: /releases/-
   value:
     name: bosh-go-cpi-cloudstack
-    version: 1.23
-    url: https://github.com/orange-cloudfoundry/bosh-go-cpi-cloudstack/releases/download/v1.23/bosh-go-cpi-cloudstack-1.23.tgz
-    sha1: ea29a4dd9718b8f6ba9f800b25e84630f194938a
+    version: 1.24
+    url: https://github.com/orange-cloudfoundry/bosh-go-cpi-cloudstack/releases/download/v1.24/bosh-go-cpi-cloudstack-1.24.tgz
+    sha1: dad54723e6209cd1572dab5e9d824ffd9e621cce
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
