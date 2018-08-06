@@ -32,13 +32,13 @@ resources:
       regexp: ".*-(\\d+).tgz"
 
 jobs:
-  - name: compile-bosh-release-267
+  - name: compile-bosh-release-266
     plan:
       - aggregate:
         - get: bosh-deployment
         - get: bosh-release
           version:
-            version: "267.2.0"
+            version: "266.5.0"
         - get: ubuntu-xenial-stemcell
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
