@@ -1,0 +1,29 @@
+---
+- type: replace
+  path: /releases/-
+  value:
+    name: bosh-huaweicloud-cpi
+    version: "1"
+    url: https://obs-bosh-otc.obs.otc.t-systems.com/bosh-huaweicloud-cpi-release.tgz
+    sha1: e6cf27a4b35305617cedb21976e7a31d11b120cb
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: huaweicloud_cpi
+    release: bosh-huaweicloud-cpi
+
+# unused values should be overwritten via Director's cpi config
+- type: replace
+  path: /instance_groups/name=bosh/properties/huaweicloud?
+  value:
+    # todo eventually cpi does not take defaults (takes config only via cpi configs)
+    auth_url: unused
+    username: unused
+    api_key: unused
+    domain: unused
+    project: unused
+    region: unused
+    default_key_name: unused
+    default_security_groups: unused
+    human_readable_vm_names: true
