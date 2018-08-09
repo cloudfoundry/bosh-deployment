@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: bosh-huaweicloud-cpi
-    version: "1"
-    url: https://obs-bosh.obs.otc.t-systems.com/bosh-huaweicloud-cpi-release.tgz
-    sha1: 5bb376fb37d58cd56e58ff669ea6051c9bb163af
+    version: "2"
+    url: https://obs-bosh.obs.otc.t-systems.com/bosh-huaweicloud-cpi-release-r2.tgz
+    sha1: 179e71e907a4ac7a5b04f13ae5c9c6fdd6fbad24
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
