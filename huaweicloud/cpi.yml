@@ -4,13 +4,13 @@
   value:
     name: bosh-huaweicloud-cpi
     version: "1"
-    url: https://obs-bosh-otc.obs.otc.t-systems.com/bosh-huaweicloud-cpi-release.tgz
-    sha1: e6cf27a4b35305617cedb21976e7a31d11b120cb
+    url: https://obs-bosh.obs.otc.t-systems.com/bosh-huaweicloud-cpi-release.tgz
+    sha1: 5bb376fb37d58cd56e58ff669ea6051c9bb163af
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
   value:
-    url: https://obs-bosh.obs.cn-north-1.myhwclouds.com/bosh-stemcell-1.0-huaweicloud-xen-ubuntu-trusty-go_agent.tgz
+    url: https://obs-bosh.obs.otc.t-systems.com/bosh-stemcell-1.0-huaweicloud-xen-ubuntu-trusty-go_agent.tgz
     sha1: 17c4a00858b765ec8115bfa4560a81854eb01874
 
 # Configure sizes
@@ -22,7 +22,7 @@
 
 - type: replace
   path: /networks/name=default/subnets/0/cloud_properties?
-  value: {net_id: ((net_id))}
+  value: {subnet_id: ((subnet_id))}
 
 # Enable registry job
 - type: replace
