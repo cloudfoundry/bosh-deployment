@@ -18,7 +18,7 @@ networks:
     dns: [8.8.8.8]
     range: 10.244.0.0/24
     gateway: 10.244.0.1
-    static: [10.244.0.34]
+    static: [10.244.0.34,10.244.0.134]
     reserved: []
 
 compilation:
