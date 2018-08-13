@@ -33,7 +33,7 @@ networks:
     dns: [8.8.8.8]
     reserved: []
     cloud_properties:
-      net_id: ((net_id))
+      subnet_id: ((subnet_id))
 - name: vip
   type: vip
 
