@@ -1,0 +1,10 @@
+- type: replace
+  path: /releases/name=os-conf/url
+  value: file://((local_os_conf_release))
+
+- type: remove
+  path: /releases/name=os-conf/sha1
+
+- type: replace
+  path: /releases/name=os-conf/version
+  value: latest
