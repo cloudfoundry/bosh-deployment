@@ -1,4 +1,5 @@
 ---
+# resources {
 resources:
   - name: bosh-deployment
     type: git
@@ -70,7 +71,7 @@ resources:
       access_key_id: ((aws_key_id))
       secret_access_key: ((aws_secret_access_key))
       regexp: ".*-(\\d+).tgz"
-
+# }
 jobs:
   - name: compile-bosh-release-266
     plan:
