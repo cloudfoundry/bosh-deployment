@@ -7,6 +7,14 @@
     sha1: 40ea6c4b627fcd0c394dda416df0c9348dddb1f2
 
 - type: replace
+  path: /releases/-
+  value:
+    name: bosh-warden-cpi
+    version: "40"
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-40-ubuntu-xenial-97.12-20180815-230756-913169042-20180815230802.tgz?versionId=YkcH8M_0CSo0jrWJaRb9IyU3yzU0ppS_
+    sha1: 0968e1f429fe803f0de96020a4991fd14e1a0a47
+
+- type: replace
   path: /instance_groups/name=bosh/jobs/-
   value:
     name: garden
@@ -24,34 +32,14 @@
     graph_cleanup_threshold_in_mb: 0
 
 - type: replace
-  path: /releases/-
+  path: /instance_groups/name=bosh/jobs/-
   value:
-    name: bosh-warden-cpi
-    version: "40"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-40-ubuntu-xenial-97.12-20180815-230756-913169042-20180815230802.tgz?versionId=YkcH8M_0CSo0jrWJaRb9IyU3yzU0ppS_
-    sha1: 0968e1f429fe803f0de96020a4991fd14e1a0a47
-
-- type: replace
-  path: /releases/name=os-conf?
-  value:
-    name: os-conf
-    version: 18
-    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=18
-    sha1: 78d79f08ff5001cc2a24f572837c7a9c59a0e796
+    name: warden_cpi
+    release: bosh-warden-cpi
 
 - type: replace
   path: /instance_groups/name=bosh/properties/director/cpi_job?
   value: warden_cpi
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/ignore_missing_gateway?
-  value: true
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/compiled_package_cache?
-  value:
-    provider: local
-    options: {blobstore_path: /var/vcap/store/tmp/compiled_package_cache}
 
 - type: replace
   path: /instance_groups/name=bosh/properties/warden_cpi?
@@ -60,9 +48,8 @@
     warden:
       connect_network: tcp
       connect_address: 127.0.0.1:7777
-    warden_cpi:
-      actions:
-        expand_stemcell_tarball: false
+    actions:
+      expand_stemcell_tarball: false
     agent: # todo remove once cpi dont know about these
       mbus: nats://nats:((nats_password))@10.254.50.4:4222
       blobstore:
@@ -73,16 +60,22 @@
           password: ((blobstore_agent_password))
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/garden?
+  path: /releases/name=os-conf?
   value:
-    listen_network: tcp
-    listen_address: 127.0.0.1:7777
-    debug_listen_address: 127.0.0.1:17013
-    disk_quota_enabled: false
-    allow_host_access: true
-    destroy_containers_on_start: true # avoids snapshots
-    default_container_grace_time: 0
-    graph_cleanup_threshold_in_mb: 0
+    name: os-conf
+    version: 18
+    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=18
+    sha1: 78d79f08ff5001cc2a24f572837c7a9c59a0e796
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/ignore_missing_gateway?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/compiled_package_cache?
+  value:
+    provider: local
+    options: {blobstore_path: /var/vcap/store/tmp/compiled_package_cache}
 
 - type: replace
   path: /variables/name=nats_server_tls/options/alternative_names?/-
