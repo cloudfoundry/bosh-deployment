@@ -32,8 +32,8 @@ pushd bbl-state
   eval "$(bbl print-env)"
   set -x
 
-  bosh -n upload-stemcell "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-xenial-go_agent?v=97.12" \
-    --sha1 f6c72b0946e029c900237c361f8f93881bc0803e
+  bosh upload-stemcell --sha1 69163bcf21ae6d5ffeb92f099644d295b289b63e \
+    "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=3586.36"
 
   echo "-----> `date`: Deploy"
   bosh -n -d zookeeper deploy <(wget -O- https://raw.githubusercontent.com/cppforlife/zookeeper-release/master/manifests/zookeeper.yml) \
