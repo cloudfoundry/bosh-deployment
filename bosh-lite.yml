@@ -1,18 +1,35 @@
 - type: replace
   path: /releases/-
   value:
-    name: bosh-warden-cpi
-    version: "40"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-40-ubuntu-trusty-3586.26-20180725-180607-044775361-20180725180611.tgz?versionId=Eo1G.W1YdTP4Y2Hj.cdHYoCYqTaZlUDZ
-    sha1: d1ca09abb96ef1664c4bc545775ea23e8d6dae3b
+    name: garden-runc
+    version: "1.16.3"
+    url: "https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.16.3"
+    sha1: "2a7c813e7e4d862e19334addf022916fb6b91eb0"
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: garden
+    release: garden-runc
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=garden/properties?/garden
+  value:
+    listen_network: tcp
+    listen_address: 127.0.0.1:7777
+    debug_listen_address: 127.0.0.1:17013
+    allow_host_access: true
+    destroy_containers_on_start: true # avoids snapshots
+    default_container_grace_time: 0
+    graph_cleanup_threshold_in_mb: 0
 
 - type: replace
   path: /releases/-
   value:
-    name: garden-linux
-    version: "0.342.0"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-linux-0.342.0-ubuntu-trusty-3586.26-20180725-180517-519942617-20180725180522.tgz?versionId=76sWtOcMPZFd8y.W5zQa2Eyaxhlvx3wI
-    sha1: 6408e2bf74ab5879a3b780028427fdfb8ab74a6d
+    name: bosh-warden-cpi
+    version: "40"
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-40-ubuntu-trusty-3586.26-20180725-180607-044775361-20180725180611.tgz?versionId=Eo1G.W1YdTP4Y2Hj.cdHYoCYqTaZlUDZ
+    sha1: d1ca09abb96ef1664c4bc545775ea23e8d6dae3b
 
 - type: replace
   path: /releases/name=os-conf?
@@ -21,24 +38,6 @@
     version: 18
     url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=18
     sha1: 78d79f08ff5001cc2a24f572837c7a9c59a0e796
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value:
-    name: warden_cpi
-    release: bosh-warden-cpi
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value:
-    name: garden
-    release: garden-linux
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value:
-    name: disable_agent
-    release: os-conf
 
 - type: replace
   path: /instance_groups/name=bosh/properties/director/cpi_job?
@@ -61,6 +60,9 @@
     warden:
       connect_network: tcp
       connect_address: 127.0.0.1:7777
+    warden_cpi:
+      actions:
+        expand_stemcell_tarball: false
     agent: # todo remove once cpi dont know about these
       mbus: nats://nats:((nats_password))@10.254.50.4:4222
       blobstore:

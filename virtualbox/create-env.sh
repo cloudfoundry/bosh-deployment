@@ -24,7 +24,6 @@ bosh create-env "${bosh_deployment}/bosh.yml" \
   --ops-file "${bosh_deployment}/virtualbox/cpi.yml" \
   --ops-file "${bosh_deployment}/virtualbox/outbound-network.yml" \
   --ops-file "${bosh_deployment}/bosh-lite.yml" \
-  --ops-file "${bosh_deployment}/bosh-lite-runc.yml" \
   --ops-file "${bosh_deployment}/uaa.yml" \
   --ops-file "${bosh_deployment}/credhub.yml" \
   --ops-file "${bosh_deployment}/jumpbox-user.yml" \
