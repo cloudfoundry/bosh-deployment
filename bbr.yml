@@ -3,8 +3,8 @@
   value:
     name: backup-and-restore-sdk
     version: "1.9.0"
-    url: "https://bosh.io/d/github.com/cloudfoundry-incubator/backup-and-restore-sdk-release?v=1.9.0"
-    sha1: "2f8f805d5e58f72028394af8e750b2a51a432466"
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/backup-and-restore-sdk-1.9.0-ubuntu-xenial-97.12-20180815-231632-167459407-20180815231656.tgz?versionId=vXg0sHpm_5ZP8FP7WkNbKMaK5sYAEyrc
+    sha1: 56d8644ee362531d3242f9f64ca95604d77d5f72
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
