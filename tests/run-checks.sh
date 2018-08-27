@@ -479,18 +479,6 @@ bosh create-env bosh.yml \
 echo "- Docker (cloud-config)"
 bosh update-cloud-config docker/cloud-config.yml -v network=net3
 
-echo "- Warden"
-bosh create-env bosh.yml \
-  -o warden/cpi.yml \
-  -o jumpbox-user.yml \
-  --state=$tmp_file \
-  --vars-store $(mktemp ${tmp_file}.XXXXXX) \
-  -v director_name=docker \
-  -v internal_cidr=10.245.0.0/16 \
-  -v internal_gw=10.245.0.1 \
-  -v internal_ip=10.245.0.10 \
-  -v garden_host=127.0.0.1
-
 echo "- Secondary CPIs"
 bosh create-env bosh.yml \
   -o aws/cpi.yml \
