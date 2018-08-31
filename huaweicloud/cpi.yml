@@ -10,8 +10,8 @@
 - type: replace
   path: /resource_pools/name=vms/stemcell?
   value:
-    url: https://obs-bosh.obs.otc.t-systems.com/bosh-stemcell-1.0-huaweicloud-xen-ubuntu-trusty-go_agent.tgz
-    sha1: 17c4a00858b765ec8115bfa4560a81854eb01874
+    url: https://obs-bosh.obs.otc.t-systems.com/bosh-stemcell-2.0-huaweicloud-xen-ubuntu-trusty-go_agent.tgz
+    sha1: 0584dd353988593304a6b81f54380578d3341337
 
 # Configure sizes
 - type: replace
