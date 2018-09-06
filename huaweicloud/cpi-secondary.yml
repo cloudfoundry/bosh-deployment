@@ -4,8 +4,8 @@
   value:
     name: bosh-huaweicloud-cpi
     version: "1"
-    url: https://obs-bosh-otc.obs.otc.t-systems.com/bosh-huaweicloud-cpi-release.tgz
-    sha1: e6cf27a4b35305617cedb21976e7a31d11b120cb
+    url: https://obs-bosh.obs.otc.t-systems.com/bosh-huaweicloud-cpi-release.tgz
+    sha1: 5bb376fb37d58cd56e58ff669ea6051c9bb163af
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/-

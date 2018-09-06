@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: uaa
-    version: "60.2"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-60.2-ubuntu-trusty-3586.26-20180725-180315-912954026-20180725180329.tgz?versionId=cJHOlmLkZ.CmBkM7Nlln4R2ajwXGIhWW
-    sha1: 006493def00ca3ec4d17bd5760b5d64ca893be6a
+    version: "59"
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-59-ubuntu-trusty-3586.16-20180605-222612-468773014-20180605222623.tgz?versionId=B1Ex1AVvXDtBc6TvtzTmHOx0qnlnfhUW
+    sha1: c5b9c9c59ec383989daa4134494e78623544dd8c
 
 # Switch Director to use UAA
 - type: replace
@@ -43,11 +43,6 @@
           signing_key: ((uaa_jwt_signing_key.private_key))
           verification_key: ((uaa_jwt_signing_key.public_key))
         scim:
-          groups:
-            bosh.admin: 'User has admin access on any Director'
-            bosh.read: 'User has read access on any Director'
-            bosh.stemcells.upload: 'User can upload new stemcells'
-            bosh.releases.upload: 'User can upload new releases'
           users:
           - name: admin
             groups: [bosh.admin]
@@ -56,7 +51,7 @@
           bosh_cli:
             override: true
             authorized-grant-types: password,refresh_token
-            scope: openid,bosh.admin,bosh.read,bosh.*.admin,bosh.*.read,bosh.teams.*.admin,bosh.teams.*.read
+            scope: openid,bosh.admin,bosh.read,bosh.*.admin,bosh.*.read
             authorities: uaa.none
             access-token-validity: 120 # 2 min
             refresh-token-validity: 86400 # 1 day
