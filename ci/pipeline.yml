@@ -112,7 +112,7 @@ jobs:
         - get: bosh-deployment
         - get: credhub-release
           version:
-            version: "1.9.3"
+            version: "2.0.2"
         - get: ubuntu-xenial-stemcell
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
