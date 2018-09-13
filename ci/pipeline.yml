@@ -78,7 +78,7 @@ jobs:
         - get: bosh-release
           trigger: true
           version:
-            version: "267.5.0"
+            version: "268.0.1"
         - get: ubuntu-xenial-stemcell
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
