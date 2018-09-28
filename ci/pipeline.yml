@@ -47,6 +47,10 @@ jobs:
       passed:
       - test-smoke
       - test-bosh-lite-gcp
+    - put: bosh-deployment-commit-status
+      params:
+        state: success
+        commit: bosh-deployment
     - put: bosh-deployment-master
       params:
         repository: bosh-deployment
@@ -274,3 +278,18 @@ resources:
     access_key_id: ((aws_key_id))
     secret_access_key: ((aws_secret_access_key))
     regexp: ".*-(\\d+).tgz"
+
+- name: bosh-deployment-commit-status
+  type: github-status
+  source:
+    repository: cloudfoundry/bosh-deployment
+    access_token: ((github_access_token))
+    branch: develop
+    context: ci/passed
+
+resource_types:
+- name: github-status
+  type: docker-image
+  source:
+    repository: dpb587/github-status-resource
+    tag: master
