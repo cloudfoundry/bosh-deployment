@@ -15,6 +15,7 @@ groups:
     - compile-garden-runc
     - compile-uaa-release
     - compile-warden-cpi
+    - use-latest-bosh-in-bosh-deployment
 
 jobs:
   - name: test-bosh-lite-gcp
@@ -208,6 +209,19 @@ jobs:
         params:
           file: "compiled-release/*.tgz"
 
+  - name: use-latest-bosh-in-bosh-deployment
+    plan:
+    - aggregate:
+      - get: bosh-deployment
+      - get: compiled-bosh-release
+        trigger: true
+    - task: update-bosh-deployment
+      file: bosh-deployment/ci/tasks/use-latest-bosh.yml
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment-output
+        rebase: true
+
 resources:
 - name: bosh-deployment
   type: git
@@ -278,6 +292,14 @@ resources:
     access_key_id: ((aws_key_id))
     secret_access_key: ((aws_secret_access_key))
     regexp: ".*-(\\d+).tgz"
+
+- name: compiled-bosh-release
+  type: s3
+  source:
+    bucket: "bosh-compiled-release-tarballs"
+    access_key_id: ((aws_key_id))
+    secret_access_key: ((aws_secret_access_key))
+    regexp: "bosh-(\\d+).*.tgz"
 
 - name: bosh-deployment-commit-status
   type: github-status

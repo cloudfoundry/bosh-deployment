@@ -30,6 +30,7 @@ EOF
 ruby $INTERPOLATE_SCRIPT
 
 pushd $PWD/bosh-deployment-output
+  git diff
   git add -A
   git config --global user.email "ci@localhost"
   git config --global user.name "CI Bot"
