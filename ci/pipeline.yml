@@ -224,8 +224,9 @@ resources:
 - name: bosh-deployment
   type: git
   source:
-    uri: https://github.com/cloudfoundry/bosh-deployment
+    uri: git@github.com:cloudfoundry/bosh-deployment
     branch: develop
+    private_key: ((bosh_deployment_deploy_key))
 
 - name: bosh-deployment-master
   type: git
@@ -297,7 +298,7 @@ resources:
     bucket: "bosh-compiled-release-tarballs"
     access_key_id: ((aws_key_id))
     secret_access_key: ((aws_secret_access_key))
-    regexp: "bosh-(\\d+).*.tgz"
+    regexp: "bosh-(\\d+).*xenial.*.tgz"
 
 - name: bosh-deployment-commit-status
   type: github-status

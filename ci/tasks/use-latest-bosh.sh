@@ -4,7 +4,7 @@
 tar -xzf compiled-bosh-release/*.tgz $( tar -tzf *.tgz | grep 'release.MF' )
 VERSION=$( grep -E '^version: ' release.MF | awk '{print $2}' | tr -d "\"'" )
 URL=$(cat compiled-bosh-release/url)
-SHA1=$(sha1sum compiled-bosh-release/*.tgz)
+SHA1=$(sha1sum compiled-bosh-release/*.tgz | awk '{print $1}')
 
 INTERPOLATE_SCRIPT=interpolate_script.rb
 MANIFEST=bosh-deployment-output/bosh.yml
