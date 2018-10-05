@@ -6,25 +6,25 @@ VERSION=$( grep -E '^version: ' release.MF | awk '{print $2}' | tr -d "\"'" )
 URL=$(cat compiled-bosh-release/url)
 SHA1=$(sha1sum compiled-bosh-release/*.tgz)
 
-INTERPOLATE_SCRIPT=interplate_script.rb
+INTERPOLATE_SCRIPT=interpolate_script.rb
 MANIFEST=bosh-deployment-output/bosh.yml
 
 git clone bosh-deployment bosh-deployment-output
 
 cat << EOF > $INTERPOLATE_SCRIPT
-lines = File.readlines($MANIFEST)
+lines = File.readlines("$MANIFEST")
 found_releases = false
 lines.each_with_index do |line, i|
   found_releases = true if line.start_with?('releases:')
   next if !found_releases
   if line.start_with?('- name: bosh')
-    lines[i+1] = "  version: $VERSION\n"
+    lines[i+1] = "  version: \"$VERSION\"\n"
     lines[i+2] = "  url: $URL\n"
     lines[i+3] = "  sha1: $SHA1\n"
     break
   end
 end
-File.open($MANIFEST, 'w') { |f| f.write(lines.join) }
+File.open("$MANIFEST", 'w') { |f| f.write(lines.join) }
 EOF
 
 ruby $INTERPOLATE_SCRIPT
