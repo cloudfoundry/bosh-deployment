@@ -95,7 +95,7 @@
 - type: replace
   path: /cloud_provider/ssh_tunnel?
   value:
-    host: ((sl_vm_name_prefix)).((sl_vm_domain))
+    host: ((internal_ip))
     port: 22
     private_key: ((sl_sshkey.private_key))
     user: root
