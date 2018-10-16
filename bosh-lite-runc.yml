@@ -1,25 +1,3 @@
-- type: remove
-  path: /releases/name=garden-linux
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/name=garden/release
-  value: garden-runc
-
-- type: replace
-  path: /releases/-
-  value:
-    name: garden-runc
-    version: "1.9.4"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.9.4-ubuntu-trusty-3586.26-20180725-180550-568636157-20180725180556.tgz?versionId=UtZZXlb6ONu3xxitZgFg.GBa0S7vkjiM
-    sha1: 721034e3212641b6827831833159afd14bd4b7c4
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/name=garden/properties?/garden
-  value:
-    listen_network: tcp
-    listen_address: 127.0.0.1:7777
-    debug_listen_address: 127.0.0.1:17013
-    allow_host_access: true
-    destroy_containers_on_start: true # avoids snapshots
-    default_container_grace_time: 0
-    graph_cleanup_threshold_in_mb: 0
+# Now default in bosh-lite.yml.
+# This ops-file is temporarily here for backwards compatibility
+---
