@@ -139,7 +139,7 @@
   value:
     provider: local
     options:
-      path: /var/vcap/micro_bosh/data/cache
+      blobstore_path: /var/vcap/micro_bosh/data/cache
 
 - type: replace
   path: /cloud_provider/ssh_tunnel?
