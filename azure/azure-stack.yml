@@ -1,0 +1,51 @@
+---
+
+# NOTE: Azure Stack support for managed disks is not complete enough for BOSH
+# to use it. See issue #508 below. In case the operator is not aware of this
+# caveat, we force here the 'use_managed_disks' property to 'false'.
+#
+# Indeed, failing fast here is better than confusing the operator with strange
+# error messages about Microsoft.Storage API versions and missing REST
+# endpoints.
+#
+# See also: https://github.com/cloudfoundry/bosh-azure-cpi-release/issues/508
+
+- path: /instance_groups/name=bosh/properties/azure/use_managed_disks?
+  type: replace
+  value: &use_managed_disks false
+
+- path: /cloud_provider/properties/azure/use_managed_disks?
+  type: replace
+  value: *use_managed_disks
+
+
+
+- path: /instance_groups/name=bosh/properties/azure/environment
+  type: replace
+  value: &azure_environment AzureStack
+
+- path: /instance_groups/name=bosh/properties/azure/location?
+  type: replace
+  value: &azure_location ((azure_location))
+
+- path: /instance_groups/name=bosh/properties/azure/azure_stack?
+  type: replace
+  value: &azure_stack_conf
+    domain: ((azure_stack_domain))
+    authentication: ((azure_stack_authentication))
+    resource: ((azure_stack_ad_service_endpoint_resource_id))
+    ca_cert: ((azure_stack_ca_cert))
+
+
+
+- path: /cloud_provider/properties/azure/environment
+  type: replace
+  value: *azure_environment
+
+- path: /cloud_provider/properties/azure/location?
+  type: replace
+  value: *azure_location
+
+- path: /cloud_provider/properties/azure/azure_stack?
+  type: replace
+  value: *azure_stack_conf
