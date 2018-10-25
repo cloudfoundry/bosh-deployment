@@ -20,15 +20,14 @@ STEP "Creating BOSH Director"
 ####
 
 bosh create-env "${bosh_deployment}/bosh.yml" \
-  --state state.json \
+  --state "${PWD}/state.json" \
   --ops-file "${bosh_deployment}/virtualbox/cpi.yml" \
   --ops-file "${bosh_deployment}/virtualbox/outbound-network.yml" \
   --ops-file "${bosh_deployment}/bosh-lite.yml" \
-  --ops-file "${bosh_deployment}/bosh-lite-runc.yml" \
   --ops-file "${bosh_deployment}/uaa.yml" \
   --ops-file "${bosh_deployment}/credhub.yml" \
   --ops-file "${bosh_deployment}/jumpbox-user.yml" \
-  --vars-store creds.yml \
+  --vars-store "${PWD}/creds.yml" \
   --var director_name=bosh-lite \
   --var internal_ip=192.168.50.6 \
   --var internal_gw=192.168.50.1 \
@@ -58,17 +57,17 @@ fi
 STEP "Generating .envrc"
 ####
 
-cat > .envrc <<"EOF"
+cat > .envrc <<EOF
 export BOSH_ENVIRONMENT=vbox
-export BOSH_CA_CERT=$( bosh interpolate creds.yml --path /director_ssl/ca )
+export BOSH_CA_CERT=\$( bosh interpolate ${PWD}/creds.yml --path /director_ssl/ca )
 export BOSH_CLIENT=admin
-export BOSH_CLIENT_SECRET=$( bosh interpolate creds.yml --path /admin_password )
+export BOSH_CLIENT_SECRET=\$( bosh interpolate ${PWD}/creds.yml --path /admin_password )
 
 export CREDHUB_SERVER=https://192.168.50.6:8844
-export CREDHUB_CA_CERT="$( bosh interpolate creds.yml --path=/credhub_tls/ca )
-$( bosh interpolate creds.yml --path=/uaa_ssl/ca )"
+export CREDHUB_CA_CERT="\$( bosh interpolate ${PWD}/creds.yml --path=/credhub_tls/ca )
+\$( bosh interpolate ${PWD}/creds.yml --path=/uaa_ssl/ca )"
 export CREDHUB_CLIENT=credhub-admin
-export CREDHUB_SECRET=$( bosh interpolate creds.yml --path=/credhub_admin_client_secret )
+export CREDHUB_SECRET=\$( bosh interpolate ${PWD}/creds.yml --path=/credhub_admin_client_secret )
 
 EOF
 echo "export BOSH_DEPLOYMENT_SHA=${bosh_deployment_sha}" >> .envrc
@@ -85,7 +84,7 @@ STEP "Configuring Environment Alias"
 
 bosh \
   --environment 192.168.50.6 \
-  --ca-cert <( bosh interpolate creds.yml --path /director_ssl/ca ) \
+  --ca-cert <( bosh interpolate "${PWD}/creds.yml" --path /director_ssl/ca ) \
   alias-env vbox
 
 

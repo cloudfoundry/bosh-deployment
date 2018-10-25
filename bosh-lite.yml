@@ -1,18 +1,63 @@
 - type: replace
   path: /releases/-
   value:
-    name: bosh-warden-cpi
-    version: "40"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-40-ubuntu-trusty-3586.26-20180725-180607-044775361-20180725180611.tgz?versionId=Eo1G.W1YdTP4Y2Hj.cdHYoCYqTaZlUDZ
-    sha1: d1ca09abb96ef1664c4bc545775ea23e8d6dae3b
+    name: garden-runc
+    version: "1.16.3"
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.16.3-ubuntu-xenial-97.12-20180820-211129-393958685-20180820211138.tgz?versionId=lIdDXkwScFUJK8dUg5MfU_f4xe1DFm5I
+    sha1: 40ea6c4b627fcd0c394dda416df0c9348dddb1f2
 
 - type: replace
   path: /releases/-
   value:
-    name: garden-linux
-    version: "0.342.0"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-linux-0.342.0-ubuntu-trusty-3586.26-20180725-180517-519942617-20180725180522.tgz?versionId=76sWtOcMPZFd8y.W5zQa2Eyaxhlvx3wI
-    sha1: 6408e2bf74ab5879a3b780028427fdfb8ab74a6d
+    name: bosh-warden-cpi
+    version: "40"
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-40-ubuntu-xenial-97.12-20180815-230756-913169042-20180815230802.tgz?versionId=YkcH8M_0CSo0jrWJaRb9IyU3yzU0ppS_
+    sha1: 0968e1f429fe803f0de96020a4991fd14e1a0a47
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: garden
+    release: garden-runc
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=garden/properties?/garden
+  value:
+    listen_network: tcp
+    listen_address: 127.0.0.1:7777
+    debug_listen_address: 127.0.0.1:17013
+    allow_host_access: true
+    destroy_containers_on_start: true # avoids snapshots
+    default_container_grace_time: 0
+    graph_cleanup_threshold_in_mb: 0
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: warden_cpi
+    release: bosh-warden-cpi
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/cpi_job?
+  value: warden_cpi
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/warden_cpi?
+  value:
+    host_ip: 10.254.50.4
+    warden:
+      connect_network: tcp
+      connect_address: 127.0.0.1:7777
+    actions:
+      expand_stemcell_tarball: false
+    agent: # todo remove once cpi dont know about these
+      mbus: nats://nats:((nats_password))@10.254.50.4:4222
+      blobstore:
+        provider: dav
+        options:
+          endpoint: http://10.254.50.4:25250
+          user: agent
+          password: ((blobstore_agent_password))
 
 - type: replace
   path: /releases/name=os-conf?
@@ -25,24 +70,8 @@
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
   value:
-    name: warden_cpi
-    release: bosh-warden-cpi
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value:
-    name: garden
-    release: garden-linux
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value:
     name: disable_agent
     release: os-conf
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/cpi_job?
-  value: warden_cpi
 
 - type: replace
   path: /instance_groups/name=bosh/properties/director/ignore_missing_gateway?
@@ -53,34 +82,6 @@
   value:
     provider: local
     options: {blobstore_path: /var/vcap/store/tmp/compiled_package_cache}
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/warden_cpi?
-  value:
-    host_ip: 10.254.50.4
-    warden:
-      connect_network: tcp
-      connect_address: 127.0.0.1:7777
-    agent: # todo remove once cpi dont know about these
-      mbus: nats://nats:((nats_password))@10.254.50.4:4222
-      blobstore:
-        provider: dav
-        options:
-          endpoint: http://10.254.50.4:25250
-          user: agent
-          password: ((blobstore_agent_password))
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/garden?
-  value:
-    listen_network: tcp
-    listen_address: 127.0.0.1:7777
-    debug_listen_address: 127.0.0.1:17013
-    disk_quota_enabled: false
-    allow_host_access: true
-    destroy_containers_on_start: true # avoids snapshots
-    default_container_grace_time: 0
-    graph_cleanup_threshold_in_mb: 0
 
 - type: replace
   path: /variables/name=nats_server_tls/options/alternative_names?/-

@@ -30,8 +30,8 @@
   path: /stemcells?/-
   value:
     alias: default
-    os: ubuntu-trusty
-    version: "3586.24"
+    os: ubuntu-xenial
+    version: "97.12"
 
 - type: replace
   path: /instance_groups/name=bosh/stemcell?
