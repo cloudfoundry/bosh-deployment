@@ -36,13 +36,3 @@ fly -t production check-resource -r compiled-releases-3541/uaa-release -f versio
 fly -t production check-resource -r compiled-releases-3541/credhub-release -f version:1.6.0
 fly -t production check-resource -r compiled-releases-3541/backup-and-restore-sdk-release -f version:1.2.1
 fly -t production check-resource -r compiled-releases-3541/ubuntu-trusty-stemcell -f version:3541
-
-fly -t production set-pipeline -n \
- -p compiled-releases-3468 \
- -c ./pipeline-3468.yml \
- -l <(lpass show --note "concourse:production pipeline:compiled-releases")
-
-fly -t production check-resource -r compiled-releases-3468/bosh-release -f version:263.4.0
-fly -t production check-resource -r compiled-releases-3468/uaa-release -f version:52.2
-fly -t production check-resource -r compiled-releases-3468/credhub-release -f version:1.6.0
-fly -t production check-resource -r compiled-releases-3468/ubuntu-trusty-stemcell -f version:3468
