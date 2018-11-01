@@ -13,5 +13,8 @@ inputs:
 outputs:
   - name: bosh-deployment-output
 
+params:
+  RELEASE_NAME: replace-me
+
 run:
-  path: bosh-deployment/ci/tasks/use-latest-bosh.sh
+  path: bosh-deployment/ci/tasks/use-latest-release.sh

@@ -214,7 +214,9 @@ jobs:
       - get: compiled-bosh-release
         trigger: true
     - task: update-bosh-deployment
-      file: bosh-deployment/ci/tasks/use-latest-bosh.yml
+      file: bosh-deployment/ci/tasks/use-latest-release.yml
+      params:
+        RELEASE_NAME: bosh
     - put: bosh-deployment
       params:
         repository: bosh-deployment-output

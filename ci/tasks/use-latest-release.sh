@@ -17,7 +17,7 @@ found_releases = false
 lines.each_with_index do |line, i|
   found_releases = true if line.start_with?('releases:')
   next if !found_releases
-  if line.start_with?('- name: bosh')
+  if line.start_with?("- name: #{ENV['RELEASE_NAME']}")
     lines[i+1] = "  version: \"$VERSION\"\n"
     lines[i+2] = "  url: $URL\n"
     lines[i+3] = "  sha1: $SHA1\n"
