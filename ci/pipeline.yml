@@ -64,7 +64,7 @@ jobs:
         - get: backup-and-restore-sdk-release
           trigger: true
           version:
-            version: "1.9.0"
+            version: "1.10.0"
         - get: ubuntu-xenial-stemcell
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
