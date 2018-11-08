@@ -3,9 +3,9 @@
   path: /releases/-
   value:
     name: bosh-openstack-cpi
-    version: "39"
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-openstack-cpi-release?v=39
-    sha1: 23d565ae5a90c0889e9832354589221ee8d41695
+    version: "41"
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-openstack-cpi-release?v=41
+    sha1: c5a8e16e11dce28e3f9ff1dbb1662040d1db0398
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
