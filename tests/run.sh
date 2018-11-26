@@ -18,6 +18,8 @@ bosh create-env bosh.yml \
   -o uaa.yml \
   -o credhub.yml \
   -o jumpbox-user.yml \
+  -o misc/blobstore-tls.yml \
+  -o misc/nats-strict-tls.yml \
   --vars-store $tests_dir/creds.yml \
   -v director_name=bosh-lite \
   -v internal_ip=192.168.50.10 \
@@ -34,8 +36,8 @@ echo "-----> `date`: Update cloud config"
 bosh -n update-cloud-config warden/cloud-config.yml
 
 echo "-----> `date`: Upload stemcell"
-bosh -n upload-stemcell "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=3541.10" \
-  --sha1 11c07b63953710d68b7f068e0ecb9cb8f7e64f6a
+bosh upload-stemcell --sha1 69163bcf21ae6d5ffeb92f099644d295b289b63e \
+  "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=3586.36"
 
 echo "-----> `date`: Deploy"
 bosh -n -d zookeeper deploy <(wget -O- https://raw.githubusercontent.com/cppforlife/zookeeper-release/master/manifests/zookeeper.yml) \
@@ -56,7 +58,6 @@ bosh delete-env bosh.yml \
   -o virtualbox/cpi.yml \
   -o virtualbox/outbound-network.yml \
   -o bosh-lite.yml \
-  -o bosh-lite-runc.yml \
   -o jumpbox-user.yml \
   --vars-store $tests_dir/creds.yml \
   -v director_name=bosh-lite \

@@ -1,0 +1,12 @@
+releases:
+- name: bpm
+  version: "0.8.0"
+  url: "https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.8.0"
+  sha1: "0cf53162bb246de6afb4c1eaf14becdb7865a217"
+
+addons:
+- name: bpm
+  jobs:
+  - name: bpm
+    release: bpm
+    properties: {}
