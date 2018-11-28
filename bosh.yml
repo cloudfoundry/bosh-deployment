@@ -56,8 +56,7 @@ instance_groups:
           blobstores:
           - provider: dav
             options:
-              # todo switch to using https
-              endpoint: http://((internal_ip)):25250
+              endpoint: https://((internal_ip)):25250
               user: agent
               password: ((blobstore_agent_password))
               tls:
