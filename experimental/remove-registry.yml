@@ -1,0 +1,7 @@
+---
+- type: remove
+  path: /instance_groups/name=bosh/jobs/name=registry?
+- type: remove
+  path: /instance_groups/name=bosh/properties/registry?
+- type: remove
+  path: /variables/name=registry_password?
