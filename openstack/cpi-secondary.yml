@@ -4,8 +4,8 @@
   value:
     name: bosh-openstack-cpi
     version: "39"
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-openstack-cpi-release?v=39
-    sha1: 23d565ae5a90c0889e9832354589221ee8d41695
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-openstack-cpi-release?v=39
+    sha1: 34d07e203a4442c81a2f2391262fbadf5bc6eaea
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
