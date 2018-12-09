@@ -5,6 +5,9 @@
     version: "2.0.2"
     url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.0.2-ubuntu-xenial-170.9-20181126-235205-877343813-20181126235215.tgz
     sha1: c1759ba08a927cd8b4476baefe5f803cbb95d515
+    stemcell:
+      os: ubuntu-xenial
+      version: "170.9"
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/-

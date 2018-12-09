@@ -31,7 +31,7 @@
   value:
     alias: default
     os: ubuntu-xenial
-    version: "97.12"
+    version: "170.9"
 
 - type: replace
   path: /instance_groups/name=bosh/stemcell?
