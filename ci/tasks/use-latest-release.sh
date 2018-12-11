@@ -5,6 +5,7 @@ tar -xzf compiled-bosh-release/*.tgz $( tar -tzf *.tgz | grep 'release.MF' )
 VERSION=$( grep -E '^version: ' release.MF | awk '{print $2}' | tr -d "\"'" )
 URL=$(cat compiled-bosh-release/url)
 SHA1=$(sha1sum compiled-bosh-release/*.tgz | awk '{print $1}')
+STEMCELL_VERSION=$( cat stemcell/version )
 
 INTERPOLATE_SCRIPT=interpolate_script.rb
 MANIFEST=bosh-deployment-output/bosh.yml
@@ -21,6 +22,9 @@ lines.each_with_index do |line, i|
     lines[i+1] = "  version: \"$VERSION\"\n"
     lines[i+2] = "  url: $URL\n"
     lines[i+3] = "  sha1: $SHA1\n"
+    lines[i+4] = "  stemcell:\n"
+    lines[i+5] = "    os: #{ENV['STEMCELL_OS']}\n"
+    lines[i+6] = "    version: $STEMCELL_VERSION\n"
     break
   end
 end

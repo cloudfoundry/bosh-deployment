@@ -213,9 +213,13 @@ jobs:
       - get: bosh-deployment
       - get: compiled-bosh-release
         trigger: true
+      - get: ubuntu-xenial-stemcell
     - task: update-bosh-deployment
       file: bosh-deployment/ci/tasks/use-latest-release.yml
+      input_mapping:
+        stemcell: ubuntu-xenial-stemcell
       params:
+        STEMCELL_OS: ubuntu-xenial
         RELEASE_NAME: bosh
     - put: bosh-deployment
       params:
