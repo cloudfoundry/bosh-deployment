@@ -17,7 +17,7 @@
 - type: replace
   path: /resource_pools/name=vms/cloud_properties?
   value:
-    instance_type: m4.xlarge
+    instance_type: m5.xlarge
     ephemeral_disk:
       type: gp2
       size: 25_000
