@@ -3,13 +3,13 @@ name: bosh
 
 releases:
 - name: bosh
-  version: "268.3.0"
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-268.3.0-ubuntu-xenial-97.33-20181119-194039-996670096-20181119194044.tgz
-  sha1: 8fba2997c289dfce22933d516d684e4a131db571
+  version: "268.4.0"
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-268.4.0-ubuntu-xenial-170.12-20181211-205456-423591735-20181211205502.tgz
+  sha1: cee0cef71e41718be9ee646f932aec37580a0200
 - name: bpm
   version: "0.12.3"
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-0.12.3-ubuntu-xenial-97.17-20180919-183904-508666998-20180919183910.tgz?versionId=prHEVL4zedQ.NxMXbIOUGlwq6hidaqYq
-  sha1: f57c590660fb00a55e23fa9a955e79d39ef21d1a
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-0.12.3-ubuntu-xenial-170.9-20181126-234429-76772131-20181126234436.tgz
+  sha1: 1cc709f4be6fb2ec7ea3205d81ecad7039a979b4
 
 resource_pools:
 - name: vms
@@ -56,8 +56,7 @@ instance_groups:
           blobstores:
           - provider: dav
             options:
-              # todo switch to using https
-              endpoint: http://((internal_ip)):25250
+              endpoint: https://((internal_ip)):25250
               user: agent
               password: ((blobstore_agent_password))
               tls:

@@ -242,7 +242,7 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-warden-boshlite-ubuntu-xenial-go_agent
-    version_family: '97.latest'
+    version_family: '170.latest'
 
 # releases
 - name: backup-and-restore-sdk-release
