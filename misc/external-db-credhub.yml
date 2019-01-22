@@ -1,3 +1,5 @@
+#This ops file requires that you applied the credhub.yml ops file first
+---
 - type: replace
   path: /instance_groups/name=bosh/jobs/name=credhub/properties/credhub/data_storage
   value:

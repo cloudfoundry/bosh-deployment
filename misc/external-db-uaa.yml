@@ -1,4 +1,5 @@
-
+#This ops file requires that you used the uaa.yml ops file first
+---
 - type: replace
   path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaadb
   value:
