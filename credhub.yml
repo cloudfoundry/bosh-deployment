@@ -3,8 +3,8 @@
   value:
     name: credhub
     version: "2.0.2"
-    url: "https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.0.2-ubuntu-xenial-97.16-20180912-174457-075145067-20180912174506.tgz?versionId=XXig9OLrmykqimvtJUYYlhKhykxk0M6i"
-    sha1: "afb03addb21543d3feafbebff8fdc242543ef0cb"
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.0.2-ubuntu-xenial-170.9-20181126-235205-877343813-20181126235215.tgz
+    sha1: c1759ba08a927cd8b4476baefe5f803cbb95d515
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
@@ -91,10 +91,26 @@
     secret: ((credhub_admin_client_secret))
 
 - type: replace
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/scim/users/name=credhub_cli_user?/password
+  value: ((credhub_cli_user_password))
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/scim/users/name=credhub_cli_user?/groups
+  value:
+    - credhub.read
+    - credhub.write
+
+- type: replace
   path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/jwt/revocable?
   value: true
 
 # Variables
+- type: replace
+  path: /variables/-
+  value:
+    name: credhub_cli_user_password
+    type: password
+
 - type: replace
   path: /variables/-
   value:

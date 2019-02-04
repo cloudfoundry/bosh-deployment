@@ -64,7 +64,7 @@ jobs:
         - get: backup-and-restore-sdk-release
           trigger: true
           version:
-            version: "1.9.0"
+            version: "1.10.0"
         - get: ubuntu-xenial-stemcell
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
@@ -176,7 +176,7 @@ jobs:
           - get: uaa-release
             trigger: true
             version:
-              version: "60.2"
+              version: "64.0"
           - get: ubuntu-xenial-stemcell
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
@@ -214,7 +214,9 @@ jobs:
       - get: compiled-bosh-release
         trigger: true
     - task: update-bosh-deployment
-      file: bosh-deployment/ci/tasks/use-latest-bosh.yml
+      file: bosh-deployment/ci/tasks/use-latest-release.yml
+      params:
+        RELEASE_NAME: bosh
     - put: bosh-deployment
       params:
         repository: bosh-deployment-output
@@ -240,7 +242,7 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-warden-boshlite-ubuntu-xenial-go_agent
-    version_family: '97.latest'
+    version_family: '170.latest'
 
 # releases
 - name: backup-and-restore-sdk-release

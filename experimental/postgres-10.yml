@@ -1,0 +1,10 @@
+# Using this file will upgrade postgres to v10. Once this file is used, downgrading back to older versions is not allowed.
+
+- type: remove
+  path: /instance_groups/name=bosh/jobs/name=postgres-9.4?
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=bpm:after
+  value:
+    name: postgres-10
+    release: bosh

@@ -3,15 +3,15 @@
   path: /releases/-
   value:
     name: bosh-softlayer-cpi
-    version: "23"
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-softlayer-cpi-release?v=23
-    sha1: 960f6068c7823bc3822c5e7ec6c855060c5582d0
+    version: "33"
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-softlayer-cpi-release?v=33
+    sha1: 2532b01b44595377d498749c69716e169e295113
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
   value:
-    url: https://bosh.io/d/stemcells/bosh-softlayer-xen-ubuntu-trusty-go_agent?v=3468.20
-    sha1: 3e0945585eecc49183a8f4fcd8c6a97e3809040c
+    url: https://s3.amazonaws.com/bosh-softlayer-cpi-stemcells/light-bosh-stemcell-97.15-softlayer-xen-ubuntu-xenial-go_agent.tgz
+    sha1: 67c7ce1adab587d578d151ab50bc2ba1d5a1a79f
 
 - type: replace
   path: /resource_pools/name=vms/env/bosh/keep_root_password?
@@ -22,20 +22,26 @@
   path: /resource_pools/name=vms/cloud_properties?
   value:
     domain: ((sl_vm_domain))
-    vmNamePrefix: ((sl_vm_name_prefix))
-    ephemeralDiskSize: 100
-    startCpus: 4
-    maxMemory: 8192
-    deployedByBoshcli: true
-    datacenter:
-      name: ((sl_datacenter))
-    hourlyBillingFlag: true
-    networkComponents:
-    - maxSpeed: 100
+    hostname_prefix: ((sl_vm_name_prefix))
+    ephemeral_disk_size: 100
+    cpu: 4
+    memory: 8192
+    deployed_by_boshcli: true
+    datacenter: ((sl_datacenter))
+    hourly_billing_flag: true
+    local_disk_flag: false
+    max_network_speed: 100
 
 - type: replace
   path: /networks/name=default/subnets/0/dns
   value: [8.8.8.8, 10.0.80.11, 10.0.80.12]
+
+- type: replace
+  path: /networks/name=default/subnets/0/cloud_properties?
+  value:
+    vlan_ids:
+      - ((sl_vlan_public))
+      - ((sl_vlan_private))
 
 - type: replace
   path: /networks/-
@@ -44,12 +50,9 @@
     type: dynamic
     dns: [8.8.8.8, 10.0.80.11, 10.0.80.12]
     cloud_properties:
-      PrimaryNetworkComponent:
-        NetworkVlan:
-          Id: ((sl_vlan_public))
-      PrimaryBackendNetworkComponent:
-        NetworkVlan:
-          Id: ((sl_vlan_private))
+      vlan_ids:
+      - ((sl_vlan_public))
+      - ((sl_vlan_private))
 
 # Add CPI job
 - type: replace
@@ -73,15 +76,81 @@
   value: true
 
 - type: replace
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores/provider=dav/options/endpoint?
+  value: http://((internal_ip)):25250
+
+- type: replace
   path: /cloud_provider/template?
   value: *cpi_job
 
 - type: replace
   path: /instance_groups/name=bosh/properties/softlayer?
-  value: &softlayer
+  value:
     username: ((sl_username))
-    apiKey: ((sl_api_key))
+    api_key: ((sl_api_key))
+
+- type: replace
+  path: /cloud_provider/ssh_tunnel?
+  value:
+    host: ((sl_vm_name_prefix)).((sl_vm_domain))
+    port: 22
+    private_key: ((sl_sshkey.private_key))
+    user: root
 
 - type: replace
   path: /cloud_provider/properties/softlayer?
-  value: *softlayer
+  value:
+    username: ((sl_username))
+    api_key: ((sl_api_key))
+    ssh_public_key: ((sl_sshkey.public_key))
+    ssh_public_key_fingerprint: ((sl_sshkey.public_key_fingerprint))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/address?
+  value: 127.0.0.1
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/nats/address?
+  value: 127.0.0.1
+
+- type: replace
+  path: /variables/name=nats_server_tls/options/alternative_names?/-
+  value: "127.0.0.1"
+
+- type: replace
+  path: /variables/name=blobstore_server_tls/options/alternative_names/-
+  value: "127.0.0.1"
+  
+# Enable registry job
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: registry
+    release: bosh
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/registry?
+  value:
+    address: ((internal_ip))
+    host: ((internal_ip))
+    db: # todo remove
+      host: 127.0.0.1
+      user: postgres
+      password: ((postgres_password))
+      database: bosh
+      adapter: postgres
+    username: registry
+    password: ((registry_password))
+    port: 25777
+
+- type: replace
+  path: /variables/-
+  value:
+    name: sl_sshkey
+    type: ssh
+
+- type: replace
+  path: /variables/-
+  value:
+    name: registry_password
+    type: password
