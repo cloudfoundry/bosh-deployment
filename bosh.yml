@@ -4,8 +4,8 @@ name: bosh
 releases:
 - name: bosh
   version: "268.6.0"
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-268.6.0-ubuntu-xenial-170.25-20190130-230319-172875782-20190130230326.tgz
-  sha1: 2715c3f3183945c69111378327cacd8610109da7
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-268.6.0-ubuntu-xenial-250.4-20190211-213616-327230898-20190211213622.tgz
+  sha1: 63fcd0dc49d8353dc54f0f409ff3416561c548fd
 - name: bpm
   version: "0.12.3"
   url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-0.12.3-ubuntu-xenial-170.9-20181126-234429-76772131-20181126234436.tgz
