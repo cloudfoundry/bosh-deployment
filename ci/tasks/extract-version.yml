@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: bosh/main-bosh-docker
+
+inputs:
+  - name: bosh-deployment
+  - name: compiled-release
+
+outputs:
+  - name: bosh-deployment-output
+
+run:
+  path: bosh-deployment/ci/tasks/extract-version.sh

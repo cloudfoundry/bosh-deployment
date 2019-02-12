@@ -15,7 +15,7 @@ groups:
     - compile-garden-runc
     - compile-uaa-release
     - compile-warden-cpi
-    - use-latest-bosh-in-bosh-deployment
+    - consolidate-versions
 
 jobs:
   - name: test-bosh-lite-gcp
@@ -66,15 +66,22 @@ jobs:
           version:
             version: "1.10.0"
         - get: ubuntu-xenial-stemcell
+          trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
           stemcell: ubuntu-xenial-stemcell
           release: backup-and-restore-sdk-release
+      - task: extract-version
+        file: bosh-deployment/ci/tasks/export-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
+      - put: bosh-deployment
+        params:
+          repository: bosh-deployment-output
+          rebase: true
 
   - name: compile-bosh-release
     plan:
@@ -83,15 +90,22 @@ jobs:
         - get: bosh-release
           trigger: true
         - get: ubuntu-xenial-stemcell
+          trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
           stemcell: ubuntu-xenial-stemcell
           release: bosh-release
+      - task: extract-version
+        file: bosh-deployment/ci/tasks/export-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
+      - put: bosh-deployment
+        params:
+          repository: bosh-deployment-output
+          rebase: true
 
   - name: compile-bpm-release
     plan:
@@ -102,15 +116,22 @@ jobs:
           version:
             version: "0.12.3"
         - get: ubuntu-xenial-stemcell
+          trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
           stemcell: ubuntu-xenial-stemcell
           release: bpm-release
+      - task: extract-version
+        file: bosh-deployment/ci/tasks/export-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
+      - put: bosh-deployment
+        params:
+          repository: bosh-deployment-output
+          rebase: true
 
   - name: compile-credhub-release
     plan:
@@ -121,102 +142,142 @@ jobs:
           version:
             version: "2.0.2"
         - get: ubuntu-xenial-stemcell
+          trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
           stemcell: ubuntu-xenial-stemcell
           release: credhub-release
+      - task: extract-version
+        file: bosh-deployment/ci/tasks/export-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
+      - put: bosh-deployment
+        params:
+          repository: bosh-deployment-output
+          rebase: true
 
   - name: compile-docker-cpi
     plan:
       - aggregate:
-          - get: bosh-deployment
-          - get: docker-cpi
-            trigger: true
-            version:
-              version: "0.0.5"
-          - get: ubuntu-xenial-stemcell
+        - get: bosh-deployment
+        - get: docker-cpi
+          trigger: true
+          version:
+            version: "0.0.5"
+        - get: ubuntu-xenial-stemcell
+          trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
           stemcell: ubuntu-xenial-stemcell
           release: docker-cpi
+      - task: extract-version
+        file: bosh-deployment/ci/tasks/export-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
+      - put: bosh-deployment
+        params:
+          repository: bosh-deployment-output
+          rebase: true
 
   - name: compile-garden-runc
     plan:
       - aggregate:
-          - get: bosh-deployment
-          - get: garden-runc
-            trigger: true
-            version:
-              version: "1.16.3"
-          - get: ubuntu-xenial-stemcell
+        - get: bosh-deployment
+        - get: garden-runc
+          trigger: true
+          version:
+            version: "1.16.3"
+        - get: ubuntu-xenial-stemcell
+          trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
           stemcell: ubuntu-xenial-stemcell
           release: garden-runc
+      - task: extract-version
+        file: bosh-deployment/ci/tasks/export-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
+      - put: bosh-deployment
+        params:
+          repository: bosh-deployment-output
+          rebase: true
 
   - name: compile-uaa-release
     plan:
       - aggregate:
-          - get: bosh-deployment
-          - get: uaa-release
-            trigger: true
-            version:
-              version: "64.0"
-          - get: ubuntu-xenial-stemcell
+        - get: bosh-deployment
+        - get: uaa-release
+          trigger: true
+          version:
+            version: "64.0"
+        - get: ubuntu-xenial-stemcell
+          trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
           stemcell: ubuntu-xenial-stemcell
           release: uaa-release
+      - task: extract-version
+        file: bosh-deployment/ci/tasks/export-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
+      - put: bosh-deployment
+        params:
+          repository: bosh-deployment-output
+          rebase: true
 
   - name: compile-warden-cpi
     plan:
-      - aggregate:
-          - get: bosh-deployment
-          - get: warden-cpi
-            trigger: true
-            version:
-              version: "40"
-          - get: ubuntu-xenial-stemcell
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: ubuntu-xenial-stemcell
-          release: warden-cpi
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-
-  - name: use-latest-bosh-in-bosh-deployment
-    plan:
     - aggregate:
       - get: bosh-deployment
-      - get: compiled-bosh-release
+      - get: warden-cpi
         trigger: true
-    - task: update-bosh-deployment
-      file: bosh-deployment/ci/tasks/use-latest-release.yml
+        version:
+          version: "40"
+      - get: ubuntu-xenial-stemcell
+        trigger: true
+    - task: export-release
+      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+      privileged: true
+      input_mapping:
+        stemcell: ubuntu-xenial-stemcell
+        release: warden-cpi
+    - task: extract-version
+      file: bosh-deployment/ci/tasks/export-version.yml
+    - put: compiled-releases
       params:
-        RELEASE_NAME: bosh
+        file: "compiled-release/*.tgz"
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment-output
+        rebase: true
+
+  - name: consolidate-versions
+    plan:
+    - get: bosh-deployment
+      trigger: true
+      passed:
+      - compile-docker-cpi
+      - compile-warden-cpi
+      - compile-bpm-release
+      - compile-garden-runc
+      - compile-uaa-release
+      - compile-bosh-release
+      - compile-bbr-sdk-release
+      - compile-credhub-release
+    - task: consolidate-versions
+      file: bosh-deployment/ci/tasks/consolidate-versions.yml
     - put: bosh-deployment
       params:
         repository: bosh-deployment-output
@@ -242,7 +303,6 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-warden-boshlite-ubuntu-xenial-go_agent
-    version_family: '170.latest'
 
 # releases
 - name: backup-and-restore-sdk-release
@@ -293,14 +353,6 @@ resources:
     access_key_id: ((aws_key_id))
     secret_access_key: ((aws_secret_access_key))
     regexp: ".*-(\\d+).tgz"
-
-- name: compiled-bosh-release
-  type: s3
-  source:
-    bucket: "bosh-compiled-release-tarballs"
-    access_key_id: ((aws_key_id))
-    secret_access_key: ((aws_secret_access_key))
-    regexp: "bosh-(\\d+).*xenial.*.tgz"
 
 - name: bosh-deployment-commit-status
   type: github-status
