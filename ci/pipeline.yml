@@ -74,7 +74,7 @@ jobs:
           stemcell: ubuntu-xenial-stemcell
           release: backup-and-restore-sdk-release
       - task: extract-version
-        file: bosh-deployment/ci/tasks/export-version.yml
+        file: bosh-deployment/ci/tasks/extract-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -98,7 +98,7 @@ jobs:
           stemcell: ubuntu-xenial-stemcell
           release: bosh-release
       - task: extract-version
-        file: bosh-deployment/ci/tasks/export-version.yml
+        file: bosh-deployment/ci/tasks/extract-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -124,7 +124,7 @@ jobs:
           stemcell: ubuntu-xenial-stemcell
           release: bpm-release
       - task: extract-version
-        file: bosh-deployment/ci/tasks/export-version.yml
+        file: bosh-deployment/ci/tasks/extract-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -150,7 +150,7 @@ jobs:
           stemcell: ubuntu-xenial-stemcell
           release: credhub-release
       - task: extract-version
-        file: bosh-deployment/ci/tasks/export-version.yml
+        file: bosh-deployment/ci/tasks/extract-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -176,7 +176,7 @@ jobs:
           stemcell: ubuntu-xenial-stemcell
           release: docker-cpi
       - task: extract-version
-        file: bosh-deployment/ci/tasks/export-version.yml
+        file: bosh-deployment/ci/tasks/extract-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -202,7 +202,7 @@ jobs:
           stemcell: ubuntu-xenial-stemcell
           release: garden-runc
       - task: extract-version
-        file: bosh-deployment/ci/tasks/export-version.yml
+        file: bosh-deployment/ci/tasks/extract-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -228,7 +228,7 @@ jobs:
           stemcell: ubuntu-xenial-stemcell
           release: uaa-release
       - task: extract-version
-        file: bosh-deployment/ci/tasks/export-version.yml
+        file: bosh-deployment/ci/tasks/extract-version.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -254,7 +254,7 @@ jobs:
         stemcell: ubuntu-xenial-stemcell
         release: warden-cpi
     - task: extract-version
-      file: bosh-deployment/ci/tasks/export-version.yml
+      file: bosh-deployment/ci/tasks/extract-version.yml
     - put: compiled-releases
       params:
         file: "compiled-release/*.tgz"
