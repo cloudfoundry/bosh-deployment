@@ -39,7 +39,7 @@ instance_groups:
   jobs:
   - {name: bpm, release: bpm}
   - {name: nats, release: bosh}
-  - {name: postgres-9.4, release: bosh}
+  - {name: postgres-10, release: bosh}
   - {name: blobstore, release: bosh}
   - {name: director, release: bosh}
   - {name: health_monitor, release: bosh}
