@@ -2,7 +2,7 @@
 
 git clone bosh-deployment bosh-deployment-output
 
-DIRECTORY=bosh-deployment/ci/intermediate-vars/*.yml
+DIRECTORY=bosh-deployment/ci/intermediate-vars/
 
 echo "---" > version-vars.yml
 for file in "${DIRECTORY}"/*.yml; do
