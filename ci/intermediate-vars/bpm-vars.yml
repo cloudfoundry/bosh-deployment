@@ -1,0 +1,5 @@
+---
+- name: bpm
+  version: 0.12.3
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/compiled-release/bpm-0.12.3-ubuntu-xenial-250.4-20190213-162749-871645611-20190213162756.tgz
+  sha: ab908eb15363340d68e5fd94872ece6db48bd815
