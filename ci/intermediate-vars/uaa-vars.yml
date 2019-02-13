@@ -1,5 +1,5 @@
 ---
 - name: uaa
   version: 64.0
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/compiled-release/uaa-64.0-ubuntu-xenial-250.4-20190213-161126-146615747-20190213161139.tgz
-  sha: 4384ff362eb66958f7d4b86414445e2daec15836
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/compiled-release/uaa-64.0-ubuntu-xenial-250.4-20190213-164934-849707229-20190213164949.tgz
+  sha: 201180db69ff4c42a969fcf139334174ac34e714
