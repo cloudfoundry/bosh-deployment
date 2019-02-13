@@ -1,12 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
 git clone bosh-deployment bosh-deployment-output
 
 DIRECTORY=bosh-deployment/ci/intermediate-vars/
 
-echo "---" > version-vars.yml
+echo "---" > bosh-deployment-output/version-vars.yml
 for file in "${DIRECTORY}"/*.yml; do
-  tail -n 4 "${file}" >> version-vars.yml
+  tail -n 4 "${file}" >> bosh-deployment-output/version-vars.yml
 done
 
 pushd $PWD/bosh-deployment-output
