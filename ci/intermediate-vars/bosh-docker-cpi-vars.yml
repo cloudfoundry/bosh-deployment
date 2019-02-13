@@ -1,0 +1,5 @@
+---
+- name: bosh-docker-cpi
+  version: 0.0.5
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/compiled-release/bosh-docker-cpi-0.0.5-ubuntu-xenial-250.4-20190213-162830-794677377-20190213162842.tgz
+  sha: 1b2e37c932113644b3efff3494777c73212a8576
