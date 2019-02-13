@@ -1,6 +1,6 @@
 #!/bin/bash
 
-tar -xzf compiled-release/*.tgz $( tar -tzf *.tgz | grep 'release.MF' )
+tar -xzf compiled-release/*.tgz $( tar -tzf compiled-release/*.tgz | grep 'release.MF' )
 RELEASE_NAME=$( grep -E '^name: ' release.MF | awk '{print $2}' | tr -d "\"'" )
 # ''"
 RELEASE_VERSION=$( grep -E '^version: ' release.MF | awk '{print $2}' | tr -d "\"'" )
