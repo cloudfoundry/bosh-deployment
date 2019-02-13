@@ -26,5 +26,5 @@ pushd $PWD/bosh-deployment-output
   git add -A
   git config --global user.email "ci@localhost"
   git config --global user.name "CI Bot"
-  git commit -m "Bumping ${RELEASE_NAME} to version ${VERSION}"
+  git commit -m "Bumping ${RELEASE_NAME} to version ${RELEASE_VERSION}"
 popd
