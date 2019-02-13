@@ -1,0 +1,5 @@
+---
+- name: backup-and-restore-sdk
+  version: 1.10.0
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/compiled-release/backup-and-restore-sdk-1.10.0-ubuntu-xenial-250.4-20190213-163100-073114117-20190213163118.tgz
+  sha: db7e94ae03dbaea493ca81ed7052c81516cbfed0
