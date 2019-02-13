@@ -1,5 +1,5 @@
 ---
 - name: bosh-warden-cpi
   version: 40
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/compiled-release/bosh-warden-cpi-40-ubuntu-xenial-250.4-20190213-162752-958839333-20190213162759.tgz
-  sha: 79f2c8a0948b4f7126cb25b3166ea590a0140a47
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/compiled-release/bosh-warden-cpi-40-ubuntu-xenial-250.9-20190213-193744-95314977-20190213193816.tgz
+  sha: e20f775b32a87cb14a998f5800424febcbe02986
