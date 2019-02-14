@@ -22,6 +22,7 @@
 - type: replace
   path: /networks/name=default/subnets/0/cloud_properties?
   value:
+    resource_group_name: ((vnet_resource_group_name))
     virtual_network_name: ((vnet_name))
     subnet_name: ((subnet_name))
 
