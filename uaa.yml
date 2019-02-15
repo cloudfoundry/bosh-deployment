@@ -3,8 +3,8 @@
   value:
     name: uaa
     version: "64.0"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-64.0-ubuntu-xenial-170.9-20181126-235054-308376184-20181126235108.tgz
-    sha1: e788ee7c1fce8ab9447e3772e54e11a2d69d475a
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-64.0-ubuntu-xenial-250.9-20190215-221628-042933637-20190215221642.tgz
+    sha1: f1a03bfdee37e0eeb11d50e352bb7c32e231849f
 
 # Switch Director to use UAA
 - type: replace
