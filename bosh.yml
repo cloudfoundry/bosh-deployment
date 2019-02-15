@@ -8,8 +8,8 @@ releases:
   sha1: 63fcd0dc49d8353dc54f0f409ff3416561c548fd
 - name: bpm
   version: "0.12.3"
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-0.12.3-ubuntu-xenial-170.9-20181126-234429-76772131-20181126234436.tgz
-  sha1: 1cc709f4be6fb2ec7ea3205d81ecad7039a979b4
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/*.tgz
+  sha1: 8191f2fb9ef67c7fb3d4c3b9130e43bd897e4661
 
 resource_pools:
 - name: vms
