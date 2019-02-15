@@ -9,9 +9,7 @@ SHA1="$(sha1sum compiled-release/*.tgz | cut -d' ' -f1)"
 URL="https://s3.amazonaws.com/bosh-compiled-release-tarballs/${TARBALL_NAME}"
 
 INTERPOLATE_SCRIPT=interpolate_script.rb
-#git clone bosh-deployment bosh-deployment-output
-rm -rf bosh-deployment-output
-cp -r bosh-deployment bosh-deployment-output
+git clone bosh-deployment bosh-deployment-output
 
 cat << EOF > $INTERPOLATE_SCRIPT
 changes=0
