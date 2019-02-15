@@ -15,7 +15,7 @@ groups:
     - compile-garden-runc
     - compile-uaa-release
     - compile-warden-cpi
-    - update-stemcell
+    - update-virtualbox-stemcell
 
 jobs:
   - name: test-bosh-lite-gcp
@@ -65,13 +65,13 @@ jobs:
           trigger: true
           version:
             version: "1.10.0"
-        - get: ubuntu-xenial-stemcell
+        - get: warden-ubuntu-xenial-stemcell
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
-          stemcell: ubuntu-xenial-stemcell
+          stemcell: warden-ubuntu-xenial-stemcell
           release: backup-and-restore-sdk-release
       - task: bump-bosh-deployment
         file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
@@ -89,13 +89,13 @@ jobs:
         - get: bosh-deployment
         - get: bosh-release
           trigger: true
-        - get: ubuntu-xenial-stemcell
+        - get: warden-ubuntu-xenial-stemcell
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
-          stemcell: ubuntu-xenial-stemcell
+          stemcell: warden-ubuntu-xenial-stemcell
           release: bosh-release
       - task: bump-bosh-deployment
         file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
@@ -115,13 +115,13 @@ jobs:
           trigger: true
           version:
             version: "0.12.3"
-        - get: ubuntu-xenial-stemcell
+        - get: warden-ubuntu-xenial-stemcell
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
-          stemcell: ubuntu-xenial-stemcell
+          stemcell: warden-ubuntu-xenial-stemcell
           release: bpm-release
       - task: bump-bosh-deployment
         file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
@@ -141,13 +141,13 @@ jobs:
           trigger: true
           version:
             version: "2.0.2"
-        - get: ubuntu-xenial-stemcell
+        - get: warden-ubuntu-xenial-stemcell
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
-          stemcell: ubuntu-xenial-stemcell
+          stemcell: warden-ubuntu-xenial-stemcell
           release: credhub-release
       - task: bump-bosh-deployment
         file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
@@ -167,13 +167,13 @@ jobs:
           trigger: true
           version:
             version: "0.0.5"
-        - get: ubuntu-xenial-stemcell
+        - get: warden-ubuntu-xenial-stemcell
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
-          stemcell: ubuntu-xenial-stemcell
+          stemcell: warden-ubuntu-xenial-stemcell
           release: docker-cpi
       - task: bump-bosh-deployment
         file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
@@ -193,13 +193,13 @@ jobs:
           trigger: true
           version:
             version: "1.16.3"
-        - get: ubuntu-xenial-stemcell
+        - get: warden-ubuntu-xenial-stemcell
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
-          stemcell: ubuntu-xenial-stemcell
+          stemcell: warden-ubuntu-xenial-stemcell
           release: garden-runc
       - task: bump-bosh-deployment
         file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
@@ -219,13 +219,13 @@ jobs:
           trigger: true
           version:
             version: "64.0"
-        - get: ubuntu-xenial-stemcell
+        - get: warden-ubuntu-xenial-stemcell
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
         input_mapping:
-          stemcell: ubuntu-xenial-stemcell
+          stemcell: warden-ubuntu-xenial-stemcell
           release: uaa-release
       - task: bump-bosh-deployment
         file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
@@ -245,19 +245,37 @@ jobs:
         trigger: true
         version:
           version: "40"
-      - get: ubuntu-xenial-stemcell
+      - get: warden-ubuntu-xenial-stemcell
         trigger: true
     - task: export-release
       file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
       privileged: true
       input_mapping:
-        stemcell: ubuntu-xenial-stemcell
+        stemcell: warden-ubuntu-xenial-stemcell
         release: warden-cpi
     - task: bump-bosh-deployment
       file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
     - put: compiled-releases
       params:
         file: "compiled-release/*.tgz"
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment-output
+        rebase: true
+
+  - name: update-virtualbox-stemcell
+    plan:
+    - aggregate:
+      - get: bosh-deployment
+      - get: vsphere-ubuntu-xenial-stemcell
+        trigger: true
+    - task: bump-stemcell
+      file: bosh-deployment/ci/bump-stemcell.yml
+      input_mapping:
+        stemcell: vsphere-ubuntu-xenial-stemcell
+      params:
+        CPI_OPS_FILE: virtualbox/cpi.yml
+        STEMCELL_NAME: vsphere-ubuntu-xenial-stemcell
     - put: bosh-deployment
       params:
         repository: bosh-deployment-output
@@ -279,10 +297,15 @@ resources:
     private_key: ((bosh_deployment_deploy_key))
 
 # stemcells
-- name: ubuntu-xenial-stemcell
+- name: warden-ubuntu-xenial-stemcell
   type: bosh-io-stemcell
   source:
     name: bosh-warden-boshlite-ubuntu-xenial-go_agent
+
+- name: vsphere-ubuntu-xenial-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-vsphere-esxi-ubuntu-xenial-go_agent
 
 # releases
 - name: backup-and-restore-sdk-release
