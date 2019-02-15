@@ -10,11 +10,12 @@ groups:
     - compile-bbr-sdk-release
     - compile-bosh-release
     - compile-bpm-release
-    - compile-docker-cpi
     - compile-credhub-release
+    - compile-docker-cpi
     - compile-garden-runc
     - compile-uaa-release
     - compile-warden-cpi
+    - update-stemcell
 
 jobs:
   - name: test-bosh-lite-gcp

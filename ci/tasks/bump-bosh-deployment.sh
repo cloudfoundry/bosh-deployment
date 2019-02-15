@@ -1,10 +1,12 @@
 #!/bin/bash -eux
 
 tar -xzf compiled-release/*.tgz $( tar -tzf compiled-release/*.tgz | grep 'release.MF' )
-RELEASE_NAME=$( grep -E '^name: ' release.MF | awk '{print $2}' | tr -d "\"'" )
-VERSION=$( grep -E '^version: ' release.MF | awk '{print $2}' | tr -d "\"'" )
-SHA1=($(sha1sum compiled-release/*.tgz))
-URL="https://s3.amazonaws.com/bosh-compiled-release-tarballs/${SHA[1]}"
+RELEASE_NAME="$( bosh int release.MF --path /name )"
+VERSION="$( bosh int release.MF --path /version )"
+TARBALL_NAME="$(cd compile-release/; echo *.tgz)"
+SHA1="$(sha1sum compiled-release/*.tgz | cut -d' ' -f1)"
+
+URL="https://s3.amazonaws.com/bosh-compiled-release-tarballs/${TARBALL_NAME}"
 
 INTERPOLATE_SCRIPT=interpolate_script.rb
 #git clone bosh-deployment bosh-deployment-output
@@ -25,7 +27,7 @@ manifests.each do |manifest|
       if line.chomp == '- name: $RELEASE_NAME' && lines[i+2].include?('compile')
         lines[i+1] = "  version: \"$VERSION\"\n"
         lines[i+2] = "  url: $URL\n"
-        lines[i+3] = "  sha1: ${SHA1[0]}\n"
+        lines[i+3] = "  sha1: ${SHA1}\n"
         puts "Updated release in #{manifest}"
         changes += 1
         break
@@ -37,7 +39,7 @@ manifests.each do |manifest|
       if line.chomp == '    name: $RELEASE_NAME' && lines[i+2].include?('compile')
         lines[i+1] = "    version: \"$VERSION\"\n"
         lines[i+2] = "    url: $URL\n"
-        lines[i+3] = "    sha1: ${SHA1[0]}\n"
+        lines[i+3] = "    sha1: ${SHA1}\n"
         puts "Updated release in #{manifest}"
         changes += 1
         break
