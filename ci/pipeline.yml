@@ -269,8 +269,8 @@ jobs:
       - get: bosh-deployment
       - get: vsphere-ubuntu-xenial-stemcell
         trigger: true
-    - task: bump-stemcell
-      file: bosh-deployment/ci/bump-stemcell.yml
+    - task: update-stemcell
+      file: bosh-deployment/ci/tasks/update-stemcell.yml
       input_mapping:
         stemcell: vsphere-ubuntu-xenial-stemcell
       params:
