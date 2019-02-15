@@ -3,7 +3,7 @@
 tar -xzf compiled-release/*.tgz $( tar -tzf compiled-release/*.tgz | grep 'release.MF' )
 RELEASE_NAME="$( bosh int release.MF --path /name )"
 VERSION="$( bosh int release.MF --path /version )"
-TARBALL_NAME="$(cd compile-release/; echo *.tgz)"
+TARBALL_NAME="$(cd compiled-release/; echo *.tgz)"
 SHA1="$(sha1sum compiled-release/*.tgz | cut -d' ' -f1)"
 
 URL="https://s3.amazonaws.com/bosh-compiled-release-tarballs/${TARBALL_NAME}"
