@@ -14,4 +14,4 @@ outputs:
   - name: bosh-deployment-output
 
 run:
-  path: bosh-deployment/ci/tasks/bump-bosh-deployment.sh
+  path: bosh-deployment/ci/tasks/update-release.sh

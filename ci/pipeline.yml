@@ -81,8 +81,8 @@ jobs:
         input_mapping:
           stemcell: warden-ubuntu-xenial-stemcell
           release: backup-and-restore-sdk-release
-      - task: bump-bosh-deployment
-        file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
+      - task: update-release
+        file: bosh-deployment/ci/tasks/update-release.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -105,8 +105,8 @@ jobs:
         input_mapping:
           stemcell: warden-ubuntu-xenial-stemcell
           release: bosh-release
-      - task: bump-bosh-deployment
-        file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
+      - task: update-release
+        file: bosh-deployment/ci/tasks/update-release.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -131,8 +131,8 @@ jobs:
         input_mapping:
           stemcell: warden-ubuntu-xenial-stemcell
           release: bpm-release
-      - task: bump-bosh-deployment
-        file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
+      - task: update-release
+        file: bosh-deployment/ci/tasks/update-release.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -157,8 +157,8 @@ jobs:
         input_mapping:
           stemcell: warden-ubuntu-xenial-stemcell
           release: credhub-release
-      - task: bump-bosh-deployment
-        file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
+      - task: update-release
+        file: bosh-deployment/ci/tasks/update-release.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -183,8 +183,8 @@ jobs:
         input_mapping:
           stemcell: warden-ubuntu-xenial-stemcell
           release: docker-cpi
-      - task: bump-bosh-deployment
-        file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
+      - task: update-release
+        file: bosh-deployment/ci/tasks/update-release.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -209,8 +209,8 @@ jobs:
         input_mapping:
           stemcell: warden-ubuntu-xenial-stemcell
           release: garden-runc
-      - task: bump-bosh-deployment
-        file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
+      - task: update-release
+        file: bosh-deployment/ci/tasks/update-release.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -235,8 +235,8 @@ jobs:
         input_mapping:
           stemcell: warden-ubuntu-xenial-stemcell
           release: uaa-release
-      - task: bump-bosh-deployment
-        file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
+      - task: update-release
+        file: bosh-deployment/ci/tasks/update-release.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -261,8 +261,8 @@ jobs:
       input_mapping:
         stemcell: warden-ubuntu-xenial-stemcell
         release: warden-cpi
-    - task: bump-bosh-deployment
-      file: bosh-deployment/ci/tasks/bump-bosh-deployment.yml
+    - task: update-release
+      file: bosh-deployment/ci/tasks/update-release.yml
     - put: compiled-releases
       params:
         file: "compiled-release/*.tgz"
