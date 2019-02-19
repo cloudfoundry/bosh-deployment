@@ -1,49 +1,43 @@
-# WARNING: This is an experimental feature that is not explicitly supported.
----
-- type: replace
-  path: /releases/name=bosh-warden-cpi?
+- path: /releases/name=bosh-warden-cpi?
+  type: replace
   value:
     name: bosh-warden-cpi
-    version: "40"
-    url: https://bosh.io/d/github.com/cppforlife/bosh-warden-cpi-release?v=40
     sha1: 9f579b1615bc95494eaa8579728fe4764e3b1e16
-
-- type: replace
+    url: https://bosh.io/d/github.com/cppforlife/bosh-warden-cpi-release?v=40
+    version: "40"
+- name: stemcell
   path: /resource_pools/name=vms/stemcell?
+  type: replace
   value:
-    url: https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-xenial-go_agent?v=170.9
     sha1: eb9041d1b2647fd0555c90e9147998b58ebf55ae
-
-# Configure VM size
-- type: replace
-  path: /resource_pools/name=vms/cloud_properties?
+    url: https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-xenial-go_agent?v=170.9
+- path: /resource_pools/name=vms/cloud_properties?
+  type: replace
   value:
     ports:
-      - host: 22 # todo jumpboxing?
-      - host: 6868 # bootstrap agent
-      - host: 25555 # director
-      - host: 4222 # nats
-      - host: 25250 # blobstore
-      - host: 8443 # uaa
-      - host: 8080 # cfg serv
-
-- type: replace
-  path: /cloud_provider/template?
-  value: &cpi_job
+    - host: 22
+    - host: 6868
+    - host: 25555
+    - host: 4222
+    - host: 25250
+    - host: 8443
+    - host: 8080
+- path: /cloud_provider/template?
+  type: replace
+  value:
     name: warden_cpi
     release: bosh-warden-cpi
-
-- type: replace
-  path: /cloud_provider/properties/warden_cpi?
+- path: /cloud_provider/properties/warden_cpi?
+  type: replace
   value:
+    actions:
+      expand_stemcell_tarball: false
+    agent:
+      blobstore:
+        options:
+          blobstore_path: /var/vcap/micro_bosh/data/cache
+        provider: local
+      mbus: https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868
     warden:
       connect_address: ((garden_host)):7777
       connect_network: tcp
-    actions:
-      expand_stemcell_tarball: false
-    agent: # todo remove
-      mbus: "https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868"
-      blobstore:
-        provider: local
-        options:
-          blobstore_path: /var/vcap/micro_bosh/data/cache

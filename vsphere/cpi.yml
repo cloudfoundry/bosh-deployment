@@ -1,61 +1,66 @@
----
-- type: replace
-  path: /releases/-
+- path: /releases/-
+  type: replace
   value:
     name: bosh-vsphere-cpi
-    version: "52"
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-vsphere-cpi-release?v=52
     sha1: 73f4cd14eef75e037d6ca553ee63d8b55062f0ab
-
-- type: replace
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-vsphere-cpi-release?v=52
+    version: "52"
+- name: stemcell
   path: /resource_pools/name=vms/stemcell?
+  type: replace
   value:
-    url: https://bosh.io/d/stemcells/bosh-vsphere-esxi-ubuntu-xenial-go_agent?v=170.9
     sha1: dff5ee88f85c902389d8f9960e06fdf82b233c1f
-
-# Configure sizes
-- type: replace
-  path: /resource_pools/name=vms/cloud_properties?
+    url: https://bosh.io/d/stemcells/bosh-vsphere-esxi-ubuntu-xenial-go_agent?v=170.9
+- path: /resource_pools/name=vms/cloud_properties?
+  type: replace
   value:
     cpu: 2
-    ram: 4_096
-    disk: 40_000
-
-- type: replace
-  path: /networks/name=default/subnets/0/cloud_properties?
-  value: {name: ((network_name))}
-
-# Add CPI job
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value: &cpi_job
+    disk: 40000
+    ram: 4096
+- path: /networks/name=default/subnets/0/cloud_properties?
+  type: replace
+  value:
+    name: ((network_name))
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
     name: vsphere_cpi
     release: bosh-vsphere-cpi
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/cpi_job?
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
+  type: replace
   value: vsphere_cpi
-
-- type: replace
-  path: /cloud_provider/template?
-  value: *cpi_job
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/vcenter?
-  value: &vcenter
+- path: /cloud_provider/template?
+  type: replace
+  value:
+    name: vsphere_cpi
+    release: bosh-vsphere-cpi
+- path: /instance_groups/name=bosh/properties/vcenter?
+  type: replace
+  value:
     address: ((vcenter_ip))
-    user: ((vcenter_user))
-    password: ((vcenter_password))
     datacenters:
-    - name: ((vcenter_dc))
-      vm_folder: ((vcenter_vms))
-      template_folder: ((vcenter_templates))
-      datastore_pattern: ((vcenter_ds))
-      persistent_datastore_pattern: ((vcenter_ds))
-      disk_path: ((vcenter_disks))
-      clusters:
+    - clusters:
       - ((vcenter_cluster)): {}
-
-- type: replace
-  path: /cloud_provider/properties/vcenter?
-  value: *vcenter
+      datastore_pattern: ((vcenter_ds))
+      disk_path: ((vcenter_disks))
+      name: ((vcenter_dc))
+      persistent_datastore_pattern: ((vcenter_ds))
+      template_folder: ((vcenter_templates))
+      vm_folder: ((vcenter_vms))
+    password: ((vcenter_password))
+    user: ((vcenter_user))
+- path: /cloud_provider/properties/vcenter?
+  type: replace
+  value:
+    address: ((vcenter_ip))
+    datacenters:
+    - clusters:
+      - ((vcenter_cluster)): {}
+      datastore_pattern: ((vcenter_ds))
+      disk_path: ((vcenter_disks))
+      name: ((vcenter_dc))
+      persistent_datastore_pattern: ((vcenter_ds))
+      template_folder: ((vcenter_templates))
+      vm_folder: ((vcenter_vms))
+    password: ((vcenter_password))
+    user: ((vcenter_user))

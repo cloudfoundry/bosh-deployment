@@ -1,94 +1,91 @@
----
-- type: replace
-  path: /releases/-
+- path: /releases/-
+  type: replace
   value:
     name: bosh-openstack-cpi
-    version: "42"
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-openstack-cpi-release?v=42
     sha1: 31a05d33bff6c41fb12febb5a157bc9b58c95527
-
-- type: replace
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-openstack-cpi-release?v=42
+    version: "42"
+- name: stemcell
   path: /resource_pools/name=vms/stemcell?
+  type: replace
   value:
-    url: https://bosh.io/d/stemcells/bosh-openstack-kvm-ubuntu-xenial-go_agent?v=170.9
     sha1: 56f71976448e86bd097611a49f4750383b19e016
-
-# Configure sizes
-- type: replace
-  path: /resource_pools/name=vms/cloud_properties?
+    url: https://bosh.io/d/stemcells/bosh-openstack-kvm-ubuntu-xenial-go_agent?v=170.9
+- path: /resource_pools/name=vms/cloud_properties?
+  type: replace
   value:
-    instance_type: m1.xlarge
     availability_zone: ((az))
-
-- type: replace
-  path: /networks/name=default/subnets/0/cloud_properties?
-  value: {net_id: ((net_id))}
-
-# Enable registry job
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
+    instance_type: m1.xlarge
+- path: /networks/name=default/subnets/0/cloud_properties?
+  type: replace
+  value:
+    net_id: ((net_id))
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
   value:
     name: registry
     release: bosh
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/registry?
+- path: /instance_groups/name=bosh/properties/registry?
+  type: replace
   value:
     address: ((internal_ip))
-    host: ((internal_ip))
-    db: # todo remove
-      host: 127.0.0.1
-      user: postgres
-      password: ((postgres_password))
-      database: bosh
+    db:
       adapter: postgres
-    username: registry
+      database: bosh
+      host: 127.0.0.1
+      password: ((postgres_password))
+      user: postgres
+    endpoint: http://registry:((registry_password))@((internal_ip)):25777
+    host: ((internal_ip))
     password: ((registry_password))
     port: 25777
-    endpoint: http://registry:((registry_password))@((internal_ip)):25777
-
-# Add CPI job
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value: &cpi_job
+    username: registry
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
     name: openstack_cpi
     release: bosh-openstack-cpi
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/cpi_job?
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
+  type: replace
   value: openstack_cpi
-
-- type: replace
-  path: /cloud_provider/template?
-  value: *cpi_job
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/openstack?
-  value: &openstack
-    auth_url: ((auth_url))
-    username: ((openstack_username))
+- path: /cloud_provider/template?
+  type: replace
+  value:
+    name: openstack_cpi
+    release: bosh-openstack-cpi
+- path: /instance_groups/name=bosh/properties/openstack?
+  type: replace
+  value:
     api_key: ((openstack_password))
-    domain: ((openstack_domain))
-    project: ((openstack_project))
-    region: ((region))
+    auth_url: ((auth_url))
     default_key_name: ((default_key_name))
     default_security_groups: ((default_security_groups))
+    domain: ((openstack_domain))
     human_readable_vm_names: true
-
-- type: replace
-  path: /cloud_provider/ssh_tunnel?
+    project: ((openstack_project))
+    region: ((region))
+    username: ((openstack_username))
+- path: /cloud_provider/ssh_tunnel?
+  type: replace
   value:
     host: ((internal_ip))
     port: 22
-    user: vcap
     private_key: ((private_key))
-
-- type: replace
-  path: /cloud_provider/properties/openstack?
-  value: *openstack
-
-- type: replace
-  path: /variables/-
+    user: vcap
+- path: /cloud_provider/properties/openstack?
+  type: replace
+  value:
+    api_key: ((openstack_password))
+    auth_url: ((auth_url))
+    default_key_name: ((default_key_name))
+    default_security_groups: ((default_security_groups))
+    domain: ((openstack_domain))
+    human_readable_vm_names: true
+    project: ((openstack_project))
+    region: ((region))
+    username: ((openstack_username))
+- path: /variables/-
+  type: replace
   value:
     name: registry_password
     type: password

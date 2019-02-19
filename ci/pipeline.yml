@@ -15,7 +15,15 @@ groups:
     - compile-garden-runc
     - compile-uaa-release
     - compile-warden-cpi
+    - update-aws-stemcell
+    - update-azure-stemcell
+    - update-docker-stemcell
+    - update-gcp-stemcell
+    - update-openstack-stemcell
+    - update-vcloud-stemcell
     - update-virtualbox-stemcell
+    - update-vsphere-stemcell
+    - update-warden-stemcell
 
 jobs:
   - name: test-bosh-lite-gcp
@@ -263,19 +271,55 @@ jobs:
         repository: bosh-deployment-output
         rebase: true
 
-  - name: update-virtualbox-stemcell
+  - name: update-aws-stemcell
     plan:
     - aggregate:
       - get: bosh-deployment
-      - get: vsphere-ubuntu-xenial-stemcell
+      - get: aws-ubuntu-xenial-stemcell
         trigger: true
     - task: update-stemcell
       file: bosh-deployment/ci/tasks/update-stemcell.yml
       input_mapping:
-        stemcell: vsphere-ubuntu-xenial-stemcell
+        stemcell: aws-ubuntu-xenial-stemcell
       params:
-        CPI_OPS_FILE: virtualbox/cpi.yml
-        STEMCELL_NAME: vsphere-ubuntu-xenial-stemcell
+        CPI_OPS_FILE: aws/cpi.yml
+        STEMCELL_NAME: aws-ubuntu-xenial-stemcell
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment-output
+        rebase: true
+
+  - name: update-azure-stemcell
+    plan:
+    - aggregate:
+      - get: bosh-deployment
+      - get: azure-ubuntu-xenial-stemcell
+        trigger: true
+    - task: update-stemcell
+      file: bosh-deployment/ci/tasks/update-stemcell.yml
+      input_mapping:
+        stemcell: azure-ubuntu-xenial-stemcell
+      params:
+        CPI_OPS_FILE: azure/cpi.yml
+        STEMCELL_NAME: azure-ubuntu-xenial-stemcell
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment-output
+        rebase: true
+
+  - name: update-docker-stemcell
+    plan:
+    - aggregate:
+      - get: bosh-deployment
+      - get: warden-ubuntu-xenial-stemcell
+        trigger: true
+    - task: update-stemcell
+      file: bosh-deployment/ci/tasks/update-stemcell.yml
+      input_mapping:
+        stemcell: warden-ubuntu-xenial-stemcell
+      params:
+        CPI_OPS_FILE: docker/cpi.yml
+        STEMCELL_NAME: warden-ubuntu-xenial-stemcell
     - put: bosh-deployment
       params:
         repository: bosh-deployment-output
@@ -299,6 +343,96 @@ jobs:
         repository: bosh-deployment-output
         rebase: true
 
+  - name: update-openstack-stemcell
+    plan:
+    - aggregate:
+      - get: bosh-deployment
+      - get: openstack-ubuntu-xenial-stemcell
+        trigger: true
+    - task: update-stemcell
+      file: bosh-deployment/ci/tasks/update-stemcell.yml
+      input_mapping:
+        stemcell: openstack-ubuntu-xenial-stemcell
+      params:
+        CPI_OPS_FILE: openstack/cpi.yml
+        STEMCELL_NAME: openstack-ubuntu-xenial-stemcell
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment-output
+        rebase: true
+
+  - name: update-vcloud-stemcell
+    plan:
+    - aggregate:
+      - get: bosh-deployment
+      - get: vcloud-ubuntu-xenial-stemcell
+        trigger: true
+    - task: update-stemcell
+      file: bosh-deployment/ci/tasks/update-stemcell.yml
+      input_mapping:
+        stemcell: vcloud-ubuntu-xenial-stemcell
+      params:
+        CPI_OPS_FILE: vcloud/cpi.yml
+        STEMCELL_NAME: vcloud-ubuntu-xenial-stemcell
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment-output
+        rebase: true
+
+  - name: update-virtualbox-stemcell
+    plan:
+    - aggregate:
+      - get: bosh-deployment
+      - get: vsphere-ubuntu-xenial-stemcell
+        trigger: true
+    - task: update-stemcell
+      file: bosh-deployment/ci/tasks/update-stemcell.yml
+      input_mapping:
+        stemcell: vsphere-ubuntu-xenial-stemcell
+      params:
+        CPI_OPS_FILE: virtualbox/cpi.yml
+        STEMCELL_NAME: vsphere-ubuntu-xenial-stemcell
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment-output
+        rebase: true
+
+  - name: update-vsphere-stemcell
+    plan:
+    - aggregate:
+      - get: bosh-deployment
+      - get: vsphere-ubuntu-xenial-stemcell
+        trigger: true
+    - task: update-stemcell
+      file: bosh-deployment/ci/tasks/update-stemcell.yml
+      input_mapping:
+        stemcell: vsphere-ubuntu-xenial-stemcell
+      params:
+        CPI_OPS_FILE: vsphere/cpi.yml
+        STEMCELL_NAME: vsphere-ubuntu-xenial-stemcell
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment-output
+        rebase: true
+
+  - name: update-warden-stemcell
+    plan:
+    - aggregate:
+      - get: bosh-deployment
+      - get: warden-ubuntu-xenial-stemcell
+        trigger: true
+    - task: update-stemcell
+      file: bosh-deployment/ci/tasks/update-stemcell.yml
+      input_mapping:
+        stemcell: warden-ubuntu-xenial-stemcell
+      params:
+        CPI_OPS_FILE: warden/cpi.yml
+        STEMCELL_NAME: warden-ubuntu-xenial-stemcell
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment-output
+        rebase: true
+
 resources:
 - name: bosh-deployment
   type: git
@@ -315,6 +449,36 @@ resources:
     private_key: ((bosh_deployment_deploy_key))
 
 # stemcells
+- name: aws-ubuntu-xenial-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-aws-xen-ubuntu-xenial-go_agent
+    force_regular: true
+
+- name: azure-ubuntu-xenial-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-azure-hyperv-ubuntu-xenial-go_agent
+    force_regular: true
+
+- name: gcp-ubuntu-xenial-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-xenial-go_agent
+    force_regular: true
+
+- name: openstack-ubuntu-xenial-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-openstack-kvm-ubuntu-xenial-go_agent
+    force_regular: true
+
+- name: vcloud-ubuntu-xenial-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-openstack-kvm-ubuntu-xenial-go_agent
+    force_regular: true
+
 - name: warden-ubuntu-xenial-stemcell
   type: bosh-io-stemcell
   source:
@@ -324,11 +488,6 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-vsphere-esxi-ubuntu-xenial-go_agent
-
-- name: gcp-ubuntu-xenial-stemcell
-  type: bosh-io-stemcell
-  source:
-    name: bosh-google-kvm-ubuntu-xenial-go_agent
 
 # releases
 - name: backup-and-restore-sdk-release
