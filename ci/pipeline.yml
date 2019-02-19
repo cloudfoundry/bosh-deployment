@@ -74,6 +74,7 @@ jobs:
           version:
             version: "1.10.0"
         - get: warden-ubuntu-xenial-stemcell
+          passed: [update-warden-stemcell]
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
@@ -98,6 +99,7 @@ jobs:
         - get: bosh-release
           trigger: true
         - get: warden-ubuntu-xenial-stemcell
+          passed: [update-warden-stemcell]
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
@@ -124,6 +126,7 @@ jobs:
           version:
             version: "0.12.3"
         - get: warden-ubuntu-xenial-stemcell
+          passed: [update-warden-stemcell]
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
@@ -150,6 +153,7 @@ jobs:
           version:
             version: "2.0.2"
         - get: warden-ubuntu-xenial-stemcell
+          passed: [update-warden-stemcell]
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
@@ -176,6 +180,7 @@ jobs:
           version:
             version: "0.0.5"
         - get: warden-ubuntu-xenial-stemcell
+          passed: [update-warden-stemcell]
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
@@ -202,6 +207,7 @@ jobs:
           version:
             version: "1.16.3"
         - get: warden-ubuntu-xenial-stemcell
+          passed: [update-warden-stemcell]
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
@@ -228,6 +234,7 @@ jobs:
           version:
             version: "64.0"
         - get: warden-ubuntu-xenial-stemcell
+          passed: [update-warden-stemcell]
           trigger: true
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
@@ -247,29 +254,30 @@ jobs:
 
   - name: compile-warden-cpi
     plan:
-    - aggregate:
-      - get: bosh-deployment
-      - get: warden-cpi
-        trigger: true
-        version:
-          version: "40"
-      - get: warden-ubuntu-xenial-stemcell
-        trigger: true
-    - task: export-release
-      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-      privileged: true
-      input_mapping:
-        stemcell: warden-ubuntu-xenial-stemcell
-        release: warden-cpi
-    - task: update-release
-      file: bosh-deployment/ci/tasks/update-release.yml
-    - put: compiled-releases
-      params:
-        file: "compiled-release/*.tgz"
-    - put: bosh-deployment
-      params:
-        repository: bosh-deployment-output
-        rebase: true
+      - aggregate:
+        - get: bosh-deployment
+        - get: warden-cpi
+          trigger: true
+          version:
+            version: "40"
+        - get: warden-ubuntu-xenial-stemcell
+          passed: [update-warden-stemcell]
+          trigger: true
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: warden-ubuntu-xenial-stemcell
+          release: warden-cpi
+      - task: update-release
+        file: bosh-deployment/ci/tasks/update-release.yml
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+      - put: bosh-deployment
+        params:
+          repository: bosh-deployment-output
+          rebase: true
 
   - name: update-aws-stemcell
     plan:
