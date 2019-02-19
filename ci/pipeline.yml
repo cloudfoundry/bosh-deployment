@@ -281,6 +281,24 @@ jobs:
         repository: bosh-deployment-output
         rebase: true
 
+  - name: update-gcp-stemcell
+    plan:
+    - aggregate:
+      - get: bosh-deployment
+      - get: gcp-ubuntu-xenial-stemcell
+        trigger: true
+    - task: update-stemcell
+      file: bosh-deployment/ci/tasks/update-stemcell.yml
+      input_mapping:
+        stemcell: gcp-ubuntu-xenial-stemcell
+      params:
+        CPI_OPS_FILE: gcp/cpi.yml
+        STEMCELL_NAME: gcp-ubuntu-xenial-stemcell
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment-output
+        rebase: true
+
 resources:
 - name: bosh-deployment
   type: git
@@ -306,6 +324,11 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-vsphere-esxi-ubuntu-xenial-go_agent
+
+- name: gcp-ubuntu-xenial-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-xenial-go_agent
 
 # releases
 - name: backup-and-restore-sdk-release

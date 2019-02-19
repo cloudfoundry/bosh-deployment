@@ -1,69 +1,62 @@
----
-- type: replace
-  path: /releases/-
+- path: /releases/-
+  type: replace
   value:
     name: bosh-google-cpi
-    version: "29.0.0"
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-google-cpi-release?v=29.0.0
     sha1: ab8e434c6cc86eb130d30f361d210126d5a539bd
-
-- type: replace
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-google-cpi-release?v=29.0.0
+    version: 29.0.0
+- name: stemcell
   path: /resource_pools/name=vms/stemcell?
+  type: replace
   value:
-    url: https://bosh.io/d/stemcells/bosh-google-kvm-ubuntu-xenial-go_agent?v=170.9
     sha1: 798fed2cbdac65adb0b1daa4a7d473faeaafe27f
-
-# Configure sizes
-- type: replace
-  path: /resource_pools/name=vms/cloud_properties?
+    url: https://bosh.io/d/stemcells/bosh-google-kvm-ubuntu-xenial-go_agent?v=170.9
+- path: /resource_pools/name=vms/cloud_properties?
+  type: replace
   value:
-    zone: ((zone))
     machine_type: n1-standard-1
     root_disk_size_gb: 40
     root_disk_type: pd-standard
-
-- type: replace
-  path: /disk_pools/name=disks/cloud_properties?
-  value: {type: pd-standard}
-
-- type: replace
-  path: /networks/name=default/subnets/0/cloud_properties?
+    zone: ((zone))
+- path: /disk_pools/name=disks/cloud_properties?
+  type: replace
   value:
+    type: pd-standard
+- path: /networks/name=default/subnets/0/cloud_properties?
+  type: replace
+  value:
+    ephemeral_external_ip: false
     network_name: ((network))
     subnetwork_name: ((subnetwork))
-    ephemeral_external_ip: false
     tags: ((tags))
-
-# Add CPI job
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value: &cpi_job
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
     name: google_cpi
     release: bosh-google-cpi
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/cpi_job?
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
+  type: replace
   value: google_cpi
-
-- type: replace
-  path: /cloud_provider/template?
-  value: *cpi_job
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/google?
-  value: &cpi_conf
-    project: ((project_id))
+- path: /cloud_provider/template?
+  type: replace
+  value:
+    name: google_cpi
+    release: bosh-google-cpi
+- path: /instance_groups/name=bosh/properties/google?
+  type: replace
+  value:
     json_key: ((gcp_credentials_json))
-
-- type: replace
-  path: /cloud_provider/properties/google?
-  value: *cpi_conf
-
-# Use GCP NTP
-- type: replace
-  path: /instance_groups/name=bosh/properties/ntp
-  value: &ntp [169.254.169.254]
-
-- type: replace
-  path: /cloud_provider/properties/ntp
-  value: *ntp
+    project: ((project_id))
+- path: /cloud_provider/properties/google?
+  type: replace
+  value:
+    json_key: ((gcp_credentials_json))
+    project: ((project_id))
+- path: /instance_groups/name=bosh/properties/ntp
+  type: replace
+  value:
+  - 169.254.169.254
+- path: /cloud_provider/properties/ntp
+  type: replace
+  value:
+  - 169.254.169.254
