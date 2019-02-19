@@ -1,5 +1,0 @@
----
-- name: credhub
-  version: 2.0.2
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/compiled-release/credhub-2.0.2-ubuntu-xenial-250.9-20190213-192521-657898544-20190213192532.tgz
-  sha: 27cdcf6d149df0905e14ec52a179c5960d229294

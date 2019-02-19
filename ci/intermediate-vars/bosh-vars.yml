@@ -1,5 +1,0 @@
----
-- name: bosh
-  version: 268.6.0
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/compiled-release/bosh-268.6.0-ubuntu-xenial-250.9-20190213-193252-890710675-20190213193259.tgz
-  sha: bb3c52735f72d78b01f39597387e42ed2ccf7903

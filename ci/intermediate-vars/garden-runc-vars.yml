@@ -1,5 +1,0 @@
----
-- name: garden-runc
-  version: 1.16.3
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/compiled-release/garden-runc-1.16.3-ubuntu-xenial-250.9-20190213-194853-311228948-20190213194903.tgz
-  sha: c84808dd92d79f76fece33c694e5bc0b6ef65f07
