@@ -1,98 +1,85 @@
-- type: replace
+- path: /releases/-
   release: garden-runc
-  path: /releases/-
+  type: replace
   value:
     name: garden-runc
-    version: "1.16.3"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.16.3-ubuntu-xenial-250.9-20190215-221953-454891568-20190215222003.tgz
     sha1: 8e4e1317cf3b5e5149a23f38b2abd2823ec2effb
-
-- type: replace
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.16.3-ubuntu-xenial-250.9-20190215-221953-454891568-20190215222003.tgz
+    version: 1.16.3
+- path: /releases/-
   release: bosh-warden-cpi
-  path: /releases/-
+  type: replace
   value:
     name: bosh-warden-cpi
-    version: "40"
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-40-ubuntu-xenial-250.9-20190215-221618-787679084-20190215221625.tgz
     sha1: 5bea5e330e58b0da009182c26aef706d4e1f5054
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-40-ubuntu-xenial-250.9-20190215-221618-787679084-20190215221625.tgz
+    version: "40"
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
   value:
     name: garden
     release: garden-runc
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/name=garden/properties?/garden
+- path: /instance_groups/name=bosh/jobs/name=garden/properties?/garden
+  type: replace
   value:
-    listen_network: tcp
-    listen_address: 127.0.0.1:7777
-    debug_listen_address: 127.0.0.1:17013
     allow_host_access: true
-    destroy_containers_on_start: true # avoids snapshots
+    debug_listen_address: 127.0.0.1:17013
     default_container_grace_time: 0
+    destroy_containers_on_start: true
     graph_cleanup_threshold_in_mb: 0
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
+    listen_address: 127.0.0.1:7777
+    listen_network: tcp
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
   value:
     name: warden_cpi
     release: bosh-warden-cpi
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/cpi_job?
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
+  type: replace
   value: warden_cpi
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/warden_cpi?
+- path: /instance_groups/name=bosh/properties/warden_cpi?
+  type: replace
   value:
-    host_ip: 10.254.50.4
-    warden:
-      connect_network: tcp
-      connect_address: 127.0.0.1:7777
     actions:
       expand_stemcell_tarball: false
-    agent: # todo remove once cpi dont know about these
-      mbus: nats://nats:((nats_password))@10.254.50.4:4222
+    agent:
       blobstore:
-        provider: dav
         options:
           endpoint: http://10.254.50.4:25250
-          user: agent
           password: ((blobstore_agent_password))
-
-- type: replace
-  path: /releases/name=os-conf?
+          user: agent
+        provider: dav
+      mbus: nats://nats:((nats_password))@10.254.50.4:4222
+    host_ip: 10.254.50.4
+    warden:
+      connect_address: 127.0.0.1:7777
+      connect_network: tcp
+- path: /releases/name=os-conf?
+  type: replace
   value:
     name: os-conf
-    version: 18
-    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=18
     sha1: 78d79f08ff5001cc2a24f572837c7a9c59a0e796
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
+    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=18
+    version: 18
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
   value:
     name: disable_agent
     release: os-conf
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/ignore_missing_gateway?
+- path: /instance_groups/name=bosh/properties/director/ignore_missing_gateway?
+  type: replace
   value: true
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/compiled_package_cache?
+- path: /instance_groups/name=bosh/properties/compiled_package_cache?
+  type: replace
   value:
+    options:
+      blobstore_path: /var/vcap/store/tmp/compiled_package_cache
     provider: local
-    options: {blobstore_path: /var/vcap/store/tmp/compiled_package_cache}
-
-- type: replace
-  path: /variables/name=nats_server_tls/options/alternative_names?/-
-  value: "10.254.50.4"
-
-- type: replace
-  path: /variables/name=blobstore_server_tls/options/alternative_names/-
-  value: "10.254.50.4"
-
-# Remove by virtualbox cpi to avoid compilation
-- type: remove
-  path: /instance_groups/name=bosh/jobs/name=virtualbox_cpi?
+- path: /variables/name=nats_server_tls/options/alternative_names?/-
+  type: replace
+  value: 10.254.50.4
+- path: /variables/name=blobstore_server_tls/options/alternative_names/-
+  type: replace
+  value: 10.254.50.4
+- path: /instance_groups/name=bosh/jobs/name=virtualbox_cpi?
+  type: remove
