@@ -6,6 +6,10 @@ image_resource:
   source:
     repository: bosh/main-bosh-docker
 
+params:
+  UPDATING_OPS_FILE: false
+  FILE_TO_UPDATE: ~
+
 inputs:
   - name: bosh-deployment
   - name: compiled-release
