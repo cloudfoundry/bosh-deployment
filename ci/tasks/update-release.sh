@@ -10,6 +10,8 @@ URL="https://s3.amazonaws.com/bosh-compiled-release-tarballs/${TARBALL_NAME}"
 
 UPDATE_RELEASE_OPS_FILE=update-release-ops.yml
 
+cp -R bosh-deployment bosh-deployment-output
+
 if [[ $UPDATING_OPS_FILE == "true" ]]; then
 
 cat << EOF > $UPDATE_RELEASE_OPS_FILE
