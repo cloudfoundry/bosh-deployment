@@ -84,6 +84,9 @@ jobs:
           release: backup-and-restore-sdk-release
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        params:
+          UPDATING_OPS_FILE: true
+          FILE_TO_UPDATE: bbr.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -109,6 +112,9 @@ jobs:
           release: bosh-release
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        params:
+          UPDATING_OPS_FILE: false
+          FILE_TO_UPDATE: bosh.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -136,6 +142,9 @@ jobs:
           release: bpm-release
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        params:
+          UPDATING_OPS_FILE: false
+          FILE_TO_UPDATE: bosh.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -163,6 +172,9 @@ jobs:
           release: credhub-release
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        params:
+          UPDATING_OPS_FILE: true
+          FILE_TO_UPDATE: credhub.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -190,6 +202,9 @@ jobs:
           release: docker-cpi
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        params:
+          UPDATING_OPS_FILE: true
+          FILE_TO_UPDATE: bosh-lite-docker.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -217,6 +232,9 @@ jobs:
           release: garden-runc
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        params:
+          UPDATING_OPS_FILE: true
+          FILE_TO_UPDATE: bosh-lite.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -244,6 +262,9 @@ jobs:
           release: uaa-release
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        params:
+          UPDATING_OPS_FILE: true
+          FILE_TO_UPDATE: uaa.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -271,6 +292,9 @@ jobs:
           release: warden-cpi
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        params:
+          UPDATING_OPS_FILE: true
+          FILE_TO_UPDATE: bosh-lite.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"

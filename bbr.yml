@@ -1,4 +1,5 @@
 - type: replace
+  release: backup-and-restore-sdk
   path: /releases/-
   value:
     name: backup-and-restore-sdk

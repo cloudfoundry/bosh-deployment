@@ -1,55 +1,44 @@
 #!/bin/bash -eux
 
-tar -xzf compiled-release/*.tgz $( tar -tzf compiled-release/*.tgz | grep 'release.MF' )
+tar -xzf compiled-release/*.tgz "release.MF"
+
 RELEASE_NAME="$( bosh int release.MF --path /name )"
 VERSION="$( bosh int release.MF --path /version )"
-TARBALL_NAME="$(cd compiled-release/; echo *.tgz)"
+TARBALL_NAME="$(basename compiled-release/*.tgz)"
 SHA1="$(sha1sum compiled-release/*.tgz | cut -d' ' -f1)"
-
 URL="https://s3.amazonaws.com/bosh-compiled-release-tarballs/${TARBALL_NAME}"
 
-INTERPOLATE_SCRIPT=interpolate_script.rb
-git clone bosh-deployment bosh-deployment-output
+UPDATE_RELEASE_OPS_FILE=update-release-ops.yml
 
-cat << EOF > $INTERPOLATE_SCRIPT
-changes=0
-manifests=%x|find bosh-deployment-output -name '*.yml'|.split("\n")
-manifests.each do |manifest|
-  lines = File.readlines(manifest)
-  found_releases = false
-  found_ops_releases = false
-  lines.each_with_index do |line, i|
-    found_releases = true if line.start_with?('releases:')
-    if found_releases
-      found_releases = false if line.chomp == ''
-      if line.chomp == '- name: $RELEASE_NAME' && lines[i+2].include?('compile')
-        lines[i+1] = "  version: \"$VERSION\"\n"
-        lines[i+2] = "  url: $URL\n"
-        lines[i+3] = "  sha1: ${SHA1}\n"
-        puts "Updated release in #{manifest}"
-        changes += 1
-        break
-      end
-    end
-    found_ops_releases = true if line.start_with?('  path: /releases/-')
-    if found_ops_releases
-      found_ops_releases = false if line.chomp == ''
-      if line.chomp == '    name: $RELEASE_NAME' && lines[i+2].include?('compile')
-        lines[i+1] = "    version: \"$VERSION\"\n"
-        lines[i+2] = "    url: $URL\n"
-        lines[i+3] = "    sha1: ${SHA1}\n"
-        puts "Updated release in #{manifest}"
-        changes += 1
-        break
-      end
-    end
-  end
-  File.open(manifest, 'w') { |f| f.write(lines.join) }
-end
-puts "Made #{changes} change for $RELEASE_NAME"
+if [[ $UPDATING_OPS_FILE == "true" ]]; then
+
+cat << EOF > $UPDATE_RELEASE_OPS_FILE
+---
+- type: replace
+  path: /release=${RELEASE_NAME}/value
+  value:
+    name: ${RELEASE_NAME}
+    version: ${VERSION}
+    url: ${URL}
+    sha1: ${SHA1}
 EOF
 
-ruby $INTERPOLATE_SCRIPT
+else
+
+cat << EOF > $UPDATE_RELEASE_OPS_FILE
+---
+- type: replace
+  path: /releases/name=${RELEASE_NAME}
+  value:
+    sha1: ${SHA1}
+    url: ${URL}
+    version: ${VERSION}
+    name: ${RELEASE_NAME}
+EOF
+
+fi
+
+bosh int bosh-deployment/${FILE_TO_UPDATE} -o update-release-ops.yml > bosh-deployment-output/${FILE_TO_UPDATE}
 
 pushd $PWD/bosh-deployment-output
   git diff

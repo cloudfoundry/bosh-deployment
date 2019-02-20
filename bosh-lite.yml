@@ -1,4 +1,5 @@
 - type: replace
+  release: garden-runc
   path: /releases/-
   value:
     name: garden-runc
@@ -7,6 +8,7 @@
     sha1: 8e4e1317cf3b5e5149a23f38b2abd2823ec2effb
 
 - type: replace
+  release: bosh-warden-cpi
   path: /releases/-
   value:
     name: bosh-warden-cpi

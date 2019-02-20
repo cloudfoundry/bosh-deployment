@@ -1,4 +1,5 @@
 - type: replace
+  release: bosh-docker-cpi
   path: /releases/-
   value:
     name: bosh-docker-cpi

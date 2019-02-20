@@ -1,4 +1,5 @@
 - type: replace
+  release: credhub
   path: /releases/-
   value:
     name: credhub
