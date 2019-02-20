@@ -50,6 +50,7 @@ addons:
     - os: windows2012R2
     - os: windows2016
     - os: windows1803
+    - os: windows2019
 
 variables:
 - name: /dns_healthcheck_tls_ca
