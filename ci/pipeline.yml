@@ -92,7 +92,7 @@ jobs:
           file: "compiled-release/*.tgz"
       - put: bosh-deployment
         params:
-          repository: bosh-deployment-output
+          repository: bosh-deployment
           rebase: true
 
   - name: compile-bosh-release
@@ -120,7 +120,7 @@ jobs:
           file: "compiled-release/*.tgz"
       - put: bosh-deployment
         params:
-          repository: bosh-deployment-output
+          repository: bosh-deployment
           rebase: true
 
   - name: compile-bpm-release
@@ -150,7 +150,7 @@ jobs:
           file: "compiled-release/*.tgz"
       - put: bosh-deployment
         params:
-          repository: bosh-deployment-output
+          repository: bosh-deployment
           rebase: true
 
   - name: compile-credhub-release
@@ -180,7 +180,7 @@ jobs:
           file: "compiled-release/*.tgz"
       - put: bosh-deployment
         params:
-          repository: bosh-deployment-output
+          repository: bosh-deployment
           rebase: true
 
   - name: compile-docker-cpi
@@ -210,7 +210,7 @@ jobs:
           file: "compiled-release/*.tgz"
       - put: bosh-deployment
         params:
-          repository: bosh-deployment-output
+          repository: bosh-deployment
           rebase: true
 
   - name: compile-garden-runc
@@ -240,7 +240,7 @@ jobs:
           file: "compiled-release/*.tgz"
       - put: bosh-deployment
         params:
-          repository: bosh-deployment-output
+          repository: bosh-deployment
           rebase: true
 
   - name: compile-uaa-release
@@ -270,7 +270,7 @@ jobs:
           file: "compiled-release/*.tgz"
       - put: bosh-deployment
         params:
-          repository: bosh-deployment-output
+          repository: bosh-deployment
           rebase: true
 
   - name: compile-warden-cpi
@@ -300,7 +300,7 @@ jobs:
           file: "compiled-release/*.tgz"
       - put: bosh-deployment
         params:
-          repository: bosh-deployment-output
+          repository: bosh-deployment
           rebase: true
 
   - name: update-aws-stemcell
@@ -318,7 +318,7 @@ jobs:
         STEMCELL_NAME: aws-ubuntu-xenial-stemcell
     - put: bosh-deployment
       params:
-        repository: bosh-deployment-output
+        repository: bosh-deployment
         rebase: true
 
   - name: update-azure-stemcell
@@ -336,7 +336,7 @@ jobs:
         STEMCELL_NAME: azure-ubuntu-xenial-stemcell
     - put: bosh-deployment
       params:
-        repository: bosh-deployment-output
+        repository: bosh-deployment
         rebase: true
 
   - name: update-docker-stemcell
@@ -354,7 +354,7 @@ jobs:
         STEMCELL_NAME: warden-ubuntu-xenial-stemcell
     - put: bosh-deployment
       params:
-        repository: bosh-deployment-output
+        repository: bosh-deployment
         rebase: true
 
   - name: update-gcp-stemcell
@@ -372,7 +372,7 @@ jobs:
         STEMCELL_NAME: gcp-ubuntu-xenial-stemcell
     - put: bosh-deployment
       params:
-        repository: bosh-deployment-output
+        repository: bosh-deployment
         rebase: true
 
   - name: update-openstack-stemcell
@@ -390,7 +390,7 @@ jobs:
         STEMCELL_NAME: openstack-ubuntu-xenial-stemcell
     - put: bosh-deployment
       params:
-        repository: bosh-deployment-output
+        repository: bosh-deployment
         rebase: true
 
   - name: update-vcloud-stemcell
@@ -408,7 +408,7 @@ jobs:
         STEMCELL_NAME: vcloud-ubuntu-xenial-stemcell
     - put: bosh-deployment
       params:
-        repository: bosh-deployment-output
+        repository: bosh-deployment
         rebase: true
 
   - name: update-virtualbox-stemcell
@@ -426,7 +426,7 @@ jobs:
         STEMCELL_NAME: vsphere-ubuntu-xenial-stemcell
     - put: bosh-deployment
       params:
-        repository: bosh-deployment-output
+        repository: bosh-deployment
         rebase: true
 
   - name: update-vsphere-stemcell
@@ -444,7 +444,7 @@ jobs:
         STEMCELL_NAME: vsphere-ubuntu-xenial-stemcell
     - put: bosh-deployment
       params:
-        repository: bosh-deployment-output
+        repository: bosh-deployment
         rebase: true
 
   - name: update-warden-stemcell
@@ -462,7 +462,7 @@ jobs:
         STEMCELL_NAME: warden-ubuntu-xenial-stemcell
     - put: bosh-deployment
       params:
-        repository: bosh-deployment-output
+        repository: bosh-deployment
         rebase: true
 
 resources:

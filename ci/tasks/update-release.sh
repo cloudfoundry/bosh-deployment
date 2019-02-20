@@ -10,8 +10,6 @@ URL="https://s3.amazonaws.com/bosh-compiled-release-tarballs/${TARBALL_NAME}"
 
 UPDATE_RELEASE_OPS_FILE=update-release-ops.yml
 
-cp -R bosh-deployment bosh-deployment-output
-
 if [[ $UPDATING_OPS_FILE == "true" ]]; then
 
 cat << EOF > $UPDATE_RELEASE_OPS_FILE
@@ -40,9 +38,11 @@ EOF
 
 fi
 
-bosh int bosh-deployment/${FILE_TO_UPDATE} -o update-release-ops.yml > bosh-deployment-output/${FILE_TO_UPDATE}
+TMP=$(mktemp)
+bosh int bosh-deployment/${FILE_TO_UPDATE} -o update-release-ops.yml > $TMP
+mv $TMP bosh-deployment/${FILE_TO_UPDATE}
 
-pushd $PWD/bosh-deployment-output
+pushd $PWD/bosh-deployment
   git diff
   git add -A
   git config --global user.email "ci@localhost"
