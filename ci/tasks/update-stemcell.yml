@@ -15,7 +15,8 @@ params:
   STEMCELL_NAME: ~
 
 outputs:
-  - name: bosh-deployment-output
+  - name: bosh-deployment
+    path: bosh-deployment-output
 
 run:
   path: bosh-deployment/ci/tasks/update-stemcell.sh
