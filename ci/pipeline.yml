@@ -485,7 +485,6 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
-    force_regular: true
 
 - name: azure-ubuntu-xenial-stemcell
   type: bosh-io-stemcell
@@ -497,7 +496,6 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-google-kvm-ubuntu-xenial-go_agent
-    force_regular: true
 
 - name: openstack-ubuntu-xenial-stemcell
   type: bosh-io-stemcell
