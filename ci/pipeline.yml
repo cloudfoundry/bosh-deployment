@@ -71,8 +71,8 @@ jobs:
         - get: bosh-deployment
         - get: backup-and-restore-sdk-release
           trigger: true
-          version:
-            version: "1.10.0"
+          # version:
+          #   version: "1.10.0"
         - get: warden-ubuntu-xenial-stemcell
           passed: [update-warden-stemcell]
           trigger: true
