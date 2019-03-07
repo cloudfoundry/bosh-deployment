@@ -3,8 +3,9 @@
   type: replace
   value:
     name: credhub
-    source:
-      repository: pivotal-cf/credhub-release
+    sha1: adc6af7b872d27c2fa920c479882a71d8a6048ce
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.1.2-ubuntu-xenial-250.17-20190307-184327-812674904-20190307184338.tgz
+    version: 2.1.2
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
