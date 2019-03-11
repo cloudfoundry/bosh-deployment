@@ -18,7 +18,7 @@ cat << EOF > $UPDATE_RELEASE_OPS_FILE
   path: /release=${RELEASE_NAME}/value
   value:
     name: ${RELEASE_NAME}
-    version: ${VERSION}
+    version: "${VERSION}"
     url: ${URL}
     sha1: ${SHA1}
 EOF
@@ -32,7 +32,7 @@ cat << EOF > $UPDATE_RELEASE_OPS_FILE
   value:
     sha1: ${SHA1}
     url: ${URL}
-    version: ${VERSION}
+    version: "${VERSION}"
     name: ${RELEASE_NAME}
 EOF
 
