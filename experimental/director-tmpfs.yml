@@ -1,0 +1,11 @@
+- type: replace
+  path: /resource_pools/name=vms/env/bosh/job_dir?
+  value:
+    tmpfs: true
+    tmpfs_size: 128m
+
+- type: replace
+  path: /resource_pools/name=vms/env/bosh/agent?
+  value:
+    settings:
+      tmpfs: true
