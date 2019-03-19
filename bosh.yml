@@ -49,6 +49,28 @@ instance_groups:
                   ca: ((blobstore_ca.certificate))
               user: agent
             provider: dav
+            purpose: logs
+          - options:
+              endpoint: https://((internal_ip)):25250
+              password: ((blobstore_agent_password))
+              tls:
+                cert:
+                  ca: ((blobstore_ca.certificate))
+              user: agent
+            provider: dav
+            purpose: packages
+      compilation:
+        env:
+          bosh:
+            blobstores:
+            - options:
+                endpoint: https://((internal_ip)):25250
+                password: ((blobstore_agent_password))
+                tls:
+                  cert:
+                    ca: ((blobstore_ca.certificate))
+                user: agent
+              provider: dav
       mbus: nats://nats:((nats_password))@((internal_ip)):4222
     blobstore:
       address: ((internal_ip))
