@@ -131,3 +131,20 @@
   value:
     name: credhub_admin_client_secret
     type: password
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: bbr-credhubdb
+    release: credhub
+    properties:
+      release_level_backup: true
+      credhub:
+        data_storage:
+          type: postgres
+          host: 127.0.0.1
+          port: 5432
+          username: postgres
+          password: ((postgres_password))
+          database: credhub
+          require_tls: false
+
