@@ -247,8 +247,6 @@ jobs:
         - get: bosh-deployment
         - get: uaa-release
           trigger: true
-          version:
-            version: "64.0"
         - get: warden-ubuntu-xenial-stemcell
           passed: [update-warden-stemcell]
           trigger: true
