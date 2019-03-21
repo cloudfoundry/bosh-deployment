@@ -248,7 +248,7 @@ jobs:
         - get: uaa-release
           trigger: true
           version:
-            version: "71.0"
+            version: "64.0"
         - get: warden-ubuntu-xenial-stemcell
           passed: [update-warden-stemcell]
           trigger: true
