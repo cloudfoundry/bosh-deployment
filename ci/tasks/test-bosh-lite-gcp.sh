@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-pushd bbl-state
+pushd "${PWD}/bbl-state"
   set +x
   eval "$(bbl print-env)"
   set -x
