@@ -9,6 +9,7 @@ image_resource:
 
 inputs:
   - name: bosh-deployment
+  - name: bbl-state
 
 params:
   BBL_GCP_SERVICE_ACCOUNT_KEY: replace-me
