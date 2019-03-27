@@ -14,8 +14,6 @@ bbl_up() {
 
 bosh_deployment="$PWD/bosh-deployment"
 
-mkdir bbl-state
-
 pushd bbl-state
   bbl_up
 popd
