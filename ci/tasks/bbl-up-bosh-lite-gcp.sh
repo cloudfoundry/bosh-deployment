@@ -14,6 +14,6 @@ bbl_up() {
 
 bosh_deployment="$PWD/bosh-deployment"
 
-pushd bbl-state
+pushd "${PWD}/bbl-state"
   bbl_up
 popd

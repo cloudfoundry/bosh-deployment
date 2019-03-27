@@ -6,6 +6,6 @@ bbl_down() {
   popd
 }
 
-pushd bbl-state
+pushd "${PWD}/bbl-state"
   bbl_down
 popd
