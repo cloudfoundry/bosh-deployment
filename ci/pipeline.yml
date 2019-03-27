@@ -30,19 +30,10 @@ jobs:
     serial: true
     build_logs_to_retain: 250
     plan:
-    - do:
       - get: bosh-deployment
         trigger: true
-      - task: bbl-up
-        file: bosh-deployment/ci/tasks/bbl-up-bosh-lite-gcp.yml
-        params:
-          BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_json))
-          BBL_GCP_REGION: us-west1
       - task: test-bosh-lite-gcp
         file: bosh-deployment/ci/tasks/test-bosh-lite-gcp.yml
-      ensure:
-        task: bbl-down
-        file: bosh-deployment/ci/tasks/bbl-down-bosh-lite-gcp.yml
         params:
           BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_json))
           BBL_GCP_REGION: us-west1

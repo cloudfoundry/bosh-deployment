@@ -1,6 +1,33 @@
 #!/bin/bash -ex
 
+bbl_down() {
+  pushd ${BUILD_DIR}/bbl-state
+    bbl --debug down --no-confirm
+  popd
+}
+
+bbl_up() {
+  bbl plan
+  rm -rf bosh-deployment
+  cp -rfp "${bosh_deployment}" .
+  cp "${bosh_deployment}/ci/assets/bosh-lite-gcp/create-director.sh" ./create-director.sh
+
+  rm cloud-config/*
+  cp "${bosh_deployment}/warden/cloud-config.yml" cloud-config/cloud-config.yml
+  touch cloud-config/ops.yml
+  bbl --debug up
+}
+
+export BUILD_DIR=$PWD
+
+bosh_deployment="$PWD/bosh-deployment"
+
+mkdir bbl-state
 pushd bbl-state
+  bbl_up
+
+  trap "bbl_down" EXIT
+
   set +x
   eval "$(bbl print-env)"
   set -x
