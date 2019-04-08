@@ -2,9 +2,9 @@
   path: /releases/name=os-conf?
   value:
     name: os-conf
-    version: 18
-    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=18
-    sha1: 78d79f08ff5001cc2a24f572837c7a9c59a0e796
+    version: 20
+    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=20
+    sha1: 42b1295896c1fbcd36b55bfdedfe86782b2c9fba
 
 - type: replace
   path: /instance_groups/name=bosh/properties/director/default_ssh_options?/gateway_user
