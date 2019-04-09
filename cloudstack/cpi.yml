@@ -4,15 +4,15 @@
   path: /releases/-
   value:
     name: bosh-go-cpi-cloudstack
-    version: 1.24
-    url: https://github.com/orange-cloudfoundry/bosh-go-cpi-cloudstack/releases/download/v1.24/bosh-go-cpi-cloudstack-1.24.tgz
-    sha1: dad54723e6209cd1572dab5e9d824ffd9e621cce
+    version: 1.25
+    url: https://github.com/orange-cloudfoundry/bosh-go-cpi-cloudstack/releases/download/v1.25/bosh-go-cpi-cloudstack-1.25.tgz
+    sha1: 56340ab7e47fc0035ee385a9b5c09d9712682cc4
 
 - type: replace
   path: /resource_pools/name=vms/stemcell?
   value:
-    url: https://github.com/orange-cloudfoundry/bosh-linux-stemcell-builder/releases/download/v3586.26/bosh-stemcell-3586.26-cloudstack-xen-ubuntu-trusty-go_agent.tgz
-    sha1: 07eefba3b194554a3030d17e672222ac93a84367
+    url: https://github.com/orange-cloudfoundry/bosh-linux-stemcell-builder/releases/download/ubuntu-xenial%2Fv250.4/bosh-stemcell-250.4-cloudstack-xen-ubuntu-xenial-go_agent.tgz
+    sha1: 824c668bfd9feb79c2b03f9389807b55186f3206
 
 # Configure sizes
 - type: replace
