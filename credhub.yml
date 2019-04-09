@@ -21,7 +21,7 @@
         authorization:
           acls:
             enabled: false
-        data_storage:
+        data_storage: &credhub_data_storage
           database: credhub
           host: 127.0.0.1
           password: ((postgres_password))
@@ -93,6 +93,17 @@
 - path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/jwt/revocable?
   type: replace
   value: true
+
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
+    name: bbr-credhubdb
+    release: credhub
+    properties:
+      release_level_backup: true
+      credhub:
+        data_storage: *credhub_data_storage
+
 - path: /variables/-
   type: replace
   value:
