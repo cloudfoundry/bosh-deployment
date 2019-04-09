@@ -1,0 +1,18 @@
+#This ops file requires that you applied the credhub.yml ops file first
+---
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: bbr-credhubdb
+    release: credhub
+    properties:
+      release_level_backup: true
+      credhub:
+        data_storage:
+          database: credhub
+          host: 127.0.0.1
+          password: ((postgres_password))
+          port: 5432
+          require_tls: false
+          type: postgres
+          username: postgres
