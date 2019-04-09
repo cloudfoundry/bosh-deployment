@@ -97,6 +97,14 @@ bosh -n update-cloud-config "${bosh_deployment}/warden/cloud-config.yml" \
 
 echo Succeeded
 
+####
+STEP "Updating Runtime Config"
+####
+
+bosh -n update-runtime-config "${bosh_deployment}/runtime-configs/dns.yml" \
+  > /dev/null
+
+echo Succeeded
 
 ####
 STEP "Completed"

@@ -1,133 +1,133 @@
-- type: replace
-  path: /releases/-
+- path: /releases/-
+  release: credhub
+  type: replace
   value:
     name: credhub
-    version: "2.0.2"
-    url: "https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.0.2-ubuntu-xenial-97.16-20180912-174457-075145067-20180912174506.tgz?versionId=XXig9OLrmykqimvtJUYYlhKhykxk0M6i"
-    sha1: "afb03addb21543d3feafbebff8fdc242543ef0cb"
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
+    sha1: 580f6ac1af783f0f0139025cced3d94893f6959b
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.1.5-ubuntu-xenial-250.29-20190408-223328-047215558-20190408223342.tgz
+    version: 2.1.5
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
   value:
     name: credhub
-    release: credhub
     properties:
       credhub:
+        authentication:
+          uaa:
+            ca_certs:
+            - ((uaa_ssl.ca))
+            url: https://((internal_ip)):8443
+            verification_key: ((uaa_jwt_signing_key.public_key))
         authorization:
           acls:
             enabled: false
-        authentication:
-          uaa:
-            url: "https://((internal_ip)):8443"
-            ca_certs:
-            - ((uaa_ssl.ca))
-            verification_key: ((uaa_jwt_signing_key.public_key))
         data_storage:
-          type: postgres
-          host: 127.0.0.1
-          port: 5432
-          username: postgres
-          password: ((postgres_password))
           database: credhub
+          host: 127.0.0.1
+          password: ((postgres_password))
+          port: 5432
           require_tls: false
-        tls: ((credhub_tls))
+          type: postgres
+          username: postgres
         encryption:
+          keys:
+          - active: true
+            key_properties:
+              encryption_password: ((credhub_encryption_password))
+            provider_name: internal
           providers:
           - name: internal
             type: internal
-          keys:
-          - provider_name: internal
-            key_properties:
-              encryption_password: ((credhub_encryption_password))
-            active: true
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/postgres/additional_databases?/-
+        tls: ((credhub_tls))
+    release: credhub
+- path: /instance_groups/name=bosh/properties/postgres/additional_databases?/-
+  type: replace
   value: credhub
-
-# Configure Director
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/config_server?
+- path: /instance_groups/name=bosh/properties/director/config_server?
+  type: replace
   value:
-    enabled: true
-    url: "https://((internal_ip)):8844/api/"
     ca_cert: ((credhub_tls.ca))
+    enabled: true
     uaa:
-      url: "https://((internal_ip)):8443"
       ca_cert: ((uaa_ssl.ca))
       client_id: director_to_credhub
       client_secret: ((uaa_clients_director_to_credhub))
-
-# Configure UAA
-- type: replace
-  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/director_to_credhub?
+      url: https://((internal_ip)):8443
+    url: https://((internal_ip)):8844/api/
+- path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/director_to_credhub?
+  type: replace
   value:
-    override: true
-    authorized-grant-types: client_credentials
-    scope: ""
-    authorities: credhub.read,credhub.write
     access-token-validity: 3600
+    authorities: credhub.read,credhub.write
+    authorized-grant-types: client_credentials
+    override: true
+    scope: ""
     secret: ((uaa_clients_director_to_credhub))
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/credhub_cli?
+- path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/credhub_cli?
+  type: replace
   value:
-    override: true
-    authorized-grant-types: password,refresh_token
-    scope: credhub.read,credhub.write
-    authorities: ""
     access-token-validity: 60
-    refresh-token-validity: 1800
-    secret: ""
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/credhub-admin?
-  value:
+    authorities: ""
+    authorized-grant-types: password,refresh_token
     override: true
-    authorized-grant-types: client_credentials
-    scope: ""
-    authorities: credhub.read,credhub.write
+    refresh-token-validity: 1800
+    scope: credhub.read,credhub.write
+    secret: ""
+- path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/credhub-admin?
+  type: replace
+  value:
     access-token-validity: 3600
+    authorities: credhub.read,credhub.write
+    authorized-grant-types: client_credentials
+    override: true
+    scope: ""
     secret: ((credhub_admin_client_secret))
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/jwt/revocable?
+- path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/scim/users/name=credhub_cli_user?/password
+  type: replace
+  value: ((credhub_cli_user_password))
+- path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/scim/users/name=credhub_cli_user?/groups
+  type: replace
+  value:
+  - credhub.read
+  - credhub.write
+- path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/jwt/revocable?
+  type: replace
   value: true
-
-# Variables
-- type: replace
-  path: /variables/-
+- path: /variables/-
+  type: replace
+  value:
+    name: credhub_cli_user_password
+    type: password
+- path: /variables/-
+  type: replace
   value:
     name: credhub_ca
-    type: certificate
     options:
+      common_name: CredHub CA
       is_ca: true
-      common_name: "CredHub CA"
-
-- type: replace
-  path: /variables/-
+    type: certificate
+- path: /variables/-
+  type: replace
   value:
     name: credhub_tls
-    type: certificate
     options:
+      alternative_names:
+      - ((internal_ip))
       ca: credhub_ca
       common_name: ((internal_ip))
-      alternative_names: [((internal_ip))]
-
-- type: replace
-  path: /variables/-
+    type: certificate
+- path: /variables/-
+  type: replace
   value:
     name: credhub_encryption_password
     type: password
-
-- type: replace
-  path: /variables/-
+- path: /variables/-
+  type: replace
   value:
     name: uaa_clients_director_to_credhub
     type: password
-
-- type: replace
-  path: /variables/-
+- path: /variables/-
+  type: replace
   value:
     name: credhub_admin_client_secret
     type: password

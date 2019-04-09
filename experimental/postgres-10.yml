@@ -1,0 +1,3 @@
+# Using this file will upgrade postgres to v10. Once this file is used, downgrading back to older versions is not allowed.
+
+# Postgres 10 is now default.

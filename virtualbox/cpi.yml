@@ -1,53 +1,45 @@
----
-- type: replace
-  path: /releases/-
+- path: /releases/-
+  type: replace
   value:
     name: bosh-virtualbox-cpi
-    version: "0.0.13"
-    url: https://bosh.io/d/github.com/cppforlife/bosh-virtualbox-cpi-release?v=0.0.13
     sha1: 3aee2200f5d7ee20b149c7303009c3f6088ba559
-
-- type: replace
+    url: https://bosh.io/d/github.com/cppforlife/bosh-virtualbox-cpi-release?v=0.0.13
+    version: 0.0.13
+- name: stemcell
   path: /resource_pools/name=vms/stemcell?
+  type: replace
   value:
-    url: https://bosh.io/d/stemcells/bosh-vsphere-esxi-ubuntu-xenial-go_agent?v=97.12
-    sha1: d756a6632d88a08aa556a62c0c57993ba3a6a251
-
-# Configure sizes
-- type: replace
-  path: /resource_pools/name=vms/cloud_properties?
+    sha1: 75094fa92f0cb9095e89fc78ee10d1afbc0cabc9
+    url: https://s3.amazonaws.com/bosh-core-stemcells/250.29/bosh-stemcell-250.29-vsphere-esxi-ubuntu-xenial-go_agent.tgz
+- path: /resource_pools/name=vms/cloud_properties?
+  type: replace
   value:
     cpus: 2
+    ephemeral_disk: 16384
     memory: 4096
-    ephemeral_disk: 16_384
-
-# Add CPI job
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value: &cpi_job
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
     name: virtualbox_cpi
-    release: bosh-virtualbox-cpi
     properties:
-      # todo remove once cpi dont know about these
       agent:
         mbus: nats://nats:((nats_password))@((internal_ip)):4222
+      blobstore:
+        address: ((internal_ip))
+        agent:
+          password: ((blobstore_agent_password))
+          user: agent
+        port: 25250
+        provider: dav
       ntp:
       - 0.pool.ntp.org
       - 1.pool.ntp.org
-      blobstore:
-        address: ((internal_ip))
-        port: 25250
-        provider: dav
-        agent:
-          user: agent
-          password: ((blobstore_agent_password))
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/cpi_job?
+    release: bosh-virtualbox-cpi
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
+  type: replace
   value: virtualbox_cpi
-
-- type: replace
-  path: /cloud_provider/template?
+- path: /cloud_provider/template?
+  type: replace
   value:
     name: virtualbox_cpi
     release: bosh-virtualbox-cpi
