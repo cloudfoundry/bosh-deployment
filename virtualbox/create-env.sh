@@ -32,7 +32,7 @@ bosh create-env "${bosh_deployment}/bosh.yml" \
   --var internal_ip=192.168.50.6 \
   --var internal_gw=192.168.50.1 \
   --var internal_cidr=192.168.50.0/24 \
-  --var outbound_network_name=NatNetwork
+  --var outbound_network_name=NatNetwork "$@"
 
 
 ####

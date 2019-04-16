@@ -138,8 +138,6 @@ jobs:
         - get: bosh-deployment
         - get: bpm-release
           trigger: true
-          version:
-            version: "0.12.3"
         - get: warden-ubuntu-xenial-stemcell
           passed: [update-warden-stemcell]
           trigger: true
