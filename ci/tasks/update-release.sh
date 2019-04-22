@@ -45,7 +45,6 @@ bosh int bosh-deployment/${FILE_TO_UPDATE} -o update-release-ops.yml > $TMP
 mv $TMP bosh-deployment-output/${FILE_TO_UPDATE}
 
 pushd $PWD/bosh-deployment-output
-  git diff
   git add -A
   git config --global user.email "ci@localhost"
   git config --global user.name "CI Bot"
