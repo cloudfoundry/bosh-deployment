@@ -47,8 +47,8 @@ addons:
   name: bosh-dns-windows
 releases:
 - name: bosh-dns
-  sha1: 785d5a9f8b012609f28ecfaa395469a08a921014
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-dns-1.11.0-ubuntu-xenial-315.6-20190423-192709-264542765-20190423192716.tgz
+  sha1: 6b6c11b3f94028014bcb7921b931999289b07491
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-dns-1.11.0-ubuntu-xenial-315.10-20190423-214358-616225067-20190423214408.tgz
   version: 1.11.0
 variables:
 - name: /dns_healthcheck_tls_ca
