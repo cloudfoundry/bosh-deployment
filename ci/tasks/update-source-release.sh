@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-tar -xzf release/*.tgz "./release.MF"
+tar -xzf release.tgz "./release.MF"
 
 RELEASE_NAME="$( bosh int release.MF --path /name )"
 VERSION="$( bosh int release.MF --path /version )"
