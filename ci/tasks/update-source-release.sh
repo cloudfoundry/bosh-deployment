@@ -1,10 +1,11 @@
 #!/bin/bash -eux
-RELEASE_URL="https://bosh.io/d/github.com/cloudfoundry/${BOSH_IO_RELEASE}?v=${VERSION}"
+LATEST_RELEASE_URL="https://bosh.io/d/github.com/cloudfoundry/${BOSH_IO_RELEASE}"
 UPDATE_RELEASE_OPS_FILE=update-release-ops.yml
 
-wget ${RELEASE_URL} -o release.tgz
+wget ${LATEST_RELEASE_URL} -O release.tgz
 tar -xzf release.tgz "./release.MF"
 
+URL="https://bosh.io/d/github.com/cloudfoundry/${BOSH_IO_RELEASE}?v=${VERSION}"
 RELEASE_NAME="$( bosh int release.MF --path /name )"
 VERSION="$( bosh int release.MF --path /version )"
 SHA1="$(sha1sum release/*.tgz | cut -d' ' -f1)"
@@ -15,7 +16,7 @@ cat << EOF > $UPDATE_RELEASE_OPS_FILE
   path: /releases/name=${RELEASE_NAME}
   value:
     sha1: ${SHA1}
-    url: ${RELEASE_URL}
+    url: ${URL}
     version: "${VERSION}"
     name: ${RELEASE_NAME}
 EOF
