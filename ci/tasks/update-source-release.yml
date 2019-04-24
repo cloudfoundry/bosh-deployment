@@ -8,6 +8,7 @@ image_resource:
 
 params:
   FILE_TO_UPDATE: ~
+  BOSH_IO_RELEASE: ~
 
 inputs:
   - name: bosh-deployment
