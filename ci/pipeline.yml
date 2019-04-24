@@ -24,6 +24,7 @@ groups:
     - update-virtualbox-stemcell
     - update-vsphere-stemcell
     - update-warden-stemcell
+    - update-dns-release
 
 jobs:
   - name: test-bosh-lite-gcp
@@ -470,6 +471,22 @@ jobs:
         repository: bosh-deployment
         rebase: true
 
+  - name: update-dns-release
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: dns-release
+          trigger: true
+      - task: update-source-release
+        file: bosh-deployment/ci/tasks/update-source-release.yml
+        params:
+          FILE_TO_UPDATE: runtime-configs/dns.yml
+          BOSH_IO_RELEASE: bosh-dns-release
+      - put: bosh-deployment
+        params:
+          repository: bosh-deployment
+          rebase: true
+
 resources:
 - name: bosh-deployment
   type: git
@@ -564,6 +581,11 @@ resources:
   type: bosh-io-release
   source:
     repository: cppforlife/bosh-warden-cpi-release
+
+- name: dns-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bosh-dns-release
 
 # outputs
 - name: compiled-releases
