@@ -12,6 +12,7 @@ params:
 
 inputs:
   - name: bosh-deployment
+  - name: release
 
 outputs:
   - name: bosh-deployment
