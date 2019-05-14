@@ -8,6 +8,8 @@ image_resource:
 
 params:
   UPDATING_OPS_FILE: false
+  UPDATING_SOURCE_RELEASE_OPS_FILE: false
+  SOURCE_RELEASE_FILE: ~
   FILE_TO_UPDATE: ~
 
 inputs:
