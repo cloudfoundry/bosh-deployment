@@ -1,0 +1,8 @@
+---
+- type: replace
+  path: /releases/name=bpm?
+  value:
+    name: "bpm"
+    version: "0.11.0"
+    url: "https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.11.0"
+    sha1: "c9a0887a9dd02ae8d2dbab6f17db3c6a6bac5aad"
