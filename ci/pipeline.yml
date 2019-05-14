@@ -182,7 +182,7 @@ jobs:
           UPDATING_OPS_FILE: true
           FILE_TO_UPDATE: credhub.yml
           UPDATING_SOURCE_RELEASE_OPS_FILE: true
-          SOURCE_RELEASE_FILE: misc/source-releases/credhub.yml
+          SOURCE_RELEASE_FILE: bosh-deployment/misc/source-releases/credhub.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
