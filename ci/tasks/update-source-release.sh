@@ -6,7 +6,10 @@ UPDATE_RELEASE_OPS_FILE=update-release-ops.yml
 RELEASE_NAME="$( bosh int release.MF --path /name )"
 VERSION="$( bosh int release.MF --path /version )"
 SHA1="$(sha1sum release/*.tgz | cut -d' ' -f1)"
-URL="https://bosh.io/d/github.com/cloudfoundry/${BOSH_IO_RELEASE}?v=${VERSION}"
+URL="https://bosh.io/d/github.com/${BOSH_IO_RELEASE}?v=${VERSION}"
+
+echo "Testing source release url: ${URL}"
+if ! curl --output /dev/null --silent --head --fail $URL; then exit 1; fi
 
 cat << EOF > $UPDATE_RELEASE_OPS_FILE
 ---

@@ -125,6 +125,11 @@ jobs:
         params:
           UPDATING_OPS_FILE: false
           FILE_TO_UPDATE: bosh.yml
+      - task: update-source-release
+        file: bosh-deployment/ci/tasks/update-source-release.yml
+        params:
+          BOSH_IO_RELEASE: cloudfoundry/bosh
+          FILE_TO_UPDATE: misc/source-releases/bosh.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -153,6 +158,11 @@ jobs:
         params:
           UPDATING_OPS_FILE: false
           FILE_TO_UPDATE: bosh.yml
+      - task: update-source-release
+        file: bosh-deployment/ci/tasks/update-source-release.yml
+        params:
+          BOSH_IO_RELEASE: cloudfoundry-incubator/bpm-release
+          FILE_TO_UPDATE: misc/source-releases/bosh.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"
@@ -181,8 +191,11 @@ jobs:
         params:
           UPDATING_OPS_FILE: true
           FILE_TO_UPDATE: credhub.yml
-          UPDATING_SOURCE_RELEASE_OPS_FILE: true
-          SOURCE_RELEASE_FILE: bosh-deployment/misc/source-releases/credhub.yml
+      - task: update-source-release
+        file: bosh-deployment/ci/tasks/update-source-release.yml
+        params:
+          BOSH_IO_RELEASE: pivotal-cf/credhub-release
+          FILE_TO_UPDATE: misc/source-releases/credhub.yml
       - put: compiled-releases
         params:
           file: "compiled-release/*.tgz"

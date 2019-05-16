@@ -38,21 +38,6 @@ EOF
 
 fi
 
-if [[ $UPDATING_SOURCE_RELEASE_OPS_FILE == "true" ]]; then
-
-cat << EOF > $SOURCE_RELEASE_FILE
----
-- type: replace
-  path: /releases/name=${RELEASE_NAME}
-  value:
-    sha1: ${SHA1}
-    url: ${URL}
-    version: "${VERSION}"
-    name: ${RELEASE_NAME}
-EOF
-
-fi
-
 git clone bosh-deployment bosh-deployment-output
 
 TMP=$(mktemp)
