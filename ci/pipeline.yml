@@ -127,6 +127,8 @@ jobs:
           FILE_TO_UPDATE: bosh.yml
       - task: update-source-release
         file: bosh-deployment/ci/tasks/update-source-release.yml
+        input_mapping:
+          release: bosh-release
         params:
           BOSH_IO_RELEASE: cloudfoundry/bosh
           FILE_TO_UPDATE: misc/source-releases/bosh.yml
@@ -160,6 +162,8 @@ jobs:
           FILE_TO_UPDATE: bosh.yml
       - task: update-source-release
         file: bosh-deployment/ci/tasks/update-source-release.yml
+        input_mapping:
+          release: bpm-release
         params:
           BOSH_IO_RELEASE: cloudfoundry-incubator/bpm-release
           FILE_TO_UPDATE: misc/source-releases/bosh.yml
@@ -193,6 +197,8 @@ jobs:
           FILE_TO_UPDATE: credhub.yml
       - task: update-source-release
         file: bosh-deployment/ci/tasks/update-source-release.yml
+        input_mapping:
+          release: credhub-release
         params:
           BOSH_IO_RELEASE: pivotal-cf/credhub-release
           FILE_TO_UPDATE: misc/source-releases/credhub.yml
