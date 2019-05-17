@@ -14,7 +14,7 @@ if ! curl --output /dev/null --silent --head --fail $URL; then exit 1; fi
 cat << EOF > $UPDATE_RELEASE_OPS_FILE
 ---
 - type: replace
-  path: /releases/name=${RELEASE_NAME}
+  path: /release=${RELEASE_NAME}/value
   value:
     sha1: ${SHA1}
     url: ${URL}

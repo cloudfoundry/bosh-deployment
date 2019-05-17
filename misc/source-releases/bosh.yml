@@ -1,6 +1,7 @@
 ---
 - type: replace
   path: /releases/name=bosh?
+  release: bosh
   value:
     name: "bosh"
     version: "267.5.0"
@@ -9,6 +10,7 @@
 
 - type: replace
   path: /releases/name=bpm?
+  release: bpm
   value:
     name: "bpm"
     version: "0.11.0"

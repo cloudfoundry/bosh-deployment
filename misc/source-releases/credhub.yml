@@ -1,6 +1,7 @@
 ---
 - type: replace
   path: /releases/name=credhub?
+  release: credhub
   value:
     name: credhub
     version: "2.4.0"
