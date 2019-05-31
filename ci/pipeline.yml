@@ -578,7 +578,7 @@ resources:
 - name: bpm-release
   type: bosh-io-release
   source:
-    repository: cloudfoundry-incubator/bpm-release
+    repository: cloudfoundry/bpm-release
 
 - name: credhub-release
   type: bosh-io-release
