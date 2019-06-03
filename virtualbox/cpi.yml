@@ -1,4 +1,5 @@
-- path: /releases/-
+- name: cpi
+  path: /releases/-
   type: replace
   value:
     name: bosh-virtualbox-cpi

@@ -1,4 +1,5 @@
-- path: /releases/name=bosh-warden-cpi?
+- name: cpi
+  path: /releases/name=bosh-warden-cpi?
   type: replace
   value:
     name: bosh-warden-cpi
