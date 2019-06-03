@@ -25,6 +25,7 @@ groups:
     - update-vsphere-stemcell
     - update-warden-stemcell
     - update-dns-release
+    - update-vsphere-cpi-release
 
 jobs:
   - name: test-bosh-lite-gcp
