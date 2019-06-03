@@ -510,6 +510,31 @@ jobs:
           repository: bosh-deployment
           rebase: true
 
+  - name: update-vsphere-cpi-release
+    plan:
+    - in_parallel:
+      - get: bosh-deployment
+      - get: vsphere-cpi-release
+        trigger: true
+    - task: update-vsphere-cpi-operations-file
+      file: bosh-deployment/ci/tasks/update-cpi.yml
+      input_mapping:
+        cpi: vsphere-cpi-release
+      params:
+        CPI_OPS_FILE: vsphere/cpi.yml
+        CPI_NAME: bosh-vsphere-cpi
+    - task: update-vsphere-cpi-secondary-operations-file
+      file: bosh-deployment/ci/tasks/update-cpi.yml
+      input_mapping:
+        cpi: vsphere-cpi-release
+      params:
+        CPI_OPS_FILE: vsphere/cpi-secondary.yml
+        CPI_NAME: bosh-vsphere-cpi
+    - put: bosh-deployment
+      params:
+        repository: bosh-deployment
+        rebase: true
+
 resources:
 - name: bosh-deployment
   type: git
@@ -609,6 +634,11 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/bosh-dns-release
+
+- name: vsphere-cpi-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bosh-vsphere-cpi-release
 
 # outputs
 - name: compiled-releases
