@@ -77,7 +77,7 @@ jobs:
 
   - name: compile-bbr-sdk-release
     plan:
-      - aggregate:
+      - in_parallel:
         - get: bosh-deployment
         - get: backup-and-restore-sdk-release
           trigger: true
@@ -107,7 +107,7 @@ jobs:
 
   - name: compile-bosh-release
     plan:
-      - aggregate:
+      - in_parallel:
         - get: bosh-deployment
         - get: bosh-release
           trigger: true
@@ -142,7 +142,7 @@ jobs:
 
   - name: compile-bpm-release
     plan:
-      - aggregate:
+      - in_parallel:
         - get: bosh-deployment
         - get: bpm-release
           trigger: true
@@ -177,7 +177,7 @@ jobs:
 
   - name: compile-credhub-release
     plan:
-      - aggregate:
+      - in_parallel:
         - get: bosh-deployment
         - get: credhub-release
           trigger: true
@@ -212,7 +212,7 @@ jobs:
 
   - name: compile-docker-cpi
     plan:
-      - aggregate:
+      - in_parallel:
         - get: bosh-deployment
         - get: docker-cpi
           trigger: true
@@ -242,7 +242,7 @@ jobs:
 
   - name: compile-garden-runc
     plan:
-      - aggregate:
+      - in_parallel:
         - get: bosh-deployment
         - get: garden-runc
           trigger: true
@@ -272,7 +272,7 @@ jobs:
 
   - name: compile-uaa-release
     plan:
-      - aggregate:
+      - in_parallel:
         - get: bosh-deployment
         - get: uaa-release
           trigger: true
@@ -302,7 +302,7 @@ jobs:
 
   - name: compile-warden-cpi
     plan:
-      - aggregate:
+      - in_parallel:
         - get: bosh-deployment
         - get: warden-cpi
           trigger: true
@@ -332,7 +332,7 @@ jobs:
 
   - name: update-aws-stemcell
     plan:
-    - aggregate:
+    - in_parallel:
       - get: bosh-deployment
       - get: aws-ubuntu-xenial-stemcell
         trigger: true
@@ -350,7 +350,7 @@ jobs:
 
   - name: update-azure-stemcell
     plan:
-    - aggregate:
+    - in_parallel:
       - get: bosh-deployment
       - get: azure-ubuntu-xenial-stemcell
         trigger: true
@@ -368,7 +368,7 @@ jobs:
 
   - name: update-docker-stemcell
     plan:
-    - aggregate:
+    - in_parallel:
       - get: bosh-deployment
       - get: warden-ubuntu-xenial-stemcell
         trigger: true
@@ -386,7 +386,7 @@ jobs:
 
   - name: update-gcp-stemcell
     plan:
-    - aggregate:
+    - in_parallel:
       - get: bosh-deployment
       - get: gcp-ubuntu-xenial-stemcell
         trigger: true
@@ -404,7 +404,7 @@ jobs:
 
   - name: update-openstack-stemcell
     plan:
-    - aggregate:
+    - in_parallel:
       - get: bosh-deployment
       - get: openstack-ubuntu-xenial-stemcell
         trigger: true
@@ -422,7 +422,7 @@ jobs:
 
   - name: update-vcloud-stemcell
     plan:
-    - aggregate:
+    - in_parallel:
       - get: bosh-deployment
       - get: vcloud-ubuntu-xenial-stemcell
         trigger: true
@@ -440,7 +440,7 @@ jobs:
 
   - name: update-virtualbox-stemcell
     plan:
-    - aggregate:
+    - in_parallel:
       - get: bosh-deployment
       - get: vsphere-ubuntu-xenial-stemcell
         trigger: true
@@ -458,7 +458,7 @@ jobs:
 
   - name: update-vsphere-stemcell
     plan:
-    - aggregate:
+    - in_parallel:
       - get: bosh-deployment
       - get: vsphere-ubuntu-xenial-stemcell
         trigger: true
@@ -476,7 +476,7 @@ jobs:
 
   - name: update-warden-stemcell
     plan:
-    - aggregate:
+    - in_parallel:
       - get: bosh-deployment
       - get: warden-ubuntu-xenial-stemcell
         trigger: true
@@ -494,7 +494,7 @@ jobs:
 
   - name: update-dns-release
     plan:
-      - aggregate:
+      - in_parallel:
         - get: bosh-deployment
         - get: dns-release
           trigger: true
