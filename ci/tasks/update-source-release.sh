@@ -29,10 +29,8 @@ bosh int bosh-deployment/${FILE_TO_UPDATE} -o update-release-ops.yml > $TMP
 mv $TMP bosh-deployment-output/${FILE_TO_UPDATE}
 
 pushd $PWD/bosh-deployment-output
-  if ! git diff --quiet --exit-code; then
-    git add -A
-    git config --global user.email "ci@localhost"
-    git config --global user.name "CI Bot"
-    git commit -m "Bumping $RELEASE_NAME to version $VERSION"
-  fi
+  git add -A
+  git config --global user.email "ci@localhost"
+  git config --global user.name "CI Bot"
+  git commit -m "Bumping $RELEASE_NAME to version $VERSION"
 popd
