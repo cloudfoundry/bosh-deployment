@@ -166,7 +166,7 @@ jobs:
         input_mapping:
           release: bpm-release
         params:
-          BOSH_IO_RELEASE: cloudfoundry/bpm-release
+          BOSH_IO_RELEASE: cloudfoundry-incubator/bpm-release
           FILE_TO_UPDATE: misc/source-releases/bosh.yml
       - put: compiled-releases
         params:
