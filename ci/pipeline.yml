@@ -505,7 +505,7 @@ jobs:
           release: dns-release
         params:
           FILE_TO_UPDATE: runtime-configs/dns.yml
-          BOSH_IO_RELEASE: bosh-dns-release
+          BOSH_IO_RELEASE: cloudfoundry/bosh-dns-release
       - put: bosh-deployment
         params:
           repository: bosh-deployment
