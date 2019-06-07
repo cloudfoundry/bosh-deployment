@@ -150,8 +150,8 @@ releases:
   url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-270.1.1-ubuntu-xenial-315.36-20190604-170423-086432635-20190604170431.tgz
   version: 270.1.1
 - name: bpm
-  sha1: 7d24e46c737609175bade648fca9c74384841588
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.0-ubuntu-xenial-315.36-20190604-170331-353588735-20190604170338.tgz
+  sha1: eb6c89221919d2776c01565e0c03a181d4fc1364
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.0-ubuntu-xenial-315.36-20190607-144308-916186091-20190607144315.tgz
   version: 1.1.0
 resource_pools:
 - env:
