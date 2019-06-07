@@ -28,5 +28,5 @@ pushd $PWD/bosh-deployment-output
   git add -A
   git config --global user.email "ci@localhost"
   git config --global user.name "CI Bot"
-  git commit -m "Bumping Stemcell $STEMCELL_NAME to version $VERSION"
+  git diff-index --quiet HEAD || git commit -m "Bumping Stemcell $STEMCELL_NAME to version $VERSION"
 popd
