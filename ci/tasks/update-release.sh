@@ -2,18 +2,24 @@
 
 . $(dirname $0)/utils.sh
 
-tar -xzf compiled-release/*.tgz "./release.MF"
+tar -xzf release/*.tgz "./release.MF"
 
 RELEASE_NAME="$( bosh int release.MF --path /name )"
 VERSION="$( bosh int release.MF --path /version )"
-TARBALL_NAME="$(basename compiled-release/*.tgz)"
-SHA1="$(sha1sum compiled-release/*.tgz | cut -d' ' -f1)"
-URL="https://s3.amazonaws.com/bosh-compiled-release-tarballs/${TARBALL_NAME}"
+SHA="$(sha1sum release/*.tgz | cut -d' ' -f1)"
 
-if [[ $UPDATING_OPS_FILE == "true" ]]; then
-  UPDATE_RELEASE_OPSFILE=$(make_release_opsfile $RELEASE_NAME $VERSION $URL $SHA1)
+if [[ `grep compiled release.MF` ]]; then
+  TARBALL_NAME="$(basename release/*.tgz)"
+  URL="https://s3.amazonaws.com/bosh-compiled-release-tarballs/${TARBALL_NAME}"
 else
-  UPDATE_RELEASE_OPSFILE=$(make_base_manifest_release_opsfile $RELEASE_NAME $VERSION $URL $SHA1)
+  URL="https://bosh.io/d/github.com/${BOSH_IO_RELEASE}?v=${VERSION}"
+  test_bosh_io_release_exists $URL
+fi
+
+if [[ $UPDATING_BASE_MANIFEST == "true" ]]; then
+  UPDATE_RELEASE_OPSFILE=$(make_base_manifest_release_opsfile $RELEASE_NAME $VERSION $URL $SHA)
+else
+  UPDATE_RELEASE_OPSFILE=$(make_release_opsfile $RELEASE_NAME $VERSION $URL $SHA)
 fi
 
 git clone bosh-deployment bosh-deployment-output

@@ -95,8 +95,9 @@ jobs:
           release: backup-and-restore-sdk-release
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        input_mapping:
+          release: compiled-release
         params:
-          UPDATING_OPS_FILE: true
           FILE_TO_UPDATE: bbr.yml
       - put: compiled-releases
         params:
@@ -123,11 +124,13 @@ jobs:
           release: bosh-release
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        input_mapping:
+          release: compiled-release
         params:
-          UPDATING_OPS_FILE: false
+          UPDATING_BASE_MANIFEST: true
           FILE_TO_UPDATE: bosh.yml
       - task: update-source-release
-        file: bosh-deployment/ci/tasks/update-source-release.yml
+        file: bosh-deployment/ci/tasks/update-release.yml
         input_mapping:
           release: bosh-release
         params:
@@ -158,11 +161,13 @@ jobs:
           release: bpm-release
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        input_mapping:
+          release: compiled-release
         params:
-          UPDATING_OPS_FILE: false
+          UPDATING_BASE_MANIFEST: true
           FILE_TO_UPDATE: bosh.yml
       - task: update-source-release
-        file: bosh-deployment/ci/tasks/update-source-release.yml
+        file: bosh-deployment/ci/tasks/update-release.yml
         input_mapping:
           release: bpm-release
         params:
@@ -193,11 +198,12 @@ jobs:
           release: credhub-release
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        input_mapping:
+          release: compiled-release
         params:
-          UPDATING_OPS_FILE: true
           FILE_TO_UPDATE: credhub.yml
       - task: update-source-release
-        file: bosh-deployment/ci/tasks/update-source-release.yml
+        file: bosh-deployment/ci/tasks/update-release.yml
         input_mapping:
           release: credhub-release
         params:
@@ -230,8 +236,9 @@ jobs:
           release: docker-cpi
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        input_mapping:
+          release: compiled-release
         params:
-          UPDATING_OPS_FILE: true
           FILE_TO_UPDATE: bosh-lite-docker.yml
       - put: compiled-releases
         params:
@@ -260,8 +267,9 @@ jobs:
           release: garden-runc
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        input_mapping:
+          release: compiled-release
         params:
-          UPDATING_OPS_FILE: true
           FILE_TO_UPDATE: bosh-lite.yml
       - put: compiled-releases
         params:
@@ -290,8 +298,9 @@ jobs:
           release: uaa-release
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        input_mapping:
+          release: compiled-release
         params:
-          UPDATING_OPS_FILE: true
           FILE_TO_UPDATE: uaa.yml
       - put: compiled-releases
         params:
@@ -320,8 +329,9 @@ jobs:
           release: warden-cpi
       - task: update-release
         file: bosh-deployment/ci/tasks/update-release.yml
+        input_mapping:
+          release: compiled-release
         params:
-          UPDATING_OPS_FILE: true
           FILE_TO_UPDATE: bosh-lite.yml
       - put: compiled-releases
         params:
@@ -500,10 +510,11 @@ jobs:
         - get: dns-release
           trigger: true
       - task: update-source-release
-        file: bosh-deployment/ci/tasks/update-source-release.yml
+        file: bosh-deployment/ci/tasks/update-release.yml
         input_mapping:
           release: dns-release
         params:
+          UPDATING_OPS_FILE: false
           FILE_TO_UPDATE: runtime-configs/dns.yml
           BOSH_IO_RELEASE: cloudfoundry/bosh-dns-release
       - put: bosh-deployment
