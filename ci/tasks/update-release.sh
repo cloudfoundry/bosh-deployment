@@ -2,7 +2,8 @@
 
 . $(dirname $0)/utils.sh
 
-tar -xzf release/*.tgz "./release.MF"
+TAR_PREFIX=$(tar -tzf release/*.tgz | grep "\./" -qv || echo "./")
+tar -xzf release/*.tgz "${TAR_PREFIX}release.MF"
 
 RELEASE_NAME="$( bosh int release.MF --path /name )"
 VERSION="$( bosh int release.MF --path /version )"
