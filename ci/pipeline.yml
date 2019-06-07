@@ -256,8 +256,6 @@ jobs:
         - get: bosh-deployment
         - get: garden-runc
           trigger: true
-          version:
-            version: "1.16.3"
         - get: warden-ubuntu-xenial-stemcell
           passed: [update-warden-stemcell]
           trigger: true
