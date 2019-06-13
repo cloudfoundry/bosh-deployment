@@ -2,7 +2,7 @@
 
 set -eu
 
-. $(dirname $0)../../tasks/utils.sh
+. $(dirname $0)/../../tasks/utils.sh
 
 start-bosh
 
