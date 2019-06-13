@@ -2,35 +2,22 @@
 
 set -eu
 
+. $(dirname $0)../../tasks/utils.sh
+
 start-bosh
 
-source /tmp/local-bosh/director/env
-
-#
-# stemcell metadata/upload
-#
+. /tmp/local-bosh/director/env
 
 tar -xzf stemcell/*.tgz $( tar -tzf stemcell/*.tgz | grep 'stemcell.MF' )
-STEMCELL_OS=$( grep -E '^operating_system: ' stemcell.MF | awk '{print $2}' | tr -d "\"'" )
-STEMCELL_VERSION=$( grep -E '^version: ' stemcell.MF | awk '{print $2}' | tr -d "\"'" )
+tar -xzf release/*.tgz $( tar -tzf release/*.tgz | grep 'release.MF' )
+
+RELEASE_NAME=$(bosh int --path /name release.MF)
+RELEASE_VERSION=$(bosh int --path /version release.MF)
+STEMCELL_OS=$(bosh int --path /operating_system stemcell.MF)
+STEMCELL_VERSION=$(bosh int --path /version stemcell.MF)
 
 bosh -n upload-stemcell stemcell/*.tgz
-
-#
-# release metadata/upload
-#
-
-cd release
-tar -xzf *.tgz $( tar -tzf *.tgz | grep 'release.MF' )
-RELEASE_NAME=$( grep -E '^name: ' release.MF | awk '{print $2}' | tr -d "\"'" )
-RELEASE_VERSION=$( grep -E '^version: ' release.MF | awk '{print $2}' | tr -d "\"'" )
-
-bosh -n upload-release *.tgz
-cd ../
-
-#
-# compilation deployment
-#
+bosh -n upload-release release/*.tgz
 
 cat > manifest.yml <<EOF
 ---
