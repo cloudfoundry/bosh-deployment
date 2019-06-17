@@ -1,16 +1,17 @@
-- path: /releases/-
+- name: cpi
+  path: /releases/-
   type: replace
   value:
     name: bosh-azure-cpi
-    sha1: faebe370c143554fe471c3f6aafb523ab48c43ea
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-azure-cpi-release?v=35.5.0
-    version: 35.5.0
+    sha1: 7bfcec67dbb31283cc4a9387028e2c85d10c245c
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-azure-cpi-release?v=36.0.1
+    version: 36.0.1
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 0a77f04cf67b614a3d1538d6302689127c5969cb
-    url: https://s3.amazonaws.com/bosh-core-stemcells/250.29/bosh-stemcell-250.29-azure-hyperv-ubuntu-xenial-go_agent.tgz
+    sha1: c02d0efd38b8939aee7a7829fce25570d36101a8
+    url: https://s3.amazonaws.com/bosh-core-stemcells/315.36/bosh-stemcell-315.36-azure-hyperv-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:

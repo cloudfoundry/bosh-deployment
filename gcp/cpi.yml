@@ -1,16 +1,17 @@
-- path: /releases/-
+- name: cpi
+  path: /releases/-
   type: replace
   value:
     name: bosh-google-cpi
-    sha1: ab8e434c6cc86eb130d30f361d210126d5a539bd
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-google-cpi-release?v=29.0.0
-    version: 29.0.0
+    sha1: aba0451b5be65d8bbf3cf7f289c5432192892284
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-google-cpi-release?v=29.0.1
+    version: 29.0.1
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 2038000205150e52d9b63725f08008c82ec79010
-    url: https://s3.amazonaws.com/bosh-gce-light-stemcells/250.29/light-bosh-stemcell-250.29-google-kvm-ubuntu-xenial-go_agent.tgz
+    sha1: 20a3261722d9971bcf8f07ee389b1ee7c7013068
+    url: https://s3.amazonaws.com/bosh-gce-light-stemcells/315.36/light-bosh-stemcell-315.36-google-kvm-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:

@@ -1,24 +1,23 @@
----
-- type: replace
+- name: cpi
   path: /releases/-
+  type: replace
   value:
     name: bosh-vsphere-cpi
-    version: "50"
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-vsphere-cpi-release?v=50
-    sha1: 725215b56aece1709d347adc709849a8960396ef
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/vcenter?
+    sha1: b3587311b7f7403818e25989d9ed5eed99d65193
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-vsphere-cpi-release?v=52.1.1
+    version: 52.1.1
+- path: /instance_groups/name=bosh/properties/vcenter?
+  type: replace
   value:
     address: unused
-    user: unused
-    password: unused
     datacenters:
-    - name: unused
-      vm_folder: unused
-      template_folder: unused
-      datastore_pattern: unused
-      persistent_datastore_pattern: unused
-      disk_path: unused
-      clusters:
+    - clusters:
       - unused: {}
+      datastore_pattern: unused
+      disk_path: unused
+      name: unused
+      persistent_datastore_pattern: unused
+      template_folder: unused
+      vm_folder: unused
+    password: unused
+    user: unused

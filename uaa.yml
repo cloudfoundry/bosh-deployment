@@ -3,9 +3,9 @@
   type: replace
   value:
     name: uaa
-    sha1: 2814e1b5d86e3b5a98f170d906fedd8938912f00
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-64.0-ubuntu-xenial-250.29-20190408-223120-078961442-20190408223210.tgz
-    version: "64.0"
+    sha1: 0bfd15b2ff6209f8448ec4095db5017e02486ffb
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-73.2.0-ubuntu-xenial-315.36-20190617-160417-575464471-20190617160427.tgz
+    version: 73.2.0
 - path: /instance_groups/name=bosh/properties/director/user_management/provider
   type: replace
   value: uaa
@@ -71,7 +71,6 @@
                 signingKey: ((uaa_jwt_signing_key.private_key))
         login:
           client_secret: ((uaa_login_client_secret))
-        port: -1
         scim:
           groups:
             bosh.admin: User has admin access on any Director
@@ -88,7 +87,8 @@
         url: https://((internal_ip)):8443
         zones:
           internal:
-            hostnames: []
+            hostnames:
+            - ((internal_ip))
       uaadb:
         address: 127.0.0.1
         databases:
@@ -100,6 +100,7 @@
         - name: postgres
           password: ((postgres_password))
           tag: admin
+        tls: disabled
     release: uaa
 - path: /instance_groups/name=bosh/properties/postgres/additional_databases?/-
   type: replace
