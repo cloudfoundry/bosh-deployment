@@ -3,9 +3,9 @@
   type: replace
   value:
     name: uaa
-    sha1: b87eb9d2ff1c5a7f71e9e057c557f8847f311121
-    url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=73.0.0
-    version: 73.0.0
+    sha1: 0bfd15b2ff6209f8448ec4095db5017e02486ffb
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-73.2.0-ubuntu-xenial-315.36-20190617-160417-575464471-20190617160427.tgz
+    version: 73.2.0
 - path: /instance_groups/name=bosh/properties/director/user_management/provider
   type: replace
   value: uaa
