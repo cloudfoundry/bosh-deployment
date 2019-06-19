@@ -1,5 +1,6 @@
 - type: replace
   path: /releases/name=os-conf?
+  release: os-conf
   value:
     name: os-conf
     version: 18
