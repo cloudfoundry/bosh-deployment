@@ -15,9 +15,9 @@
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
-    cpus: 2
+    cpus: 4
     ephemeral_disk: 16384
-    memory: 4096
+    memory: 6144
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
