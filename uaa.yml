@@ -69,8 +69,6 @@
             keys:
               uaa-jwt-key-1:
                 signingKey: ((uaa_jwt_signing_key.private_key))
-        login:
-          client_secret: ((uaa_login_client_secret))
         scim:
           groups:
             bosh.admin: User has admin access on any Director
@@ -120,11 +118,6 @@
   type: replace
   value:
     name: uaa_admin_client_secret
-    type: password
-- path: /variables/-
-  type: replace
-  value:
-    name: uaa_login_client_secret
     type: password
 - path: /variables/-
   type: replace
