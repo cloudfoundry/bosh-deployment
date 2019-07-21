@@ -1,27 +1,25 @@
-- type: replace
-  path: /releases/name=os-conf?
+- path: /releases/name=os-conf?
+  release: os-conf
+  type: replace
   value:
     name: os-conf
-    version: 18
-    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=18
-    sha1: 78d79f08ff5001cc2a24f572837c7a9c59a0e796
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/default_ssh_options?/gateway_user
+    sha1: 7579a96515b265c6d828924bf4f5fae115798199
+    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=21.0.0
+    version: 21.0.0
+- path: /instance_groups/name=bosh/properties/director/default_ssh_options?/gateway_user
+  type: replace
   value: jumpbox
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
   value:
     name: user_add
-    release: os-conf
     properties:
       users:
       - name: jumpbox
         public_key: ((jumpbox_ssh.public_key))
-
-- type: replace
-  path: /variables/-
+    release: os-conf
+- path: /variables/-
+  type: replace
   value:
     name: jumpbox_ssh
     type: ssh

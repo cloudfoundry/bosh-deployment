@@ -10,14 +10,14 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: e9a684a336166ae7f588ab74c8795865de33410c
-    url: https://s3.amazonaws.com/bosh-core-stemcells/315.36/bosh-stemcell-315.36-vsphere-esxi-ubuntu-xenial-go_agent.tgz
+    sha1: be08394fa3b6dceb2bf9814528fca885eec7f6b3
+    url: https://s3.amazonaws.com/bosh-core-stemcells/456.1/bosh-stemcell-456.1-vsphere-esxi-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
-    cpus: 2
+    cpus: 4
     ephemeral_disk: 16384
-    memory: 4096
+    memory: 6144
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:

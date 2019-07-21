@@ -34,6 +34,7 @@ groups:
   - compile-uaa-release
   - compile-warden-cpi
   - update-dns-release
+  - update-os-conf-release
 
 jobs:
 - name: test-bosh-lite-gcp
@@ -608,6 +609,8 @@ jobs:
       repository: bosh-deployment
       rebase: true
 
+# Source releases
+
 - name: update-dns-release
   plan:
   - in_parallel:
@@ -622,6 +625,24 @@ jobs:
       UPDATING_BASE_MANIFEST: true
       FILE_TO_UPDATE: runtime-configs/dns.yml
       BOSH_IO_RELEASE: cloudfoundry/bosh-dns-release
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-os-conf-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+    - get: os-conf-release
+      trigger: true
+  - task: update-source-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      release: os-conf-release
+    params:
+      FILE_TO_UPDATE: jumpbox-user.yml
+      BOSH_IO_RELEASE: cloudfoundry/os-conf-release
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -751,6 +772,11 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/bosh-google-cpi-release
+
+- name: os-conf-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/os-conf-release
 
 # outputs
 - name: compiled-releases
