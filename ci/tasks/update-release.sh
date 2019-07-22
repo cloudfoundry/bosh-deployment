@@ -3,7 +3,7 @@
 . $(dirname $0)/utils.sh
 
 exit_if_already_compiled() {
-  NAME_VERSION_OS=$(echo $TARBALL_NAME | cut -d '-' -f 1-5)
+  NAME_VERSION_OS=$(echo $TARBALL_NAME | cut -d '-' -f 1-6)
   # Look for the base name of the tarball in the url in the opsfile prior to update
   if grep -q $NAME_VERSION_OS bosh-deployment/$FILE_TO_UPDATE; then
     echo "Already compiled for this OS/VERSION"
