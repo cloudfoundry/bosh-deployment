@@ -3,16 +3,21 @@
 . $(dirname $0)/utils.sh
 
 exit_if_already_compiled() {
-  NAME_VERSION_OS=$(echo $TARBALL_NAME | cut -d '-' -f 1-6)
+  tar -xzf stemcell/*.tgz $( tar -tzf stemcell/*.tgz | grep 'stemcell.MF' )
+  STEMCELL_OS=$(bosh int --path /operating_system stemcell.MF)
+  STEMCELL_VERSION=$(bosh int --path /version stemcell.MF)
   # Look for the base name of the tarball in the url in the opsfile prior to update
-  if grep -q $NAME_VERSION_OS bosh-deployment/$FILE_TO_UPDATE; then
+  if grep -q "$RELEASE_NAME-$VERSION-$STEMCELL_OS-$STEMCELL_VERSION" bosh-deployment/$FILE_TO_UPDATE; then
     echo "Already compiled for this OS/VERSION"
     exit 0
   fi
 }
 
-tar -xzf release/*.tgz $(tar -tzf release/*.tgz | grep 'release.MF')
+tar -xzf stemcell/*.tgz $( tar -tzf stemcell/*.tgz | grep 'stemcell.MF' )
+STEMCELL_OS=$(bosh int --path /operating_system stemcell.MF)
+STEMCELL_VERSION=$(bosh int --path /version stemcell.MF)
 
+tar -xzf release/*.tgz $(tar -tzf release/*.tgz | grep 'release.MF')
 RELEASE_NAME="$(bosh int release.MF --path /name)"
 VERSION="$(bosh int release.MF --path /version)"
 SHA="$(sha1sum release/*.tgz | cut -d' ' -f1)"

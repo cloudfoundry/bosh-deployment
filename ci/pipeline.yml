@@ -204,6 +204,7 @@ jobs:
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: bbr.yml
@@ -233,6 +234,7 @@ jobs:
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: compiled-release
     params:
       UPDATING_BASE_MANIFEST: true
@@ -240,6 +242,7 @@ jobs:
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: bosh-release
     params:
       BOSH_IO_RELEASE: cloudfoundry/bosh
@@ -270,6 +273,7 @@ jobs:
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: compiled-release
     params:
       UPDATING_BASE_MANIFEST: true
@@ -277,6 +281,7 @@ jobs:
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: bpm-release
     params:
       BOSH_IO_RELEASE: cloudfoundry/bpm-release
@@ -307,12 +312,14 @@ jobs:
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: credhub.yml
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: credhub-release
     params:
       BOSH_IO_RELEASE: pivotal-cf/credhub-release
@@ -345,6 +352,7 @@ jobs:
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: bosh-lite-docker.yml
@@ -374,6 +382,7 @@ jobs:
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: bosh-lite.yml
@@ -403,6 +412,7 @@ jobs:
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: uaa.yml
@@ -434,6 +444,7 @@ jobs:
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: bosh-lite.yml
@@ -620,6 +631,7 @@ jobs:
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: dns-release
     params:
       UPDATING_BASE_MANIFEST: true
@@ -639,6 +651,7 @@ jobs:
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
       release: os-conf-release
     params:
       FILE_TO_UPDATE: jumpbox-user.yml
