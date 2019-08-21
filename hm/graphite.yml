@@ -1,0 +1,11 @@
+---
+- type: replace
+  path: /instance_groups/name=bosh/properties/hm/graphite?
+  value:
+    address: ((graphite_address))
+    port: ((graphite_port))
+    prefix: ((graphite_prefix))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/hm/graphite_enabled?
+  value: true

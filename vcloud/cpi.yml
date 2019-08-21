@@ -1,60 +1,67 @@
----
-- type: replace
+- name: cpi
   path: /releases/-
+  type: replace
   value:
     name: bosh-vcloud-cpi
-    version: "24"
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-vcloud-cpi-release?v=24
     sha1: 6b223f73f3818363b6af15a7326d3894ea0c56c6
-
-- type: replace
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bosh-vcloud-cpi-release?v=24
+    version: "24"
+- name: stemcell
   path: /resource_pools/name=vms/stemcell?
+  type: replace
   value:
-    url: https://bosh.io/d/stemcells/bosh-vsphere-esxi-ubuntu-trusty-go_agent?v=3586.24
-    sha1: 9428c4e94559eefe76026051d8065514732c383c
-
-# Configure sizes
-- type: replace
-  path: /resource_pools/name=vms/cloud_properties?
+    sha1: 0b82bdf3fd0029204363cc177bb4904bf70ec6b2
+    url: https://s3.amazonaws.com/bosh-core-stemcells/456.12/bosh-stemcell-456.12-openstack-kvm-ubuntu-xenial-go_agent.tgz
+- path: /resource_pools/name=vms/cloud_properties?
+  type: replace
   value:
     cpu: 2
-    ram: 4_096
-    disk: 20_000
-
-- type: replace
-  path: /networks/name=default/subnets/0/cloud_properties?
-  value: {name: ((network_name))}
-
-# Add CPI job
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value: &cpi_job
+    disk: 20000
+    ram: 4096
+- path: /networks/name=default/subnets/0/cloud_properties?
+  type: replace
+  value:
+    name: ((network_name))
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
     name: vcloud_cpi
     release: bosh-vcloud-cpi
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/cpi_job?
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
+  type: replace
   value: vcloud_cpi
-
-- type: replace
-  path: /cloud_provider/template?
-  value: *cpi_job
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/vcd?
-  value: &vcd
-    url: ((vcloud_url))
-    user: ((vcloud_user))
-    password: ((vcloud_password))
+- path: /cloud_provider/template?
+  type: replace
+  value:
+    name: vcloud_cpi
+    release: bosh-vcloud-cpi
+- path: /instance_groups/name=bosh/properties/vcd?
+  type: replace
+  value:
+    control:
+      wait_max: 900
     entities:
-      organization: ((vcd_org))
-      virtual_datacenter: ((vcd_name))
-      vapp_catalog: bosh-catalog
       media_catalog: bosh-catalog
       media_storage_profile: '*'
+      organization: ((vcd_org))
+      vapp_catalog: bosh-catalog
+      virtual_datacenter: ((vcd_name))
       vm_metadata_key: bosh-meta
-    control: {wait_max: 900}
-
-- type: replace
-  path: /cloud_provider/properties/vcd?
-  value: *vcd
+    password: ((vcloud_password))
+    url: ((vcloud_url))
+    user: ((vcloud_user))
+- path: /cloud_provider/properties/vcd?
+  type: replace
+  value:
+    control:
+      wait_max: 900
+    entities:
+      media_catalog: bosh-catalog
+      media_storage_profile: '*'
+      organization: ((vcd_org))
+      vapp_catalog: bosh-catalog
+      virtual_datacenter: ((vcd_name))
+      vm_metadata_key: bosh-meta
+    password: ((vcloud_password))
+    url: ((vcloud_url))
+    user: ((vcloud_user))

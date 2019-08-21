@@ -4,6 +4,8 @@
   value:
     api_key: ((datadog_api_key))
     application_key: ((datadog_application_key))
+    custom_tags:
+      director: ((director_name))
 
 - type: replace
   path: /instance_groups/name=bosh/properties/hm/datadog_enabled?

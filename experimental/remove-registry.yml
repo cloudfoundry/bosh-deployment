@@ -1,0 +1,13 @@
+# The registry can safely be omitted if the following versions are satisfied:
+#
+# v268.3.0+ of the director
+# v170.6+ of the Xenial stemcells
+# v5.4.0+ of the BOSH CLI
+
+---
+- type: remove
+  path: /instance_groups/name=bosh/jobs/name=registry?
+- type: remove
+  path: /instance_groups/name=bosh/properties/registry?
+- type: remove
+  path: /variables/name=registry_password?

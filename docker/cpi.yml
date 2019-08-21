@@ -1,75 +1,67 @@
----
-- type: replace
-  path: /releases/-
+- path: /releases/-
+  type: replace
   value:
     name: bosh-docker-cpi
-    version: "0.0.5"
-    url: https://bosh.io/d/github.com/cppforlife/bosh-docker-cpi-release?v=0.0.5
     sha1: 075bc0264d2548173da55a40127757ae962a25b1
-
-- type: replace
+    url: https://bosh.io/d/github.com/cppforlife/bosh-docker-cpi-release?v=0.0.5
+    version: 0.0.5
+- name: stemcell
   path: /resource_pools/name=vms/stemcell?
+  type: replace
   value:
-    url: https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=3586.24
-    sha1: 32c1e09391d509d24026e55555df07a166f8b8eb
-
-- type: replace
-  path: /networks/name=default/subnets/0/cloud_properties?
+    sha1: 0752040d0b08f8da91946d0656243edbcc5d3e5c
+    url: https://s3.amazonaws.com/bosh-core-stemcells/456.12/bosh-stemcell-456.12-warden-boshlite-ubuntu-xenial-go_agent.tgz
+- path: /networks/name=default/subnets/0/cloud_properties?
+  type: replace
   value:
     name: ((network))
-
-# Configure VM size
-- type: replace
-  path: /resource_pools/name=vms/cloud_properties?
+- path: /resource_pools/name=vms/cloud_properties?
+  type: replace
   value:
     ports:
-    - 22/tcp # todo jumpboxing?
-    - 6868/tcp # bootstrap agent
-    - 25555/tcp # director
-    - 4222/tcp # nats
-    - 25250/tcp # blobstore
-    - 8443/tcp # uaa
-    - 8080/tcp # cfg serv
-
-# Add CPI job
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value: &cpi_job
+    - 22/tcp
+    - 6868/tcp
+    - 25555/tcp
+    - 4222/tcp
+    - 25250/tcp
+    - 8443/tcp
+    - 8080/tcp
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
     name: docker_cpi
     release: bosh-docker-cpi
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/director/cpi_job?
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
+  type: replace
   value: docker_cpi
-
-- type: replace
-  path: /cloud_provider/template?
-  value: *cpi_job
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/docker_cpi?
+- path: /cloud_provider/template?
+  type: replace
   value:
-    docker:
-      host: ((docker_host))
-      tls: ((docker_tls))
-    agent: # todo remove
-      mbus: nats://nats:((nats_password))@((internal_ip)):4222
+    name: docker_cpi
+    release: bosh-docker-cpi
+- path: /instance_groups/name=bosh/properties/docker_cpi?
+  type: replace
+  value:
+    agent:
       blobstore:
-        provider: dav
         options:
           endpoint: http://((internal_ip)):25250
-          user: agent
           password: ((blobstore_agent_password))
-
-- type: replace
-  path: /cloud_provider/properties/docker_cpi?
-  value:
+          user: agent
+        provider: dav
+      mbus: nats://nats:((nats_password))@((internal_ip)):4222
     docker:
       host: ((docker_host))
       tls: ((docker_tls))
-    agent: # todo remove
-      mbus: "https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868"
+- path: /cloud_provider/properties/docker_cpi?
+  type: replace
+  value:
+    agent:
       blobstore:
-        provider: local
         options:
           blobstore_path: /var/vcap/micro_bosh/data/cache
+        provider: local
+      mbus: https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868
+    docker:
+      host: ((docker_host))
+      tls: ((docker_tls))

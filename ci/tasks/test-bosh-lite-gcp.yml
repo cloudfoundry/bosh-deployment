@@ -9,11 +9,7 @@ image_resource:
 
 inputs:
   - name: bosh-deployment
-
-params:
-  BBL_GCP_SERVICE_ACCOUNT_KEY: replace-me
-  BBL_IAAS: gcp
-  BBL_GCP_REGION: replace-me
+  - name: bbl-state
 
 run:
   path: bosh-deployment/ci/tasks/test-bosh-lite-gcp.sh
