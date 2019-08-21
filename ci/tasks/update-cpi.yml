@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: bosh/main-bosh-docker
+
+inputs:
+  - name: bosh-deployment
+  - name: cpi
+
+params:
+  CPI_OPS_FILE: ~
+  CPI_NAME: ~
+
+outputs:
+  - name: bosh-deployment
+    path: bosh-deployment-output
+
+run:
+  path: bosh-deployment/ci/tasks/update-cpi.sh

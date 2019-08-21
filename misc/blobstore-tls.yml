@@ -1,0 +1,3 @@
+# Blobstore TLS is now enabled by default
+# Keeping this ops-file for backwards compatibility
+---

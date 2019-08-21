@@ -1,0 +1,25 @@
+---
+- type: remove
+  path: /instance_groups/name=bosh/jobs/name=blobstore
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore?
+  value:
+    provider: s3
+    bucket_name: ((s3-bucket-name))
+    access_key_id: ((s3-access-key-id))
+    secret_access_key: ((s3-secret-access-key))
+    s3_region: ((s3-region))
+
+- type: remove
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores?/-
+  value:
+    provider: s3
+    options:
+      bucket_name: ((s3-bucket-name))
+      access_key_id: ((s3-access-key-id))
+      secret_access_key: ((s3-secret-access-key))
+      region: ((s3-region))

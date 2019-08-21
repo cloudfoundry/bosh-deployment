@@ -1,0 +1,26 @@
+- name: cpi
+  path: /releases/-
+  type: replace
+  value:
+    name: bosh-azure-cpi
+    sha1: faebe370c143554fe471c3f6aafb523ab48c43ea
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-azure-cpi-release?v=35.5.0
+    version: 35.5.0
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
+    name: azure_cpi
+    release: bosh-azure-cpi
+- path: /instance_groups/name=bosh/properties/azure?
+  type: replace
+  value:
+    client_id: unused
+    client_secret: unused
+    default_security_group: unused
+    environment: unused
+    resource_group_name: unused
+    ssh_public_key: unused
+    ssh_user: unused
+    storage_account_name: unused
+    subscription_id: unused
+    tenant_id: unused

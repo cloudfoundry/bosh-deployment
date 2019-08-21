@@ -1,0 +1,8 @@
+---
+- type: replace
+  path: /releases/name=uaa?
+  value:
+    name: uaa
+    version: "60.2"
+    url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=60.2
+    sha1: 667af417997467681fddf13c78e5a11c6f4a9d15

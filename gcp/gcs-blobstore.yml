@@ -2,13 +2,22 @@
   path: /instance_groups/name=bosh/properties/blobstore?
   value:
     provider: gcs
+    credentials_source: static
     bucket_name: ((bucket_name))
     json_key: ((director_gcs_credentials_json))
 
 - type: remove
   path: /instance_groups/name=bosh/jobs/name=blobstore
 
+- type: remove
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores
+
 - type: replace
-  path: /instance_groups/name=bosh/properties/agent/blobstore?
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores?/-
   value:
-    json_key: ((agent_gcs_credentials_json))
+    provider: gcs
+    options:
+      provider: gcs
+      credentials_source: static
+      bucket_name: ((bucket_name))
+      json_key: ((agent_gcs_credentials_json))

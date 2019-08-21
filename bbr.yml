@@ -1,0 +1,14 @@
+- path: /releases/-
+  release: backup-and-restore-sdk
+  type: replace
+  value:
+    name: backup-and-restore-sdk
+    sha1: 6e30711ae24b13bd703d3c6fef8e10a1478cf69f
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/backup-and-restore-sdk-1.17.0-ubuntu-xenial-456.12-20190816-213639-824620335-20190816213702.tgz
+    version: 1.17.0
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
+    name: database-backup-restorer
+    properties: {}
+    release: backup-and-restore-sdk

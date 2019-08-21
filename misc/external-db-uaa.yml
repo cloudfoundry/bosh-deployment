@@ -1,0 +1,15 @@
+#This ops file requires that you used the uaa.yml ops file first
+---
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaadb
+  value:
+    address: ((external_db_host_uaa))
+    port: ((external_db_port_uaa))
+    databases:
+      - name: ((external_db_name_uaa))
+        tag: uaa
+    roles:
+      - name: ((external_db_user_uaa))
+        password: ((external_db_password_uaa))
+        tag: admin
+    db_scheme: ((external_db_scheme_uaa))

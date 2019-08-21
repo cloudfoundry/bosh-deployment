@@ -20,6 +20,9 @@ function bosh() {
   command bosh int --var-errs --var-errs-unused ${@//--state=*/} > /dev/null
 }
 
+echo -e "\nCheck YAML syntax\n"
+find .|grep yml|xargs -n1 bosh int
+
 echo -e "\nUsed compiled releases\n"
 grep -r -i s3.amazonaws.com/bosh-compiled-release-tarballs . | grep -v grep | grep -v ./.git
 
@@ -147,6 +150,49 @@ bosh create-env bosh.yml \
   -v external_db_password=test \
   -v external_db_adapter=test \
   -v external_db_name=test
+
+echo "- AWS with UAA + CredHub + External dbs for all"
+bosh create-env bosh.yml \
+  -o aws/cpi.yml \
+  -o uaa.yml \
+  -o credhub.yml \
+  -o misc/external-db.yml \
+  -o misc/external-db-uaa.yml \
+  -o misc/external-db-credhub.yml \
+  --state=$tmp_file \
+  --vars-store $(mktemp ${tmp_file}.XXXXXX) \
+  -v director_name=test \
+  -v internal_cidr=test \
+  -v internal_gw=test \
+  -v internal_ip=test \
+  -v access_key_id=test \
+  -v secret_access_key=test \
+  -v az=test \
+  -v region=test \
+  -v default_key_name=test \
+  -v default_security_groups=[test] \
+  -v private_key=test \
+  -v subnet_id=test \
+  -v credhub_encryption_password=test \
+  -v external_db_host=test \
+  -v external_db_port=test \
+  -v external_db_user=test \
+  -v external_db_password=test \
+  -v external_db_adapter=test \
+  -v external_db_name=test \
+  -v external_db_host_credhub=test \
+  -v external_db_port_credhub=test \
+  -v external_db_name_credhub=test \
+  -v external_db_user_credhub=test \
+  -v external_db_password_credhub=test \
+  -v external_db_require_tls_credhub=test \
+  -v external_db_adapter_credhub=test \
+  -v external_db_host_uaa=test \
+  -v external_db_port_uaa=test \
+  -v external_db_user_uaa=test \
+  -v external_db_name_uaa=test \
+  -v external_db_password_uaa=test \
+  -v external_db_scheme_uaa=test 
 
 echo "- AWS (cloud-config)"
 bosh update-cloud-config aws/cloud-config.yml \
@@ -475,3 +521,25 @@ bosh create-env bosh.yml \
 
 echo "- Docker (cloud-config)"
 bosh update-cloud-config docker/cloud-config.yml -v network=net3
+
+echo "- Secondary CPIs"
+bosh create-env bosh.yml \
+  -o aws/cpi.yml \
+  -o docker/cpi-secondary.yml \
+  -o azure/cpi-secondary.yml \
+  -o vsphere/cpi-secondary.yml \
+  -o openstack/cpi-secondary.yml \
+  --state=$tmp_file \
+  --vars-store $(mktemp ${tmp_file}.XXXXXX) \
+  -v director_name=test \
+  -v internal_cidr=test \
+  -v internal_gw=test \
+  -v internal_ip=test \
+  -v access_key_id=test \
+  -v secret_access_key=test \
+  -v az=test \
+  -v region=test \
+  -v default_key_name=test \
+  -v default_security_groups=[test] \
+  -v private_key=test \
+  -v subnet_id=test

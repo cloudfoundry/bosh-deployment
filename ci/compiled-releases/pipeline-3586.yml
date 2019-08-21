@@ -1,10 +1,11 @@
 ---
+# resources {
 resources:
   - name: bosh-deployment
     type: git
     source:
       uri: https://github.com/cloudfoundry/bosh-deployment.git
-      branch: {{branch}}
+      branch: ((branch))
 
   # releases
 
@@ -22,6 +23,11 @@ resources:
     type: bosh-io-release
     source:
       repository: pivotal-cf/credhub-release
+
+  - name: bpm-release
+    type: bosh-io-release
+    source:
+      repository: cloudfoundry-incubator/bpm-release
 
   - name: backup-and-restore-sdk-release
     type: bosh-io-release
@@ -54,6 +60,7 @@ resources:
     type: bosh-io-stemcell
     source:
       name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+      version_family: '3586.latest'
 
   # outputs
 
@@ -61,21 +68,19 @@ resources:
     type: s3
     source:
       bucket: "bosh-compiled-release-tarballs"
-      access_key_id: {{aws_key_id}}
-      secret_access_key: {{aws_secret_access_key}}
+      access_key_id: ((aws_key_id))
+      secret_access_key: ((aws_secret_access_key))
       regexp: ".*-(\\d+).tgz"
-
+# }
 jobs:
-  - name: compile-bosh-release-263
+  - name: compile-bosh-release-266
     plan:
       - aggregate:
         - get: bosh-deployment
         - get: bosh-release
           version:
-            version: "263.4.0"
+            version: "266.7.0"
         - get: ubuntu-trusty-stemcell
-          version:
-            version: "3468.1"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -86,16 +91,32 @@ jobs:
         params:
           file: "compiled-release/*.tgz"
 
-  - name: compile-uaa-release-52
+  - name: compile-bosh-release-267
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: bosh-release
+          version:
+            version: "267.5.0"
+        - get: ubuntu-trusty-stemcell
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: bosh-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+  - name: compile-uaa-release-57
     plan:
       - aggregate:
           - get: bosh-deployment
           - get: uaa-release
             version:
-              version: "52.2"
+              version: "57.3"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3468.1"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -106,16 +127,51 @@ jobs:
         params:
           file: "compiled-release/*.tgz"
 
-  - name: compile-credhub-release-1.6
+  - name: compile-uaa-release-59
+    plan:
+      - aggregate:
+          - get: bosh-deployment
+          - get: uaa-release
+            version:
+              version: "59"
+          - get: ubuntu-trusty-stemcell
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: uaa-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+  - name: compile-uaa-release-60
+    plan:
+      - aggregate:
+          - get: bosh-deployment
+          - get: uaa-release
+            version:
+              version: "60.2"
+          - get: ubuntu-trusty-stemcell
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: uaa-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+
+  - name: compile-credhub-release-1.8
     plan:
       - aggregate:
         - get: bosh-deployment
         - get: credhub-release
           version:
-            version: "1.6.1"
+            version: "1.8.3"
         - get: ubuntu-trusty-stemcell
-          version:
-            version: "3468.1"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -126,16 +182,86 @@ jobs:
         params:
           file: "compiled-release/*.tgz"
 
-  - name: compile-bbr-sdk-release-1.2
+  - name: compile-credhub-release-1.7
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: credhub-release
+          version:
+            version: "1.7.1"
+        - get: ubuntu-trusty-stemcell
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: credhub-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+  - name: compile-credhub-release-1.9
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: credhub-release
+          version:
+            version: "1.9.3"
+        - get: ubuntu-trusty-stemcell
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: credhub-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+  - name: compile-bpm-release-0.6.0
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: bpm-release
+          version:
+            version: "0.6.0"
+        - get: ubuntu-trusty-stemcell
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: bpm-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+  - name: compile-bpm-release-0.9.0
+    plan:
+      - aggregate:
+        - get: bosh-deployment
+        - get: bpm-release
+          version:
+            version: "0.9.0"
+        - get: ubuntu-trusty-stemcell
+      - task: export-release
+        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+        privileged: true
+        input_mapping:
+          stemcell: ubuntu-trusty-stemcell
+          release: bpm-release
+      - put: compiled-releases
+        params:
+          file: "compiled-release/*.tgz"
+
+  - name: compile-bbr-sdk-release-1.6
     plan:
       - aggregate:
         - get: bosh-deployment
         - get: backup-and-restore-sdk-release
           version:
-            version: "1.2.1"
+            version: "1.6.0"
         - get: ubuntu-trusty-stemcell
-          version:
-            version: "3468.1"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -154,10 +280,8 @@ jobs:
           - get: bosh-deployment
           - get: warden-cpi
             version:
-              version: "37"
+              version: "40"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3468.1"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -176,8 +300,6 @@ jobs:
             version:
               version: "0.342.0"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3468.1"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -196,8 +318,6 @@ jobs:
             version:
               version: "1.9.4"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3468.1"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
@@ -216,8 +336,6 @@ jobs:
             version:
               version: "0.24.0"
           - get: ubuntu-trusty-stemcell
-            version:
-              version: "3468.1"
       - task: export-release
         file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
         privileged: true
