@@ -2,6 +2,7 @@
 
 * [Create an environment](https://bosh.io/docs/init.html)
     * [On Local machine (BOSH Lite)](https://bosh.io/docs/bosh-lite.html)
+    * [On Alibaba Cloud](https://bosh.io/docs/init-alicloud.html)
     * [On AWS](https://bosh.io/docs/init-aws.html)
     * [On Azure](https://bosh.io/docs/init-azure.html)
     * [On OpenStack](https://bosh.io/docs/init-openstack.html)
@@ -29,8 +30,8 @@
 ## Ops files
 
 - `bosh.yml`: Base manifest that is meant to be used with different CPI configurations
-- `[aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cpi.yml`: CPI configuration
-- `[aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cloud-config.yml`: Simple cloud configs
+- `[alicloud|aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cpi.yml`: CPI configuration
+- `[alicloud|aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cloud-config.yml`: Simple cloud configs
 - `jumpbox-user.yml`: Adds user `jumpbox` for SSH-ing into the Director (see [Jumpbox User](docs/jumpbox-user.md))
 - `uaa.yml`: Deploys UAA and enables UAA user management in the Director
 - `credhub.yml`: Deploys CredHub and enables CredHub integration in the Director

@@ -1,0 +1,50 @@
+azs:
+- name: z1
+  cloud_properties:
+    availability_zone: ((zone))
+- name: z2
+  cloud_properties:
+    availability_zone: ((zone))
+- name: z3
+  cloud_properties:
+    availability_zone: ((zone))
+
+vm_types:
+- name: default
+  cloud_properties:
+    instance_type: ecs.sn1ne.large
+    ephemeral_disk: {size: 30_720}
+- name: large
+  cloud_properties:
+    instance_type: ecs.sn1ne.xlarge
+    ephemeral_disk: {size: 51_200}
+
+
+disk_types:
+- name: default
+  disk_size: 20_480
+- name: large
+  disk_size: 51_200
+
+networks:
+- name: default
+  type: manual
+  subnets:
+  - range: ((internal_cidr))
+    gateway: ((internal_gw))
+    azs: [z1, z2, z3]
+    dns: [8.8.8.8]
+    reserved: [((internal_gw))/30]
+    cloud_properties:
+      vswitch_id: ((vswitch_id))
+      security_group_ids:
+        - ((security_group_id))
+- name: vip
+  type: vip
+
+compilation:
+  workers: 5
+  reuse_compilation_vms: true
+  az: z1
+  vm_type: default
+  network: default
