@@ -46,6 +46,5 @@ pushd $PWD/bosh-deployment-output
 
   if [[ `git tag -l | grep $VERSION` ]]; then
     git tag -d $VERSION
-    git tag $VERSION
   fi
 popd

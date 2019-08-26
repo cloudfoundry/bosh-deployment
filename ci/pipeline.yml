@@ -250,10 +250,17 @@ jobs:
   - put: compiled-releases
     params:
       file: "compiled-release/*.tgz"
+  - put: bosh-deployment-tags
+    resource: bosh-deployment
+    params:
+      repository: bosh-deployment
+      #rebase: true
+      only_tag: true
   - put: bosh-deployment
     params:
       repository: bosh-deployment
       rebase: true
+      tag: bosh-release/version
 
 - name: compile-bpm-release
   plan:
