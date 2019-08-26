@@ -254,6 +254,7 @@ jobs:
     params:
       repository: bosh-deployment
       rebase: true
+      tag: bosh-release/version
 
 - name: compile-bpm-release
   plan:
