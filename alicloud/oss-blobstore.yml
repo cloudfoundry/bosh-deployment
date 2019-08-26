@@ -1,0 +1,20 @@
+---
+
+# Using Alibaba Cloud OSS Service as Bosh blobstore
+
+# Note: If you want to apply the current oss bucket for other blobstores,
+# you can specify 'bucket_name' to oss bucket and its one directory, like "((bucket_name))/bosh-blobs", and then the directory "bosh-blobs" will store all of bosh blobs.
+#
+# 'host' is oss bucket endpoint, and its format is 'oss-<regionId>.aliyuncs.com', like oss-cn-hangzhou.aliyuncs.com.
+
+- type: remove
+  path: /instance_groups/name=bosh/jobs/name=blobstore
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore?
+  value:
+    provider: s3
+    bucket_name: ((oss-bucket-name))
+    host: ((oss-host))
+    access_key_id: ((oss-access-key-id))
+    secret_access_key: ((oss-access-key-secret))

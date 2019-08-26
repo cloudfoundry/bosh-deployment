@@ -1,0 +1,124 @@
+---
+# CPI
+- type: replace
+  path: /releases/-
+  value:
+    name: bosh-alicloud-cpi
+    version: 24.0.0
+    url: https://github.com/cloudfoundry-incubator/bosh-alicloud-cpi-release/releases/download/v24.0.0/bosh-alicloud-cpi-release-24.0.0.tgz
+    sha1: 9ea843cc34ccf61d0c6809c9f6cdfd7da29bc7f1
+
+# light stemcell
+- type: replace
+  path: /resource_pools/name=vms/stemcell?
+  value:
+    url: https://bosh-alicloud-light-stemcells-eu.oss-eu-central-1.aliyuncs.com/light-bosh-stemcell-456.1-alicloud-kvm-ubuntu-xenial-go_agent.tgz
+    sha1: 43c227164ec9f5016b434fa2008c1448d25d2f01
+
+# Configure ECS sizes
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties?
+  value:
+    availability_zone: ((zone))
+    instance_type: "ecs.mn4.small"
+    instance_name: "bosh-director"
+    ephemeral_disk: {size: "51_200", category: "cloud_efficiency"}
+    system_disk: {size: "51_200", category: "cloud_efficiency"}
+    key_pair_name: ((key_pair_name))
+
+- type: replace
+  path: /disk_pools/name=disks/cloud_properties?
+  value:
+    type: "cloud_efficiency"
+    instance_role: "director"
+
+- type: replace
+  path: /networks/name=default/subnets/0/cloud_properties?
+  value:
+    vswitch_id: ((vswitch_id))
+    security_group_ids: [((security_group_id))]
+    internet_charge_type: "PayByTraffic"
+
+# Enable registry job
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: registry
+    release: bosh
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/registry?
+  value:
+    address: ((internal_ip))
+    host: ((internal_ip))
+    db: # todo remove
+      host: 127.0.0.1
+      user: postgres
+      password: ((postgres_password))
+      database: bosh
+      adapter: postgres
+    http:
+      user: registry
+      password: ((registry_password))
+      port: 25777
+    username: registry
+    password: ((registry_password))
+    port: 25777
+
+# Add CPI job
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value: &cpi_job
+    name: alicloud_cpi
+    release: bosh-alicloud-cpi
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/cpi_job?
+  value: alicloud_cpi
+
+- type: replace
+  path: /cloud_provider/template?
+  value: *cpi_job
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/alicloud?
+  value: &alicloud
+    region: ((region))
+    availability_zone: ((zone))
+    access_key_id: ((access_key_id))
+    access_key_secret: ((access_key_secret))
+
+- type: replace
+  path: /cloud_provider/properties/alicloud?
+  value: *alicloud
+
+- type: replace
+  path: /cloud_provider/ssh_tunnel?
+  value:
+    host: ((internal_ip))
+    port: 22
+    user: vcap
+    private_key: ((private_key))
+
+- type: replace
+  path: /variables/-
+  value:
+    name: registry_password
+    type: password
+
+# Replace ntp to China timezone
+- type: replace
+  path: /instance_groups/name=bosh/properties/ntp?
+  value: &ntp
+  - server 0.cn.pool.ntp.org
+  - server 1.cn.pool.ntp.org
+  - server 2.cn.pool.ntp.org
+  - server 3.cn.pool.ntp.org
+
+- type: replace
+  path: /cloud_provider/properties/ntp?
+  value: &ntp
+  - server 0.cn.pool.ntp.org
+  - server 1.cn.pool.ntp.org
+  - server 2.cn.pool.ntp.org
+  - server 3.cn.pool.ntp.org
