@@ -220,6 +220,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: bosh-release
       trigger: true
     - get: warden-ubuntu-xenial-stemcell
@@ -250,16 +252,16 @@ jobs:
   - put: compiled-releases
     params:
       file: "compiled-release/*.tgz"
-  - put: bosh-deployment-tags
-    resource: bosh-deployment
-    params:
-      repository: bosh-deployment
-      #rebase: true
-      only_tag: true
   - put: bosh-deployment
     params:
       repository: bosh-deployment
       rebase: true
+  - put: bosh-deployment-tags
+    resource: bosh-deployment
+    params:
+      repository: bosh-deployment
+      force: true
+      only_tag: true
       tag: bosh-release/version
 
 - name: compile-bpm-release
