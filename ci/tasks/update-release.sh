@@ -43,8 +43,4 @@ bosh int bosh-deployment/${FILE_TO_UPDATE} -o $UPDATE_RELEASE_OPSFILE > bosh-dep
 
 pushd $PWD/bosh-deployment-output
   git_commit "Bumping $RELEASE_NAME to version $VERSION"
-
-  if [[ `git tag -l | grep $VERSION` ]]; then
-    git tag -d $VERSION
-  fi
 popd
