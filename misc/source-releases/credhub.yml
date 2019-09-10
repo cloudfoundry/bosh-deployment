@@ -3,6 +3,6 @@
   type: replace
   value:
     name: credhub
-    sha1: ba05a59249f77606acb10b8cd748edda59bc1400
-    url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.5.4
-    version: 2.5.4
+    sha1: 55d37def670c4bfdac99e1750fd059cdcdcf8d1e
+    url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=2.5.5
+    version: 2.5.5
