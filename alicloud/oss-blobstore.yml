@@ -18,3 +18,9 @@
     host: ((oss-host))
     access_key_id: ((oss-access-key-id))
     secret_access_key: ((oss-access-key-secret))
+
+- type: remove
+  path: /variables/name=blobstore_ca?
+
+- type: remove
+  path: /variables/name=blobstore_server_tls?

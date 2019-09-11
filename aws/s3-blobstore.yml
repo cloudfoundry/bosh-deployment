@@ -23,3 +23,9 @@
       access_key_id: ((s3-access-key-id))
       secret_access_key: ((s3-secret-access-key))
       region: ((s3-region))
+
+- type: remove
+  path: /variables/name=blobstore_ca?
+
+- type: remove
+  path: /variables/name=blobstore_server_tls?
