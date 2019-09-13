@@ -91,6 +91,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: aws-cpi-release
       trigger: true
   - task: update-release
@@ -109,6 +111,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: azure-cpi-release
       trigger: true
   - task: update-release
@@ -127,6 +131,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: google-cpi-release
       trigger: true
   - task: update-release
@@ -145,6 +151,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: vsphere-cpi-release
       trigger: true
   - task: update-vsphere-cpi-operations-file
@@ -170,6 +178,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: virtualbox-cpi-release
       trigger: true
   - task: update-virtualbox-cpi-operations-file
@@ -190,6 +200,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: backup-and-restore-sdk-release
       trigger: true
     - get: warden-ubuntu-xenial-stemcell
@@ -268,6 +280,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: bpm-release
       trigger: true
     - get: warden-ubuntu-xenial-stemcell
@@ -307,6 +321,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: credhub-release
       trigger: true
     - get: warden-ubuntu-xenial-stemcell
@@ -345,6 +361,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: docker-cpi
       trigger: true
       version:
@@ -377,6 +395,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: garden-runc
       trigger: true
     - get: warden-ubuntu-xenial-stemcell
@@ -407,6 +427,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: uaa-release
       trigger: true
     - get: warden-ubuntu-xenial-stemcell
@@ -437,6 +459,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: warden-cpi
       trigger: true
       version:
@@ -471,6 +495,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: aws-ubuntu-xenial-stemcell
       trigger: true
   - task: update-stemcell
@@ -489,6 +515,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: azure-ubuntu-xenial-stemcell
       trigger: true
   - task: update-stemcell
@@ -507,6 +535,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: warden-ubuntu-xenial-stemcell
       trigger: true
   - task: update-stemcell
@@ -525,6 +555,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: gcp-ubuntu-xenial-stemcell
       trigger: true
   - task: update-stemcell
@@ -543,6 +575,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: openstack-ubuntu-xenial-stemcell
       trigger: true
   - task: update-stemcell
@@ -561,6 +595,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: vcloud-ubuntu-xenial-stemcell
       trigger: true
   - task: update-stemcell
@@ -579,6 +615,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: vsphere-ubuntu-xenial-stemcell
       trigger: true
   - task: update-stemcell
@@ -597,6 +635,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: vsphere-ubuntu-xenial-stemcell
       trigger: true
   - task: update-stemcell
@@ -615,6 +655,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: warden-ubuntu-xenial-stemcell
       trigger: true
   - task: update-stemcell
@@ -635,6 +677,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: dns-release
       trigger: true
   - task: update-source-release
@@ -655,6 +699,8 @@ jobs:
   plan:
   - in_parallel:
     - get: bosh-deployment
+      params:
+        clean_tags: true
     - get: os-conf-release
       trigger: true
   - task: update-source-release
