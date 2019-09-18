@@ -147,8 +147,8 @@ networks:
   type: manual
 releases:
 - name: bosh
-  sha1: cb1ccc831804b9d5f43b31bf3f7217d32d0ae74b
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-270.5.0-ubuntu-xenial-456.22-20190910-001316-954185576-20190910001326.tgz
+  sha1: e2c64241b96bd1e9573b4025680626595e416d73
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-270.5.0-ubuntu-xenial-456.25-20190918-231408-011305108-20190918231414.tgz
   version: 270.5.0
 - name: bpm
   sha1: d510144138265c54c3fcac0de2c9ec3a188a78ce
