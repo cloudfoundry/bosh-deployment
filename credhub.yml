@@ -3,8 +3,8 @@
   type: replace
   value:
     name: credhub
-    sha1: 336e06c9ea5848fb91002e05bc3a13e10fc52504
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.5.6-ubuntu-xenial-456.22-20190913-190029-859041923-20190913190035.tgz
+    sha1: cf5b33c958a15dcfe578c1f298fb51fa307895c6
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.5.6-ubuntu-xenial-456.25-20190918-225437-277083154-20190918225446.tgz
     version: 2.5.6
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
@@ -21,6 +21,8 @@
         authorization:
           acls:
             enabled: false
+        certificates:
+          concatenate_cas: true
         data_storage:
           database: credhub
           host: 127.0.0.1
