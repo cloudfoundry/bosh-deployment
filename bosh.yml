@@ -60,7 +60,6 @@ instance_groups:
         user: director
       port: 25250
       provider: dav
-      secret: ((blobstore_secret))
       tls:
         cert:
           ca: ((blobstore_ca.certificate))
@@ -176,8 +175,6 @@ variables:
 - name: nats_password
   type: password
 - name: postgres_password
-  type: password
-- name: blobstore_secret
   type: password
 - name: default_ca
   options:
