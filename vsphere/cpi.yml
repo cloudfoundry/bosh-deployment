@@ -27,21 +27,7 @@
   value:
     name: vsphere_cpi
     release: bosh-vsphere-cpi
-    properties:
-      vceneter:
-        address: ((vcenter_ip))
-        datacenters:
-        - clusters:
-          - ((vcenter_cluster)): {}
-          datastore_pattern: ((vcenter_ds))
-          disk_path: ((vcenter_disks))
-          name: ((vcenter_dc))
-          persistent_datastore_pattern: ((vcenter_ds))
-          template_folder: ((vcenter_templates))
-          vm_folder: ((vcenter_vms))
-        password: ((vcenter_password))
-        user: ((vcenter_user))
-- path: /instance_groups/name=bosh/jobs/name=director/properties/director/cpi_job?
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
   type: replace
   value: vsphere_cpi
 - path: /cloud_provider/template?
@@ -49,6 +35,21 @@
   value:
     name: vsphere_cpi
     release: bosh-vsphere-cpi
+- path: /instance_groups/name=bosh/properties/vcenter?
+  type: replace
+  value:
+    address: ((vcenter_ip))
+    datacenters:
+    - clusters:
+      - ((vcenter_cluster)): {}
+      datastore_pattern: ((vcenter_ds))
+      disk_path: ((vcenter_disks))
+      name: ((vcenter_dc))
+      persistent_datastore_pattern: ((vcenter_ds))
+      template_folder: ((vcenter_templates))
+      vm_folder: ((vcenter_vms))
+    password: ((vcenter_password))
+    user: ((vcenter_user))
 - path: /cloud_provider/properties/vcenter?
   type: replace
   value:

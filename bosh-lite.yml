@@ -19,39 +19,41 @@
   value:
     name: garden
     release: garden-runc
-    properties:
-      garden:
-        allow_host_access: true
-        debug_listen_address: 127.0.0.1:17013
-        default_container_grace_time: 0
-        destroy_containers_on_start: true
-        graph_cleanup_threshold_in_mb: 0
-        listen_address: 127.0.0.1:7777
-        listen_network: tcp
+- path: /instance_groups/name=bosh/jobs/name=garden/properties?/garden
+  type: replace
+  value:
+    allow_host_access: true
+    debug_listen_address: 127.0.0.1:17013
+    default_container_grace_time: 0
+    destroy_containers_on_start: true
+    graph_cleanup_threshold_in_mb: 0
+    listen_address: 127.0.0.1:7777
+    listen_network: tcp
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
     name: warden_cpi
     release: bosh-warden-cpi
-    properties:
-      warden_cpi:
-        actions:
-          expand_stemcell_tarball: false
-        agent:
-          blobstore:
-            options:
-              endpoint: http://10.254.50.4:25250
-              password: ((blobstore_agent_password))
-              user: agent
-            provider: dav
-          mbus: nats://nats:((nats_password))@10.254.50.4:4222
-        host_ip: 10.254.50.4
-        warden:
-          connect_address: 127.0.0.1:7777
-          connect_network: tcp
-- path: /instance_groups/name=bosh/jobs/name=director/properties/director/cpi_job?
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
   type: replace
   value: warden_cpi
+- path: /instance_groups/name=bosh/properties/warden_cpi?
+  type: replace
+  value:
+    actions:
+      expand_stemcell_tarball: false
+    agent:
+      blobstore:
+        options:
+          endpoint: http://10.254.50.4:25250
+          password: ((blobstore_agent_password))
+          user: agent
+        provider: dav
+      mbus: nats://nats:((nats_password))@10.254.50.4:4222
+    host_ip: 10.254.50.4
+    warden:
+      connect_address: 127.0.0.1:7777
+      connect_network: tcp
 - path: /releases/name=os-conf?
   type: replace
   value:
@@ -64,11 +66,10 @@
   value:
     name: disable_agent
     release: os-conf
-    properties: {}
-- path: /instance_groups/name=bosh/jobs/name=director/properties/director/ignore_missing_gateway?
+- path: /instance_groups/name=bosh/properties/director/ignore_missing_gateway?
   type: replace
   value: true
-- path: /instance_groups/name=bosh/jobs/name=director/properties/compiled_package_cache?
+- path: /instance_groups/name=bosh/properties/compiled_package_cache?
   type: replace
   value:
     options:

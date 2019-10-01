@@ -26,26 +26,21 @@
   value:
     name: registry
     release: bosh
-    properties:
-      registry:
-        db:
-          adapter: postgres
-          database: bosh
-          host: 127.0.0.1
-          password: ((postgres_password))
-          user: postgres
-        host: ((internal_ip))
-        http:
-          password: ((registry_password))
-          port: 25777
-          user: registry
-        password: ((registry_password))
-        port: 25777
-        username: registry
-- path: /instance_groups/name=bosh/jobs/name=director/properties/registry?
+- path: /instance_groups/name=bosh/properties/registry?
   type: replace
   value:
     address: ((internal_ip))
+    db:
+      adapter: postgres
+      database: bosh
+      host: 127.0.0.1
+      password: ((postgres_password))
+      user: postgres
+    host: ((internal_ip))
+    http:
+      password: ((registry_password))
+      port: 25777
+      user: registry
     password: ((registry_password))
     port: 25777
     username: registry
@@ -54,19 +49,7 @@
   value:
     name: azure_cpi
     release: bosh-azure-cpi
-    properties:
-      azure:
-        client_id: ((client_id))
-        client_secret: ((client_secret))
-        default_security_group: ((default_security_group))
-        environment: AzureCloud
-        resource_group_name: ((resource_group_name))
-        ssh_public_key: ((ssh.public_key))
-        ssh_user: vcap
-        storage_account_name: ((storage_account_name))
-        subscription_id: ((subscription_id))
-        tenant_id: ((tenant_id))
-- path: /instance_groups/name=bosh/jobs/name=director/properties/director/cpi_job?
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
   type: replace
   value: azure_cpi
 - path: /cloud_provider/template?
@@ -74,6 +57,19 @@
   value:
     name: azure_cpi
     release: bosh-azure-cpi
+- path: /instance_groups/name=bosh/properties/azure?
+  type: replace
+  value:
+    client_id: ((client_id))
+    client_secret: ((client_secret))
+    default_security_group: ((default_security_group))
+    environment: AzureCloud
+    resource_group_name: ((resource_group_name))
+    ssh_public_key: ((ssh.public_key))
+    ssh_user: vcap
+    storage_account_name: ((storage_account_name))
+    subscription_id: ((subscription_id))
+    tenant_id: ((tenant_id))
 - path: /cloud_provider/ssh_tunnel?
   type: replace
   value:

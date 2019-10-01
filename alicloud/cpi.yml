@@ -45,27 +45,22 @@
   value:
     name: registry
     release: bosh
-    properties:
-      registry:
-        host: ((internal_ip))
-        db: # todo remove
-          host: 127.0.0.1
-          user: postgres
-          password: ((postgres_password))
-          database: bosh
-          adapter: postgres
-        http:
-          user: registry
-          password: ((registry_password))
-          port: 25777
-        username: registry
-        password: ((registry_password))
-        port: 25777
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties/registry?
+  path: /instance_groups/name=bosh/properties/registry?
   value:
     address: ((internal_ip))
+    host: ((internal_ip))
+    db: # todo remove
+      host: 127.0.0.1
+      user: postgres
+      password: ((postgres_password))
+      database: bosh
+      adapter: postgres
+    http:
+      user: registry
+      password: ((registry_password))
+      port: 25777
     username: registry
     password: ((registry_password))
     port: 25777
@@ -78,7 +73,7 @@
     release: bosh-alicloud-cpi
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties/director/cpi_job?
+  path: /instance_groups/name=bosh/properties/director/cpi_job?
   value: alicloud_cpi
 
 - type: replace
@@ -86,7 +81,7 @@
   value: *cpi_job
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=alicloud_cpi/properties/alicloud?
+  path: /instance_groups/name=bosh/properties/alicloud?
   value: &alicloud
     region: ((region))
     availability_zone: ((zone))
@@ -113,7 +108,7 @@
 
 # Replace ntp to China timezone
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=alicloud_cpi/properties/ntp?
+  path: /instance_groups/name=bosh/properties/ntp?
   value: &ntp
   - server 0.cn.pool.ntp.org
   - server 1.cn.pool.ntp.org

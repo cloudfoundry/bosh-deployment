@@ -5,15 +5,15 @@
   - "2001:4860:4860:0000:0000:0000:0000:8844"
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties/director/ipv6_listen?
+  path: /instance_groups/name=bosh/properties/director/ipv6_listen?
   value: true
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=blobstore/properties/blobstore/ipv6_listen?
+  path: /instance_groups/name=bosh/properties/blobstore/ipv6_listen?
   value: true
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=nats/properties/nats/listen_address?
+  path: /instance_groups/name=bosh/properties/nats/listen_address?
   value: "::"
 
 - type: replace
@@ -21,9 +21,9 @@
   value: "https://mbus:((mbus_bootstrap_password))@[((internal_ip))]:6868"
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties/agent/mbus
+  path: /instance_groups/name=bosh/properties/agent/mbus
   value: "nats://nats:((nats_password))@[((internal_ip))]:4222"
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties/blobstore/address
+  path: /instance_groups/name=bosh/properties/blobstore/address
   value: "[((internal_ip))]"

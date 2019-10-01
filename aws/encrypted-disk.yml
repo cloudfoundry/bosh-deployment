@@ -7,9 +7,9 @@
   value: true
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=aws_cpi/properties/aws/kms_key_arn?
+  path: /instance_groups/name=bosh/properties/aws/kms_key_arn?
   value: ((kms_key_arn))
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=aws_cpi/properties/aws/encrypted?
+  path: /instance_groups/name=bosh/properties/aws/encrypted?
   value: true

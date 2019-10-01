@@ -11,15 +11,16 @@
   value:
     name: azure_cpi
     release: bosh-azure-cpi
-    properties:
-      azure:
-        client_id: unused
-        client_secret: unused
-        default_security_group: unused
-        environment: unused
-        resource_group_name: unused
-        ssh_public_key: unused
-        ssh_user: unused
-        storage_account_name: unused
-        subscription_id: unused
-        tenant_id: unused
+- path: /instance_groups/name=bosh/properties/azure?
+  type: replace
+  value:
+    client_id: unused
+    client_secret: unused
+    default_security_group: unused
+    environment: unused
+    resource_group_name: unused
+    ssh_public_key: unused
+    ssh_user: unused
+    storage_account_name: unused
+    subscription_id: unused
+    tenant_id: unused

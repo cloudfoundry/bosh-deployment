@@ -36,7 +36,7 @@
       - 0.pool.ntp.org
       - 1.pool.ntp.org
     release: bosh-virtualbox-cpi
-- path: /instance_groups/name=bosh/jobs/name=director/properties/director/cpi_job?
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
   type: replace
   value: virtualbox_cpi
 - path: /cloud_provider/template?

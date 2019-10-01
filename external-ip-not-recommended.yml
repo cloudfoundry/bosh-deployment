@@ -17,7 +17,7 @@
     static_ips: [((external_ip))]
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties/director/default_ssh_options?/gateway_host
+  path: /instance_groups/name=bosh/properties/director/default_ssh_options?/gateway_host
   value: ((external_ip))
 
 # todo should not access non-defined vars

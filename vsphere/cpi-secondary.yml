@@ -6,22 +6,18 @@
     sha1: dc04b664641e95c045e93d84a0444ea8f7d0cae0
     url: https://bosh.io/d/github.com/cloudfoundry/bosh-vsphere-cpi-release?v=53.0.1
     version: 53.0.1
-- path: /instance_groups/name=bosh/jobs/-
+- path: /instance_groups/name=bosh/properties/vcenter?
   type: replace
   value:
-    name: vsphere_cpi
-    release: bosh-vsphere-cpi
-    properties:
-      vceneter:
-        address: unused
-        datacenters:
-        - clusters:
-          - unused: {}
-          datastore_pattern: unused
-          disk_path: unused
-          name: unused
-          persistent_datastore_pattern: unused
-          template_folder: unused
-          vm_folder: unused
-        password: unused
-        user: unused
+    address: unused
+    datacenters:
+    - clusters:
+      - unused: {}
+      datastore_pattern: unused
+      disk_path: unused
+      name: unused
+      persistent_datastore_pattern: unused
+      template_folder: unused
+      vm_folder: unused
+    password: unused
+    user: unused

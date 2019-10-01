@@ -1,12 +1,12 @@
 # Assumes use of openstack/cpi.yml
 - type: remove
-  path: /instance_groups/name=bosh/jobs/name=openstack_cpi/properties/openstack/project
+  path: /instance_groups/name=bosh/properties/openstack/project
 
 - type: remove
-  path: /instance_groups/name=bosh/jobs/name=openstack_cpi/properties/openstack/domain
+  path: /instance_groups/name=bosh/properties/openstack/domain
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=openstack_cpi/properties/openstack/tenant?
+  path: /instance_groups/name=bosh/properties/openstack/tenant?
   value: ((openstack_tenant))
 
 # Inside cloud_provider

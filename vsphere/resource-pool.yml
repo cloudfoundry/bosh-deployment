@@ -1,6 +1,6 @@
 ---
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=vsphere_cpi/properties/vcenter/datacenters/name=((vcenter_dc))/clusters/0/((vcenter_cluster))/resource_pool?
+  path: /instance_groups/name=bosh/properties/vcenter/datacenters/name=((vcenter_dc))/clusters/0/((vcenter_cluster))/resource_pool?
   value: ((vcenter_rp))
 
 - type: replace

@@ -75,15 +75,15 @@
   path: /instance_groups/name=bosh/networks/name=default
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties/director/cpi_job?
+  path: /instance_groups/name=bosh/properties/director/cpi_job?
   value: softlayer_cpi
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties/director/enable_virtual_delete_vms?
+  path: /instance_groups/name=bosh/properties/director/enable_virtual_delete_vms?
   value: true
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties/agent/env/bosh/blobstores/provider=dav/options/endpoint?
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores/provider=dav/options/endpoint?
   value: http://((director_ip)):25250
 
 - type: replace
@@ -91,7 +91,7 @@
   value: *cpi_job
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=softlayer_cpi/properties/softlayer?
+  path: /instance_groups/name=bosh/properties/softlayer?
   value: &softlayer
     username: ((sl_username))
     apiKey: ((sl_api_key))
@@ -101,11 +101,11 @@
   value: *softlayer
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties/blobstore/address?
+  path: /instance_groups/name=bosh/properties/blobstore/address?
   value: 127.0.0.1
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=director/properties/nats/address?
+  path: /instance_groups/name=bosh/properties/nats/address?
   value: 127.0.0.1
 
 - type: replace
