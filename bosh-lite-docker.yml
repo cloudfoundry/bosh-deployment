@@ -52,7 +52,8 @@
   value:
     name: disable_agent
     release: os-conf
-- path: /instance_groups/name=bosh/properties/director/cpi_job?
+    properties: {}
+- path: /instance_groups/name=bosh/jobs/name=director/properties/director/cpi_job?
   type: replace
   value: docker_cpi
 - path: /variables/-

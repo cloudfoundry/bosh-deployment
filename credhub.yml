@@ -42,10 +42,10 @@
             type: internal
         tls: ((credhub_tls))
     release: credhub
-- path: /instance_groups/name=bosh/properties/postgres/additional_databases?/-
+- path: /instance_groups/name=bosh/jobs/name=postgres-10/properties/postgres/additional_databases?/-
   type: replace
   value: credhub
-- path: /instance_groups/name=bosh/properties/director/config_server?
+- path: /instance_groups/name=bosh/jobs/name=director/properties/director/config_server?
   type: replace
   value:
     ca_cert: ((credhub_tls.ca))

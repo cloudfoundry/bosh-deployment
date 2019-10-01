@@ -1,5 +1,5 @@
 - type: replace
-  path: /instance_groups/name=bosh/properties/director/user_management/uaa?/url
+  path: /instance_groups/name=bosh/jobs/name=director/properties/director/user_management/uaa?/url
   value: "https://[((internal_ip))]:8443"
 
 - type: replace

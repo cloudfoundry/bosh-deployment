@@ -23,12 +23,12 @@
         password: ((postgres_password))
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/postgres/additional_databases?/-
+  path: /instance_groups/name=bosh/jobs/name=postgres-10/properties/postgres/additional_databases?/-
   value: config_server
 
 # Configure Director
 - type: replace
-  path: /instance_groups/name=bosh/properties/director/config_server?
+  path: /instance_groups/name=bosh/jobs/name=director/properties/director/config_server?
   value:
     enabled: true
     url: "https://((internal_ip)):8081"

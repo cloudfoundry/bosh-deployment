@@ -1,6 +1,6 @@
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/director/db/tls?
+  path: /instance_groups/name=bosh/jobs/name=director/properties/director/db/tls?
   value:
     enabled: true
     cert:

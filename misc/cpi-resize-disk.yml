@@ -1,4 +1,4 @@
 ---
 - type: replace
-  path: /instance_groups/name=bosh/properties/director/enable_cpi_resize_disk?
+  path: /instance_groups/name=bosh/jobs/name=director/properties/director/enable_cpi_resize_disk?
   value: true

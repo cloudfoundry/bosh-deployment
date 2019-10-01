@@ -4,11 +4,8 @@
 - type: remove
   path: /instance_groups/name=bosh/jobs/name=postgres-9.4?
 
-- type: remove
-  path: /instance_groups/name=bosh/properties/postgres
-
 - type: replace
-  path: /instance_groups/name=bosh/properties/director/db
+  path: /instance_groups/name=bosh/jobs/name=director/properties/director/db
   value:
     host: ((external_db_host))
     port: ((external_db_port))
@@ -18,7 +15,7 @@
     database: ((external_db_name))
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/registry?/db
+  path: /instance_groups/name=bosh/jobs/name=registry/properties/registry?/db
   value:
     host: ((external_db_host))
     port: ((external_db_port))

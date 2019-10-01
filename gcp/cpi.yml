@@ -35,7 +35,13 @@
   value:
     name: google_cpi
     release: bosh-google-cpi
-- path: /instance_groups/name=bosh/properties/director/cpi_job?
+    properties:
+      google:
+        json_key: ((gcp_credentials_json))
+        project: ((project_id))
+      ntp:
+      - 169.254.169.254
+- path: /instance_groups/name=bosh/jobs/name=director/properties/director/cpi_job?
   type: replace
   value: google_cpi
 - path: /cloud_provider/template?
@@ -43,20 +49,11 @@
   value:
     name: google_cpi
     release: bosh-google-cpi
-- path: /instance_groups/name=bosh/properties/google?
-  type: replace
-  value:
-    json_key: ((gcp_credentials_json))
-    project: ((project_id))
 - path: /cloud_provider/properties/google?
   type: replace
   value:
     json_key: ((gcp_credentials_json))
     project: ((project_id))
-- path: /instance_groups/name=bosh/properties/ntp
-  type: replace
-  value:
-  - 169.254.169.254
 - path: /cloud_provider/properties/ntp
   type: replace
   value:

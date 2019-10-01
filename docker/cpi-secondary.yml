@@ -12,22 +12,19 @@
   value:
     name: docker_cpi
     release: bosh-docker-cpi
-
-# unused values should be overwritten via Director's cpi config
-- type: replace
-  path: /instance_groups/name=bosh/properties/docker_cpi?
-  value:
-    docker:
-      host: unused
-      tls:
-        ca: unused
-        certificate: unused
-        private_key: unused
-    agent:
-      mbus: nats://nats:((nats_password))@((internal_ip)):4222
-      blobstore:
-        provider: dav
-        options:
-          endpoint: http://((internal_ip)):25250
-          user: agent
-          password: ((blobstore_agent_password))
+    properties:
+      docker_cpi:
+        docker:
+          host: unused
+          tls:
+            ca: unused
+            certificate: unused
+            private_key: unused
+        agent:
+          mbus: nats://nats:((nats_password))@((internal_ip)):4222
+          blobstore:
+            provider: dav
+            options:
+              endpoint: http://((internal_ip)):25250
+              user: agent
+              password: ((blobstore_agent_password))

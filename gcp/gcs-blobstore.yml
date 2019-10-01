@@ -1,5 +1,5 @@
 - type: replace
-  path: /instance_groups/name=bosh/properties/blobstore?
+  path: /instance_groups/name=bosh/jobs/name=director/properties/blobstore?
   value:
     provider: gcs
     credentials_source: static
@@ -10,10 +10,10 @@
   path: /instance_groups/name=bosh/jobs/name=blobstore
 
 - type: remove
-  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores
+  path: /instance_groups/name=bosh/jobs/name=director/properties/agent/env/bosh/blobstores
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores?/-
+  path: /instance_groups/name=bosh/jobs/name=director/properties/agent/env/bosh/blobstores?/-
   value:
     provider: gcs
     options:

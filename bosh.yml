@@ -20,118 +20,146 @@ instance_groups:
   jobs:
   - name: bpm
     release: bpm
+    properties: {}
   - name: nats
     release: bosh
+    properties:
+      nats:
+        address: ((internal_ip))
+        password: ((nats_password))
+        tls:
+          ca: ((nats_server_tls.ca))
+          server:
+            certificate: ((nats_server_tls.certificate))
+            private_key: ((nats_server_tls.private_key))
+        user: nats
   - name: postgres-10
     release: bosh
-  - name: blobstore
-    release: bosh
-  - name: director
-    release: bosh
-  - name: health_monitor
-    release: bosh
-  name: bosh
-  networks:
-  - name: default
-    static_ips:
-    - ((internal_ip))
-  persistent_disk_pool: disks
-  properties:
-    agent:
-      env:
-        bosh:
-          blobstores:
-          - options:
-              endpoint: https://((internal_ip)):25250
-              password: ((blobstore_agent_password))
-              tls:
-                cert:
-                  ca: ((blobstore_ca.certificate))
-              user: agent
-            provider: dav
-      mbus: nats://nats:((nats_password))@((internal_ip)):4222
-    blobstore:
-      address: ((internal_ip))
-      agent:
-        password: ((blobstore_agent_password))
-        user: agent
-      director:
-        password: ((blobstore_director_password))
-        user: director
-      port: 25250
-      provider: dav
-      tls:
-        cert:
-          ca: ((blobstore_ca.certificate))
-          certificate: ((blobstore_server_tls.certificate))
-          private_key: ((blobstore_server_tls.private_key))
-    director:
-      address: 127.0.0.1
-      db:
+    properties:
+      postgres:
         adapter: postgres
         database: bosh
         host: 127.0.0.1
         listen_address: 127.0.0.1
         password: ((postgres_password))
         user: postgres
-      enable_dedicated_status_worker: true
-      enable_nats_delivered_templates: true
-      enable_post_deploy: true
-      events:
-        record_events: true
-      flush_arp: true
-      generate_vm_passwords: true
-      local_dns:
-        enabled: true
-      name: ((director_name))
-      ssl:
-        cert: ((director_ssl.certificate))
-        key: ((director_ssl.private_key))
-      user_management:
-        local:
-          users:
-          - name: admin
-            password: ((admin_password))
-          - name: hm
-            password: ((hm_password))
-        provider: local
-      workers: 4
-    hm:
-      director_account:
-        ca_cert: ((director_ssl.ca))
-        password: ((hm_password))
-        user: hm
-      resurrector_enabled: true
-    nats:
-      address: ((internal_ip))
-      password: ((nats_password))
-      tls:
-        ca: ((nats_server_tls.ca))
-        client_ca:
-          certificate: ((nats_ca.certificate))
-          private_key: ((nats_ca.private_key))
+  - name: blobstore
+    release: bosh
+    properties:
+      blobstore:
+        agent:
+          password: ((blobstore_agent_password))
+          user: agent
         director:
-          certificate: ((nats_clients_director_tls.certificate))
-          private_key: ((nats_clients_director_tls.private_key))
-        health_monitor:
-          certificate: ((nats_clients_health_monitor_tls.certificate))
-          private_key: ((nats_clients_health_monitor_tls.private_key))
-        server:
-          certificate: ((nats_server_tls.certificate))
-          private_key: ((nats_server_tls.private_key))
-      user: nats
-    ntp:
-    - time1.google.com
-    - time2.google.com
-    - time3.google.com
-    - time4.google.com
-    postgres:
-      adapter: postgres
-      database: bosh
-      host: 127.0.0.1
-      listen_address: 127.0.0.1
-      password: ((postgres_password))
-      user: postgres
+          password: ((blobstore_director_password))
+          user: director
+        port: 25250
+        tls:
+          cert:
+            ca: ((blobstore_ca.certificate))
+            certificate: ((blobstore_server_tls.certificate))
+            private_key: ((blobstore_server_tls.private_key))
+  - name: director
+    release: bosh
+    properties:
+      agent:
+        env:
+          bosh:
+            blobstores:
+            - options:
+                endpoint: https://((internal_ip)):25250
+                password: ((blobstore_agent_password))
+                tls:
+                  cert:
+                    ca: ((blobstore_ca.certificate))
+                user: agent
+              provider: dav
+        mbus: nats://nats:((nats_password))@((internal_ip)):4222
+      blobstore:
+        address: ((internal_ip))
+        agent:
+          password: ((blobstore_agent_password))
+          user: agent
+        director:
+          password: ((blobstore_director_password))
+          user: director
+        port: 25250
+        provider: dav
+        tls:
+          cert:
+            ca: ((blobstore_ca.certificate))
+            certificate: ((blobstore_server_tls.certificate))
+            private_key: ((blobstore_server_tls.private_key))
+      director:
+        address: 127.0.0.1
+        db:
+          adapter: postgres
+          database: bosh
+          host: 127.0.0.1
+          listen_address: 127.0.0.1
+          password: ((postgres_password))
+          user: postgres
+        enable_dedicated_status_worker: true
+        enable_nats_delivered_templates: true
+        enable_post_deploy: true
+        events:
+          record_events: true
+        flush_arp: true
+        generate_vm_passwords: true
+        local_dns:
+          enabled: true
+        name: ((director_name))
+        ssl:
+          cert: ((director_ssl.certificate))
+          key: ((director_ssl.private_key))
+        user_management:
+          local:
+            users:
+            - name: admin
+              password: ((admin_password))
+            - name: hm
+              password: ((hm_password))
+          provider: local
+        workers: 4
+      nats:
+        address: ((internal_ip))
+        tls:
+          ca: ((nats_server_tls.ca))
+          client_ca:
+            certificate: ((nats_ca.certificate))
+            private_key: ((nats_ca.private_key))
+          director:
+            certificate: ((nats_clients_director_tls.certificate))
+            private_key: ((nats_clients_director_tls.private_key))
+      ntp:
+      - time1.google.com
+      - time2.google.com
+      - time3.google.com
+      - time4.google.com
+  - name: health_monitor
+    release: bosh
+    properties:
+      hm:
+        director_account:
+          ca_cert: ((director_ssl.ca))
+          password: ((hm_password))
+          user: hm
+        resurrector_enabled: true
+      director:
+        address: 127.0.0.1
+      nats:
+        address: ((internal_ip))
+        tls:
+          ca: ((nats_server_tls.ca))
+          health_monitor:
+            certificate: ((nats_clients_health_monitor_tls.certificate))
+            private_key: ((nats_clients_health_monitor_tls.private_key))
+  name: bosh
+  networks:
+  - name: default
+    static_ips:
+    - ((internal_ip))
+  persistent_disk_pool: disks
   resource_pool: vms
 name: bosh
 networks:

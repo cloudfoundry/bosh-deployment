@@ -1,4 +1,4 @@
 ---
 - type: replace
-  path: /instance_groups/name=bosh/properties/openstack/enable_auto_anti_affinity?
+  path: /instance_groups/name=bosh/jobs/name=openstack_cpi/properties/openstack/enable_auto_anti_affinity?
   value: true

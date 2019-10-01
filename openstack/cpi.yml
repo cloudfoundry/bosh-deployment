@@ -25,18 +25,23 @@
   value:
     name: registry
     release: bosh
-- path: /instance_groups/name=bosh/properties/registry?
+    properties:
+      registry:
+        db:
+          adapter: postgres
+          database: bosh
+          host: 127.0.0.1
+          password: ((postgres_password))
+          user: postgres
+        endpoint: http://registry:((registry_password))@((internal_ip)):25777
+        host: ((internal_ip))
+        password: ((registry_password))
+        port: 25777
+        username: registry
+- path: /instance_groups/name=bosh/jobs/name=director/properties/registry?
   type: replace
   value:
     address: ((internal_ip))
-    db:
-      adapter: postgres
-      database: bosh
-      host: 127.0.0.1
-      password: ((postgres_password))
-      user: postgres
-    endpoint: http://registry:((registry_password))@((internal_ip)):25777
-    host: ((internal_ip))
     password: ((registry_password))
     port: 25777
     username: registry
@@ -45,7 +50,18 @@
   value:
     name: openstack_cpi
     release: bosh-openstack-cpi
-- path: /instance_groups/name=bosh/properties/director/cpi_job?
+    properties:
+      openstack:
+        api_key: ((openstack_password))
+        auth_url: ((auth_url))
+        default_key_name: ((default_key_name))
+        default_security_groups: ((default_security_groups))
+        domain: ((openstack_domain))
+        human_readable_vm_names: true
+        project: ((openstack_project))
+        region: ((region))
+        username: ((openstack_username))
+- path: /instance_groups/name=bosh/jobs/name=director/properties/director/cpi_job?
   type: replace
   value: openstack_cpi
 - path: /cloud_provider/template?
@@ -53,18 +69,6 @@
   value:
     name: openstack_cpi
     release: bosh-openstack-cpi
-- path: /instance_groups/name=bosh/properties/openstack?
-  type: replace
-  value:
-    api_key: ((openstack_password))
-    auth_url: ((auth_url))
-    default_key_name: ((default_key_name))
-    default_security_groups: ((default_security_groups))
-    domain: ((openstack_domain))
-    human_readable_vm_names: true
-    project: ((openstack_project))
-    region: ((region))
-    username: ((openstack_username))
 - path: /cloud_provider/ssh_tunnel?
   type: replace
   value:

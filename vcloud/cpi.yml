@@ -27,7 +27,7 @@
   value:
     name: vcloud_cpi
     release: bosh-vcloud-cpi
-- path: /instance_groups/name=bosh/properties/director/cpi_job?
+- path: /instance_groups/name=bosh/jobs/name=director/properties/director/cpi_job?
   type: replace
   value: vcloud_cpi
 - path: /cloud_provider/template?
@@ -35,21 +35,20 @@
   value:
     name: vcloud_cpi
     release: bosh-vcloud-cpi
-- path: /instance_groups/name=bosh/properties/vcd?
-  type: replace
-  value:
-    control:
-      wait_max: 900
-    entities:
-      media_catalog: bosh-catalog
-      media_storage_profile: '*'
-      organization: ((vcd_org))
-      vapp_catalog: bosh-catalog
-      virtual_datacenter: ((vcd_name))
-      vm_metadata_key: bosh-meta
-    password: ((vcloud_password))
-    url: ((vcloud_url))
-    user: ((vcloud_user))
+    properties:
+      vcd:
+        control:
+          wait_max: 900
+        entities:
+          media_catalog: bosh-catalog
+          media_storage_profile: '*'
+          organization: ((vcd_org))
+          vapp_catalog: bosh-catalog
+          virtual_datacenter: ((vcd_name))
+          vm_metadata_key: bosh-meta
+        password: ((vcloud_password))
+        url: ((vcloud_url))
+        user: ((vcloud_user))
 - path: /cloud_provider/properties/vcd?
   type: replace
   value:

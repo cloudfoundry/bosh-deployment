@@ -4,11 +4,11 @@
   value: ((iam_instance_profile))
 
 - type: remove
-  path: /instance_groups/name=bosh/properties/aws/access_key_id
+  path: /instance_groups/name=bosh/jobs/name=aws_cpi/properties/aws/access_key_id
 
 - type: remove
-  path: /instance_groups/name=bosh/properties/aws/secret_access_key
+  path: /instance_groups/name=bosh/jobs/name=aws_cpi/properties/aws/secret_access_key
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/aws/credentials_source?
+  path: /instance_groups/name=bosh/jobs/name=aws_cpi/properties/aws/credentials_source?
   value: env_or_profile

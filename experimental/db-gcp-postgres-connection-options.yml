@@ -5,7 +5,7 @@
 # pool_timeout, statement_timeout, connect_timeout are in seconds.
 
 - type: replace
-  path: /instance_groups/name=bosh/properties/director/db/connection_options?
+  path: /instance_groups/name=bosh/jobs/name=director/properties/director/db/connection_options?
   value:
     sslmode: verify-ca
     pool_timeout: ((postgres_db_pool_timeout))

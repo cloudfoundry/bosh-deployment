@@ -6,7 +6,7 @@
     sha1: 7579a96515b265c6d828924bf4f5fae115798199
     url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=21.0.0
     version: 21.0.0
-- path: /instance_groups/name=bosh/properties/director/default_ssh_options?/gateway_user
+- path: /instance_groups/name=bosh/jobs/name=director/properties/director/default_ssh_options?/gateway_user
   type: replace
   value: jumpbox
 - path: /instance_groups/name=bosh/jobs/-

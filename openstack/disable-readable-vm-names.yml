@@ -1,5 +1,5 @@
 - type: replace
-  path: /instance_groups/name=bosh/properties/openstack/human_readable_vm_names
+  path: /instance_groups/name=bosh/jobs/name=openstack_cpi/properties/openstack/human_readable_vm_names
   value: false
 - type: replace
   path: /cloud_provider/properties/openstack/human_readable_vm_names

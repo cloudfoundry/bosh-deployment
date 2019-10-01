@@ -1,6 +1,4 @@
 ---
 - type: replace
-  path: /instance_groups/name=bosh/jobs/name=postgres-10?
-  value:
-    name: postgres-9.4
-    release: bosh
+  path: /instance_groups/name=bosh/jobs/name=postgres-10?/name
+  value: postgres-9.4
