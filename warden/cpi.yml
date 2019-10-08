@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 626ef93993b9ad2b0441abe857106692d4101ad5
-    url: https://s3.amazonaws.com/bosh-core-stemcells/456.16/bosh-stemcell-456.16-warden-boshlite-ubuntu-xenial-go_agent.tgz
+    sha1: 518b991efb9d1e5fb2c861e7c180e076ae66f76e
+    url: https://s3.amazonaws.com/bosh-core-stemcells/456.27/bosh-stemcell-456.27-warden-boshlite-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
