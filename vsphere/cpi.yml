@@ -1,16 +1,17 @@
-- path: /releases/-
+- name: cpi
+  path: /releases/-
   type: replace
   value:
     name: bosh-vsphere-cpi
-    sha1: 73f4cd14eef75e037d6ca553ee63d8b55062f0ab
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-vsphere-cpi-release?v=52
-    version: "52"
+    sha1: dc04b664641e95c045e93d84a0444ea8f7d0cae0
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-vsphere-cpi-release?v=53.0.1
+    version: 53.0.1
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 82232f714557e4becb4050703847da72461c5f2a
-    url: https://s3.amazonaws.com/bosh-core-stemcells/250.25/bosh-stemcell-250.25-vsphere-esxi-ubuntu-xenial-go_agent.tgz
+    sha1: 48bd8339640ea3fc71c9ec12add7c1ea571848a0
+    url: https://s3.amazonaws.com/bosh-core-stemcells/456.30/bosh-stemcell-456.30-vsphere-esxi-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:

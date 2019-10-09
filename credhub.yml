@@ -3,9 +3,9 @@
   type: replace
   value:
     name: credhub
-    sha1: cbfc6be039c18704e29468bb9ac100d7f6e43131
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.1.4-ubuntu-xenial-250.25-20190401-143619-996636426-20190401143625.tgz
-    version: 2.1.4
+    sha1: 8bc618239167e35c9780f1bbba513cf6c30a3d9e
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.5.6-ubuntu-xenial-456.27-20190924-221023-719999641-20190924221030.tgz
+    version: 2.5.6
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
@@ -21,6 +21,8 @@
         authorization:
           acls:
             enabled: false
+        certificates:
+          concatenate_cas: true
         data_storage:
           database: credhub
           host: 127.0.0.1
@@ -93,6 +95,22 @@
 - path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/jwt/revocable?
   type: replace
   value: true
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
+    name: bbr-credhubdb
+    properties:
+      credhub:
+        data_storage:
+          database: credhub
+          host: 127.0.0.1
+          password: ((postgres_password))
+          port: 5432
+          require_tls: false
+          type: postgres
+          username: postgres
+      release_level_backup: true
+    release: credhub
 - path: /variables/-
   type: replace
   value:

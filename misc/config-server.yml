@@ -2,9 +2,9 @@
   path: /releases/-
   value:
     name: config-server
-    version: 0.0.1
-    url: https://bosh.io/d/github.com/cloudfoundry/config-server-release?v=0.0.1
-    sha1: 6372fd76e6e9da5a292de47c300fe33a85f970bf
+    version: 0.1.20
+    url: https://bosh.io/d/github.com/cloudfoundry/config-server-release?v=0.1.20
+    sha1: 00efb69c6771dae651546ff54eac188cf6e4f943
 
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
@@ -12,7 +12,7 @@
     name: config_server
     release: config-server
     properties:
-      port: 8080
+      port: 8081
       store: database
       jwt:
         verification_key: ((uaa_jwt_signing_key.public_key))
@@ -31,7 +31,7 @@
   path: /instance_groups/name=bosh/properties/director/config_server?
   value:
     enabled: true
-    url: "https://((internal_ip)):8080"
+    url: "https://((internal_ip)):8081"
     ca_cert: ((config_server_ssl.ca))
     uaa:
       url: "https://((internal_ip)):8443"

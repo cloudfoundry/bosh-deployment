@@ -1,22 +1,23 @@
-- path: /releases/-
+- name: cpi
+  path: /releases/-
   type: replace
   value:
     name: bosh-virtualbox-cpi
-    sha1: 3aee2200f5d7ee20b149c7303009c3f6088ba559
-    url: https://bosh.io/d/github.com/cppforlife/bosh-virtualbox-cpi-release?v=0.0.13
-    version: 0.0.13
+    sha1: 2efc4763e7bf19cf76264f435b78bb05a1060935
+    url: https://bosh.io/d/github.com/cppforlife/bosh-virtualbox-cpi-release?v=0.2.0
+    version: 0.2.0
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 82232f714557e4becb4050703847da72461c5f2a
-    url: https://s3.amazonaws.com/bosh-core-stemcells/250.25/bosh-stemcell-250.25-vsphere-esxi-ubuntu-xenial-go_agent.tgz
+    sha1: d439332eb00e49541bbe3f5bd255f3f1b7980618
+    url: https://s3.amazonaws.com/bosh-core-stemcells/456.27/bosh-stemcell-456.27-vsphere-esxi-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
-    cpus: 2
+    cpus: 4
     ephemeral_disk: 16384
-    memory: 4096
+    memory: 6144
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:

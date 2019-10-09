@@ -7,16 +7,18 @@ image_resource:
     repository: bosh/main-bosh-docker
 
 params:
-  UPDATING_OPS_FILE: false
+  UPDATING_BASE_MANIFEST: false
   FILE_TO_UPDATE: ~
+  BOSH_IO_RELEASE: ~
 
 inputs:
-  - name: bosh-deployment
-  - name: compiled-release
+- name: bosh-deployment
+- name: release
+- name: stemcell
 
 outputs:
-  - name: bosh-deployment
-    path: bosh-deployment-output
+- name: bosh-deployment
+  path: bosh-deployment-output
 
 run:
   path: bosh-deployment/ci/tasks/update-release.sh

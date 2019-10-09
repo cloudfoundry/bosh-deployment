@@ -32,7 +32,7 @@ bosh create-env "${bosh_deployment}/bosh.yml" \
   --var internal_ip=192.168.50.6 \
   --var internal_gw=192.168.50.1 \
   --var internal_cidr=192.168.50.0/24 \
-  --var outbound_network_name=NatNetwork
+  --var outbound_network_name=NatNetwork "$@"
 
 
 ####
@@ -40,18 +40,21 @@ STEP "Adding Network Routes (sudo is required)"
 ####
 
 if [ "$(uname)" = "Darwin" ]; then
-  sudo route add -net 10.244.0.0/16 192.168.50.6
+  if [[ `route get 192.168.50.6 | grep vboxnet` ]]; then
+    echo "Skipping. Route already exists."
+  else
+    sudo route add -net 10.244.0.0/16 192.168.50.6
+  fi
 elif [ "$(uname)" = "Linux" ]; then
   if type ip > /dev/null 2>&1; then
     sudo ip route add 10.244.0.0/16 via 192.168.50.6
   elif type route > /dev/null 2>&1; then
-    sudo route add -net 10.244.0.0/16 gw  192.168.50.6
+    sudo route add -net 10.244.0.0/16 gw 192.168.50.6
   else
     echo "ERROR adding route"
     exit 1
   fi
 fi
-
 
 ####
 STEP "Generating .envrc"

@@ -1,476 +1,718 @@
 ---
 groups:
-  - name: bosh-deployment
-    jobs:
-    - test-bosh-lite-gcp
-    - test-smoke
-    - promote
-  - name: compiled-releases
-    jobs:
-    - compile-bbr-sdk-release
-    - compile-bosh-release
-    - compile-bpm-release
-    - compile-credhub-release
-    - compile-docker-cpi
-    - compile-garden-runc
-    - compile-uaa-release
-    - compile-warden-cpi
-    - update-aws-stemcell
-    - update-azure-stemcell
-    - update-docker-stemcell
-    - update-gcp-stemcell
-    - update-openstack-stemcell
-    - update-vcloud-stemcell
-    - update-virtualbox-stemcell
-    - update-vsphere-stemcell
-    - update-warden-stemcell
+- name: bosh-deployment
+  jobs:
+  - test-bosh-lite-gcp
+  - test-smoke
+  - promote
+- name: cpis
+  jobs:
+  - update-aws-cpi
+  - update-google-cpi
+  - update-azure-cpi
+  - update-vsphere-cpi-release
+  - update-virtualbox-cpi-release
+- name: stemcells
+  jobs:
+  - update-aws-stemcell
+  - update-azure-stemcell
+  - update-docker-stemcell
+  - update-gcp-stemcell
+  - update-openstack-stemcell
+  - update-vcloud-stemcell
+  - update-virtualbox-stemcell
+  - update-vsphere-stemcell
+  - update-warden-stemcell
+- name: releases
+  jobs:
+  - compile-bbr-sdk-release
+  - compile-bosh-release
+  - compile-bpm-release
+  - compile-credhub-release
+  - compile-docker-cpi
+  - compile-garden-runc
+  - compile-uaa-release
+  - compile-warden-cpi
+  - update-dns-release
+  - update-os-conf-release
 
 jobs:
-  - name: test-bosh-lite-gcp
-    serial: true
-    build_logs_to_retain: 250
-    plan:
-    - do:
-      - get: bosh-deployment
-        trigger: true
-      - task: bbl-up
-        file: bosh-deployment/ci/tasks/bbl-up-bosh-lite-gcp.yml
-        params:
-          BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_json))
-          BBL_GCP_REGION: us-west1
-      - task: test-bosh-lite-gcp
-        file: bosh-deployment/ci/tasks/test-bosh-lite-gcp.yml
-      ensure:
-        task: bbl-down
-        file: bosh-deployment/ci/tasks/bbl-down-bosh-lite-gcp.yml
-        params:
-          BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_json))
-          BBL_GCP_REGION: us-west1
-
-  - name: test-smoke
-    serial: true
-    build_logs_to_retain: 250
-    plan:
-      - get: bosh-deployment
-        trigger: true
-      - task: test-smoke
-        file: bosh-deployment/ci/tasks/test-smoke.yml
-
-  - name: promote
-    serial: true
-    build_logs_to_retain: 250
-    plan:
+- name: test-bosh-lite-gcp
+  serial: true
+  build_logs_to_retain: 250
+  plan:
+  - do:
     - get: bosh-deployment
       trigger: true
-      passed:
-      - test-smoke
-      - test-bosh-lite-gcp
-    - put: bosh-deployment-commit-status
+    - task: bbl-up
+      file: bosh-deployment/ci/tasks/bbl-up-bosh-lite-gcp.yml
       params:
-        state: success
-        commit: bosh-deployment
-    - put: bosh-deployment-master
+        BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_json))
+        BBL_GCP_REGION: us-west1
+    - task: test-bosh-lite-gcp
+      file: bosh-deployment/ci/tasks/test-bosh-lite-gcp.yml
+    ensure:
+      task: bbl-down
+      file: bosh-deployment/ci/tasks/bbl-down-bosh-lite-gcp.yml
       params:
-        repository: bosh-deployment
-        rebase: true
+        BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_json))
+        BBL_GCP_REGION: us-west1
 
-  - name: compile-bbr-sdk-release
-    plan:
-      - aggregate:
-        - get: bosh-deployment
-        - get: backup-and-restore-sdk-release
-          trigger: true
-          # version:
-          #   version: "1.10.0"
-        - get: warden-ubuntu-xenial-stemcell
-          passed: [update-warden-stemcell]
-          trigger: true
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: warden-ubuntu-xenial-stemcell
-          release: backup-and-restore-sdk-release
-      - task: update-release
-        file: bosh-deployment/ci/tasks/update-release.yml
-        params:
-          UPDATING_OPS_FILE: true
-          FILE_TO_UPDATE: bbr.yml
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-      - put: bosh-deployment
-        params:
-          repository: bosh-deployment
-          rebase: true
+- name: test-smoke
+  serial: true
+  build_logs_to_retain: 250
+  plan:
+  - get: bosh-deployment
+    trigger: true
+  - task: test-smoke
+    file: bosh-deployment/ci/tasks/test-smoke.yml
 
-  - name: compile-bosh-release
-    plan:
-      - aggregate:
-        - get: bosh-deployment
-        - get: bosh-release
-          trigger: true
-        - get: warden-ubuntu-xenial-stemcell
-          passed: [update-warden-stemcell]
-          trigger: true
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: warden-ubuntu-xenial-stemcell
-          release: bosh-release
-      - task: update-release
-        file: bosh-deployment/ci/tasks/update-release.yml
-        params:
-          UPDATING_OPS_FILE: false
-          FILE_TO_UPDATE: bosh.yml
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-      - put: bosh-deployment
-        params:
-          repository: bosh-deployment
-          rebase: true
+- name: promote
+  serial: true
+  build_logs_to_retain: 250
+  plan:
+  - get: bosh-deployment
+    trigger: true
+    passed:
+    - test-smoke
+    - test-bosh-lite-gcp
+  - put: bosh-deployment-commit-status
+    params:
+      state: success
+      commit: bosh-deployment
+  - put: bosh-deployment-master
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: compile-bpm-release
-    plan:
-      - aggregate:
-        - get: bosh-deployment
-        - get: bpm-release
-          trigger: true
-          version:
-            version: "0.12.3"
-        - get: warden-ubuntu-xenial-stemcell
-          passed: [update-warden-stemcell]
-          trigger: true
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: warden-ubuntu-xenial-stemcell
-          release: bpm-release
-      - task: update-release
-        file: bosh-deployment/ci/tasks/update-release.yml
-        params:
-          UPDATING_OPS_FILE: false
-          FILE_TO_UPDATE: bosh.yml
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-      - put: bosh-deployment
-        params:
-          repository: bosh-deployment
-          rebase: true
+### CPIs
 
-  - name: compile-credhub-release
-    plan:
-      - aggregate:
-        - get: bosh-deployment
-        - get: credhub-release
-          trigger: true
-        - get: warden-ubuntu-xenial-stemcell
-          passed: [update-warden-stemcell]
-          trigger: true
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: warden-ubuntu-xenial-stemcell
-          release: credhub-release
-      - task: update-release
-        file: bosh-deployment/ci/tasks/update-release.yml
-        params:
-          UPDATING_OPS_FILE: true
-          FILE_TO_UPDATE: credhub.yml
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-      - put: bosh-deployment
-        params:
-          repository: bosh-deployment
-          rebase: true
+- name: update-aws-cpi
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: aws-cpi-release
+      trigger: true
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: aws-cpi-release
+    params:
+      CPI_OPS_FILE: aws/cpi.yml
+      CPI_NAME: bosh-aws-cpi
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: compile-docker-cpi
-    plan:
-      - aggregate:
-        - get: bosh-deployment
-        - get: docker-cpi
-          trigger: true
-          version:
-            version: "0.0.5"
-        - get: warden-ubuntu-xenial-stemcell
-          passed: [update-warden-stemcell]
-          trigger: true
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: warden-ubuntu-xenial-stemcell
-          release: docker-cpi
-      - task: update-release
-        file: bosh-deployment/ci/tasks/update-release.yml
-        params:
-          UPDATING_OPS_FILE: true
-          FILE_TO_UPDATE: bosh-lite-docker.yml
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-      - put: bosh-deployment
-        params:
-          repository: bosh-deployment
-          rebase: true
+- name: update-azure-cpi
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: azure-cpi-release
+      trigger: true
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: azure-cpi-release
+    params:
+      CPI_NAME: bosh-azure-cpi
+      CPI_OPS_FILE: azure/cpi.yml
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: compile-garden-runc
-    plan:
-      - aggregate:
-        - get: bosh-deployment
-        - get: garden-runc
-          trigger: true
-          version:
-            version: "1.16.3"
-        - get: warden-ubuntu-xenial-stemcell
-          passed: [update-warden-stemcell]
-          trigger: true
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: warden-ubuntu-xenial-stemcell
-          release: garden-runc
-      - task: update-release
-        file: bosh-deployment/ci/tasks/update-release.yml
-        params:
-          UPDATING_OPS_FILE: true
-          FILE_TO_UPDATE: bosh-lite.yml
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-      - put: bosh-deployment
-        params:
-          repository: bosh-deployment
-          rebase: true
+- name: update-google-cpi
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: google-cpi-release
+      trigger: true
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: google-cpi-release
+    params:
+      CPI_NAME: bosh-google-cpi
+      CPI_OPS_FILE: gcp/cpi.yml
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: compile-uaa-release
-    plan:
-      - aggregate:
-        - get: bosh-deployment
-        - get: uaa-release
-          trigger: true
-          version:
-            version: "64.0"
-        - get: warden-ubuntu-xenial-stemcell
-          passed: [update-warden-stemcell]
-          trigger: true
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: warden-ubuntu-xenial-stemcell
-          release: uaa-release
-      - task: update-release
-        file: bosh-deployment/ci/tasks/update-release.yml
-        params:
-          UPDATING_OPS_FILE: true
-          FILE_TO_UPDATE: uaa.yml
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-      - put: bosh-deployment
-        params:
-          repository: bosh-deployment
-          rebase: true
+- name: update-vsphere-cpi-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: vsphere-cpi-release
+      trigger: true
+  - task: update-vsphere-cpi-operations-file
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: vsphere-cpi-release
+    params:
+      CPI_OPS_FILE: vsphere/cpi.yml
+      CPI_NAME: bosh-vsphere-cpi
+  - task: update-vsphere-cpi-secondary-operations-file
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: vsphere-cpi-release
+    params:
+      CPI_OPS_FILE: vsphere/cpi-secondary.yml
+      CPI_NAME: bosh-vsphere-cpi
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: compile-warden-cpi
-    plan:
-      - aggregate:
-        - get: bosh-deployment
-        - get: warden-cpi
-          trigger: true
-          version:
-            version: "40"
-        - get: warden-ubuntu-xenial-stemcell
-          passed: [update-warden-stemcell]
-          trigger: true
-      - task: export-release
-        file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-        privileged: true
-        input_mapping:
-          stemcell: warden-ubuntu-xenial-stemcell
-          release: warden-cpi
-      - task: update-release
-        file: bosh-deployment/ci/tasks/update-release.yml
-        params:
-          UPDATING_OPS_FILE: true
-          FILE_TO_UPDATE: bosh-lite.yml
-      - put: compiled-releases
-        params:
-          file: "compiled-release/*.tgz"
-      - put: bosh-deployment
-        params:
-          repository: bosh-deployment
-          rebase: true
+- name: update-virtualbox-cpi-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: virtualbox-cpi-release
+      trigger: true
+  - task: update-virtualbox-cpi-operations-file
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: virtualbox-cpi-release
+    params:
+      CPI_OPS_FILE: virtualbox/cpi.yml
+      CPI_NAME: bosh-virtualbox-cpi
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: update-aws-stemcell
-    plan:
-    - aggregate:
-      - get: bosh-deployment
-      - get: aws-ubuntu-xenial-stemcell
-        trigger: true
-    - task: update-stemcell
-      file: bosh-deployment/ci/tasks/update-stemcell.yml
-      input_mapping:
-        stemcell: aws-ubuntu-xenial-stemcell
-      params:
-        CPI_OPS_FILE: aws/cpi.yml
-        STEMCELL_NAME: aws-ubuntu-xenial-stemcell
-    - put: bosh-deployment
-      params:
-        repository: bosh-deployment
-        rebase: true
+### Releases
 
-  - name: update-azure-stemcell
-    plan:
-    - aggregate:
-      - get: bosh-deployment
-      - get: azure-ubuntu-xenial-stemcell
-        trigger: true
-    - task: update-stemcell
-      file: bosh-deployment/ci/tasks/update-stemcell.yml
-      input_mapping:
-        stemcell: azure-ubuntu-xenial-stemcell
+- name: compile-bbr-sdk-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
       params:
-        CPI_OPS_FILE: azure/cpi.yml
-        STEMCELL_NAME: azure-ubuntu-xenial-stemcell
-    - put: bosh-deployment
-      params:
-        repository: bosh-deployment
-        rebase: true
+        clean_tags: true
+    - get: backup-and-restore-sdk-release
+      trigger: true
+    - get: warden-ubuntu-xenial-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - task: export-release
+    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+    privileged: true
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: backup-and-restore-sdk-release
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: bbr.yml
+  - put: compiled-releases
+    params:
+      file: "compiled-release/*.tgz"
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: update-docker-stemcell
-    plan:
-    - aggregate:
-      - get: bosh-deployment
-      - get: warden-ubuntu-xenial-stemcell
-        trigger: true
-    - task: update-stemcell
-      file: bosh-deployment/ci/tasks/update-stemcell.yml
-      input_mapping:
-        stemcell: warden-ubuntu-xenial-stemcell
+- name: compile-bosh-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
       params:
-        CPI_OPS_FILE: docker/cpi.yml
-        STEMCELL_NAME: warden-ubuntu-xenial-stemcell
-    - put: bosh-deployment
-      params:
-        repository: bosh-deployment
-        rebase: true
+        clean_tags: true
+    - get: bosh-release
+      trigger: true
+    - get: warden-ubuntu-xenial-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - task: export-release
+    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+    privileged: true
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: bosh-release
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: compiled-release
+    params:
+      UPDATING_BASE_MANIFEST: true
+      FILE_TO_UPDATE: bosh.yml
+  - task: update-source-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: bosh-release
+    params:
+      BOSH_IO_RELEASE: cloudfoundry/bosh
+      FILE_TO_UPDATE: misc/source-releases/bosh.yml
+  - put: compiled-releases
+    params:
+      file: "compiled-release/*.tgz"
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+  - put: bosh-deployment-tags
+    resource: bosh-deployment
+    params:
+      repository: bosh-deployment
+      force: true
+      only_tag: true
+      tag: bosh-release/version
 
-  - name: update-gcp-stemcell
-    plan:
-    - aggregate:
-      - get: bosh-deployment
-      - get: gcp-ubuntu-xenial-stemcell
-        trigger: true
-    - task: update-stemcell
-      file: bosh-deployment/ci/tasks/update-stemcell.yml
-      input_mapping:
-        stemcell: gcp-ubuntu-xenial-stemcell
+- name: compile-bpm-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
       params:
-        CPI_OPS_FILE: gcp/cpi.yml
-        STEMCELL_NAME: gcp-ubuntu-xenial-stemcell
-    - put: bosh-deployment
-      params:
-        repository: bosh-deployment
-        rebase: true
+        clean_tags: true
+    - get: bpm-release
+      trigger: true
+    - get: warden-ubuntu-xenial-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - task: export-release
+    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+    privileged: true
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: bpm-release
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: compiled-release
+    params:
+      UPDATING_BASE_MANIFEST: true
+      FILE_TO_UPDATE: bosh.yml
+  - task: update-source-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: bpm-release
+    params:
+      BOSH_IO_RELEASE: cloudfoundry/bpm-release
+      FILE_TO_UPDATE: misc/source-releases/bosh.yml
+  - put: compiled-releases
+    params:
+      file: "compiled-release/*.tgz"
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: update-openstack-stemcell
-    plan:
-    - aggregate:
-      - get: bosh-deployment
-      - get: openstack-ubuntu-xenial-stemcell
-        trigger: true
-    - task: update-stemcell
-      file: bosh-deployment/ci/tasks/update-stemcell.yml
-      input_mapping:
-        stemcell: openstack-ubuntu-xenial-stemcell
+- name: compile-credhub-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
       params:
-        CPI_OPS_FILE: openstack/cpi.yml
-        STEMCELL_NAME: openstack-ubuntu-xenial-stemcell
-    - put: bosh-deployment
-      params:
-        repository: bosh-deployment
-        rebase: true
+        clean_tags: true
+    - get: credhub-release
+      trigger: true
+    - get: warden-ubuntu-xenial-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - task: export-release
+    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+    privileged: true
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: credhub-release
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: credhub.yml
+  - task: update-source-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: credhub-release
+    params:
+      BOSH_IO_RELEASE: pivotal-cf/credhub-release
+      FILE_TO_UPDATE: misc/source-releases/credhub.yml
+  - put: compiled-releases
+    params:
+      file: "compiled-release/*.tgz"
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: update-vcloud-stemcell
-    plan:
-    - aggregate:
-      - get: bosh-deployment
-      - get: vcloud-ubuntu-xenial-stemcell
-        trigger: true
-    - task: update-stemcell
-      file: bosh-deployment/ci/tasks/update-stemcell.yml
-      input_mapping:
-        stemcell: vcloud-ubuntu-xenial-stemcell
+- name: compile-docker-cpi
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
       params:
-        CPI_OPS_FILE: vcloud/cpi.yml
-        STEMCELL_NAME: vcloud-ubuntu-xenial-stemcell
-    - put: bosh-deployment
-      params:
-        repository: bosh-deployment
-        rebase: true
+        clean_tags: true
+    - get: docker-cpi
+      trigger: true
+      version:
+        version: "0.0.5"
+    - get: warden-ubuntu-xenial-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - task: export-release
+    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+    privileged: true
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: docker-cpi
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: bosh-lite-docker.yml
+  - put: compiled-releases
+    params:
+      file: "compiled-release/*.tgz"
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: update-virtualbox-stemcell
-    plan:
-    - aggregate:
-      - get: bosh-deployment
-      - get: vsphere-ubuntu-xenial-stemcell
-        trigger: true
-    - task: update-stemcell
-      file: bosh-deployment/ci/tasks/update-stemcell.yml
-      input_mapping:
-        stemcell: vsphere-ubuntu-xenial-stemcell
+- name: compile-garden-runc
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
       params:
-        CPI_OPS_FILE: virtualbox/cpi.yml
-        STEMCELL_NAME: vsphere-ubuntu-xenial-stemcell
-    - put: bosh-deployment
-      params:
-        repository: bosh-deployment
-        rebase: true
+        clean_tags: true
+    - get: garden-runc
+      trigger: true
+    - get: warden-ubuntu-xenial-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - task: export-release
+    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+    privileged: true
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: garden-runc
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: bosh-lite.yml
+  - put: compiled-releases
+    params:
+      file: "compiled-release/*.tgz"
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: update-vsphere-stemcell
-    plan:
-    - aggregate:
-      - get: bosh-deployment
-      - get: vsphere-ubuntu-xenial-stemcell
-        trigger: true
-    - task: update-stemcell
-      file: bosh-deployment/ci/tasks/update-stemcell.yml
-      input_mapping:
-        stemcell: vsphere-ubuntu-xenial-stemcell
+- name: compile-uaa-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
       params:
-        CPI_OPS_FILE: vsphere/cpi.yml
-        STEMCELL_NAME: vsphere-ubuntu-xenial-stemcell
-    - put: bosh-deployment
-      params:
-        repository: bosh-deployment
-        rebase: true
+        clean_tags: true
+    - get: uaa-release
+      trigger: true
+    - get: warden-ubuntu-xenial-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - task: export-release
+    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+    privileged: true
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: uaa-release
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: uaa.yml
+  - put: compiled-releases
+    params:
+      file: "compiled-release/*.tgz"
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
-  - name: update-warden-stemcell
-    plan:
-    - aggregate:
-      - get: bosh-deployment
-      - get: warden-ubuntu-xenial-stemcell
-        trigger: true
-    - task: update-stemcell
-      file: bosh-deployment/ci/tasks/update-stemcell.yml
-      input_mapping:
-        stemcell: warden-ubuntu-xenial-stemcell
+- name: compile-warden-cpi
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
       params:
-        CPI_OPS_FILE: warden/cpi.yml
-        STEMCELL_NAME: warden-ubuntu-xenial-stemcell
-    - put: bosh-deployment
+        clean_tags: true
+    - get: warden-cpi
+      trigger: true
+    - get: warden-ubuntu-xenial-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - task: export-release
+    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+    privileged: true
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: warden-cpi
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: bosh-lite.yml
+  - put: compiled-releases
+    params:
+      file: "compiled-release/*.tgz"
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+### Stemcells
+
+- name: update-aws-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
       params:
-        repository: bosh-deployment
-        rebase: true
+        clean_tags: true
+    - get: aws-ubuntu-xenial-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: aws-ubuntu-xenial-stemcell
+    params:
+      CPI_OPS_FILE: aws/cpi.yml
+      STEMCELL_NAME: aws-ubuntu-xenial-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-azure-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: azure-ubuntu-xenial-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: azure-ubuntu-xenial-stemcell
+    params:
+      CPI_OPS_FILE: azure/cpi.yml
+      STEMCELL_NAME: azure-ubuntu-xenial-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-docker-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: warden-ubuntu-xenial-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+    params:
+      CPI_OPS_FILE: docker/cpi.yml
+      STEMCELL_NAME: warden-ubuntu-xenial-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-gcp-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: gcp-ubuntu-xenial-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: gcp-ubuntu-xenial-stemcell
+    params:
+      CPI_OPS_FILE: gcp/cpi.yml
+      STEMCELL_NAME: gcp-ubuntu-xenial-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-openstack-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: openstack-ubuntu-xenial-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: openstack-ubuntu-xenial-stemcell
+    params:
+      CPI_OPS_FILE: openstack/cpi.yml
+      STEMCELL_NAME: openstack-ubuntu-xenial-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-vcloud-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: vcloud-ubuntu-xenial-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: vcloud-ubuntu-xenial-stemcell
+    params:
+      CPI_OPS_FILE: vcloud/cpi.yml
+      STEMCELL_NAME: vcloud-ubuntu-xenial-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-virtualbox-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: vsphere-ubuntu-xenial-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: vsphere-ubuntu-xenial-stemcell
+    params:
+      CPI_OPS_FILE: virtualbox/cpi.yml
+      STEMCELL_NAME: vsphere-ubuntu-xenial-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-vsphere-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: vsphere-ubuntu-xenial-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: vsphere-ubuntu-xenial-stemcell
+    params:
+      CPI_OPS_FILE: vsphere/cpi.yml
+      STEMCELL_NAME: vsphere-ubuntu-xenial-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-warden-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: warden-ubuntu-xenial-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+    params:
+      CPI_OPS_FILE: warden/cpi.yml
+      STEMCELL_NAME: warden-ubuntu-xenial-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+# Source releases
+
+- name: update-dns-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: dns-release
+      trigger: true
+  - task: update-source-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: dns-release
+    params:
+      UPDATING_BASE_MANIFEST: true
+      FILE_TO_UPDATE: runtime-configs/dns.yml
+      BOSH_IO_RELEASE: cloudfoundry/bosh-dns-release
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-os-conf-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: os-conf-release
+      trigger: true
+  - task: update-source-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: os-conf-release
+    params:
+      FILE_TO_UPDATE: jumpbox-user.yml
+      BOSH_IO_RELEASE: cloudfoundry/os-conf-release
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
 resources:
 - name: bosh-deployment
@@ -540,7 +782,7 @@ resources:
 - name: bpm-release
   type: bosh-io-release
   source:
-    repository: cloudfoundry-incubator/bpm-release
+    repository: cloudfoundry/bpm-release
 
 - name: credhub-release
   type: bosh-io-release
@@ -566,6 +808,41 @@ resources:
   type: bosh-io-release
   source:
     repository: cppforlife/bosh-warden-cpi-release
+
+- name: dns-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bosh-dns-release
+
+- name: vsphere-cpi-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bosh-vsphere-cpi-release
+
+- name: virtualbox-cpi-release
+  type: bosh-io-release
+  source:
+    repository: cppforlife/bosh-virtualbox-cpi-release
+
+- name: aws-cpi-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bosh-aws-cpi-release
+
+- name: azure-cpi-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bosh-azure-cpi-release
+
+- name: google-cpi-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bosh-google-cpi-release
+
+- name: os-conf-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/os-conf-release
 
 # outputs
 - name: compiled-releases
