@@ -146,13 +146,13 @@ networks:
   type: manual
 releases:
 - name: bosh
-  sha1: ba12c00184c05f6745b1e86879e62c249b09e7a0
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-270.7.0-ubuntu-xenial-456.27-20191004-161149-954948882-20191004161157.tgz
+  sha1: 33d372002bd84b8ea8095f3a1c0354cf51527c74
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-270.7.0-ubuntu-xenial-456.30-20191008-184323-54400337-20191008184329.tgz
   version: 270.7.0
 - name: bpm
-  sha1: a41b0648d1b2f9a6b0decaffe0bfe4e5e950b043
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.3-ubuntu-xenial-456.27-20190924-221153-327657113-20190924221200.tgz
-  version: 1.1.3
+  sha1: 4a5bec4146ce16f46f43170b7920adb5abf58940
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.4-ubuntu-xenial-456.30-20191011-220445-924177112-20191011220454.tgz
+  version: 1.1.4
 resource_pools:
 - env:
     bosh:
