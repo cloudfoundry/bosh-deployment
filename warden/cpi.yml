@@ -34,10 +34,7 @@
     actions:
       expand_stemcell_tarball: false
     agent:
-      blobstore:
-        options:
-          blobstore_path: /var/vcap/micro_bosh/data/cache
-        provider: local
+      blobstore: null
       mbus: https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868
     warden:
       connect_address: ((garden_host)):7777

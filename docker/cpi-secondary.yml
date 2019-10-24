@@ -25,9 +25,4 @@
         private_key: unused
     agent:
       mbus: nats://nats:((nats_password))@((internal_ip)):4222
-      blobstore:
-        provider: dav
-        options:
-          endpoint: http://((internal_ip)):25250
-          user: agent
-          password: ((blobstore_agent_password))
+      blobstore: null
