@@ -268,13 +268,6 @@ jobs:
     params:
       repository: bosh-deployment
       rebase: true
-  - put: bosh-deployment-tags
-    resource: bosh-deployment
-    params:
-      repository: bosh-deployment
-      force: true
-      only_tag: true
-      tag: bosh-release/version
 
 - name: compile-bpm-release
   plan:
