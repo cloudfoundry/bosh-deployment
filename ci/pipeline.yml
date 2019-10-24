@@ -83,7 +83,6 @@ jobs:
   - put: bosh-deployment-master
     params:
       repository: bosh-deployment
-      rebase: true
 
 ### CPIs
 
