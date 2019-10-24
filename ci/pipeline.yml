@@ -83,7 +83,6 @@ jobs:
   - put: bosh-deployment-master
     params:
       repository: bosh-deployment
-      rebase: true
 
 ### CPIs
 
@@ -268,13 +267,6 @@ jobs:
     params:
       repository: bosh-deployment
       rebase: true
-  - put: bosh-deployment-tags
-    resource: bosh-deployment
-    params:
-      repository: bosh-deployment
-      force: true
-      only_tag: true
-      tag: bosh-release/version
 
 - name: compile-bpm-release
   plan:
@@ -679,6 +671,7 @@ jobs:
         clean_tags: true
     - get: dns-release
       trigger: true
+    - get: warden-ubuntu-xenial-stemcell
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -701,6 +694,7 @@ jobs:
         clean_tags: true
     - get: os-conf-release
       trigger: true
+    - get: warden-ubuntu-xenial-stemcell
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
