@@ -679,6 +679,7 @@ jobs:
         clean_tags: true
     - get: dns-release
       trigger: true
+    - get: warden-ubuntu-xenial-stemcell
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -701,6 +702,7 @@ jobs:
         clean_tags: true
     - get: os-conf-release
       trigger: true
+    - get: warden-ubuntu-xenial-stemcell
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
