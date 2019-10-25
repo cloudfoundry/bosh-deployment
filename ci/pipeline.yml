@@ -4,6 +4,7 @@ groups:
   jobs:
   - test-bosh-lite-gcp
   - test-smoke
+  - test-main-bosh-docker
   - promote
 - name: cpis
   jobs:
@@ -66,6 +67,15 @@ jobs:
     trigger: true
   - task: test-smoke
     file: bosh-deployment/ci/tasks/test-smoke.yml
+
+- name: test-main-bosh-docker
+  serial: true
+  build_logs_to_retain: 250
+  plan:
+  - get: bosh-deployment
+    trigger: true
+  - task: test-main-bosh-docker
+    file: bosh-deployment/ci/tasks/test-main-bosh-docker.yml
 
 - name: promote
   serial: true
