@@ -76,6 +76,7 @@ jobs:
     trigger: true
   - task: test-main-bosh-docker
     file: bosh-deployment/ci/tasks/test-main-bosh-docker.yml
+    privileged: true
 
 - name: promote
   serial: true
