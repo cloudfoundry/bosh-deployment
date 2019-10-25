@@ -43,7 +43,12 @@
   type: replace
   value:
     agent:
-      blobstore: null
+      blobstore:
+        options:
+          endpoint: http://((internal_ip)):25250
+          password: ((blobstore_agent_password))
+          user: agent
+        provider: dav
       mbus: nats://nats:((nats_password))@((internal_ip)):4222
     docker:
       host: ((docker_host))
@@ -52,7 +57,10 @@
   type: replace
   value:
     agent:
-      blobstore: null
+      blobstore:
+        options:
+          blobstore_path: /var/vcap/micro_bosh/data/cache
+        provider: local
       mbus: https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868
     docker:
       host: ((docker_host))
