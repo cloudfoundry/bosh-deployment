@@ -52,10 +52,7 @@
   type: replace
   value:
     agent:
-      blobstore:
-        options:
-          blobstore_path: /var/vcap/micro_bosh/data/cache
-          provider: local
+      blobstore: null
       mbus: https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868
     docker:
       host: ((docker_host))
