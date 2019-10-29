@@ -87,6 +87,7 @@ jobs:
     passed:
     - test-smoke
     - test-bosh-lite-gcp
+    - test-main-bosh-docker
   - put: bosh-deployment-commit-status
     params:
       state: success
