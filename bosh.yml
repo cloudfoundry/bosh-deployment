@@ -4,9 +4,6 @@ cloud_provider:
   properties:
     agent:
       mbus: https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868
-    blobstore:
-      path: /var/vcap/micro_bosh/data/cache
-      provider: local
     ntp:
     - time1.google.com
     - time2.google.com
@@ -159,6 +156,10 @@ resource_pools:
       mbus:
         cert: ((mbus_bootstrap_ssl))
       password: '*'
+      blobstores:
+      - options:
+          blobstore_path: /var/vcap/micro_bosh/data/cache
+        provider: local
   name: vms
   network: default
 variables:

@@ -49,14 +49,6 @@
     warden:
       connect_address: 127.0.0.1:7777
       connect_network: tcp
-- path: /resource_pools/0/env/bosh/blobstores?/-
-  type: replace
-  value:
-    options:
-      endpoint: http://10.254.50.4:25250
-      password: ((blobstore_agent_password))
-      user: agent
-    provider: dav
 - path: /releases/name=os-conf?
   type: replace
   value:
