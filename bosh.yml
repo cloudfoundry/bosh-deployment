@@ -159,6 +159,15 @@ resource_pools:
       mbus:
         cert: ((mbus_bootstrap_ssl))
       password: '*'
+      blobstores:
+      - options:
+          endpoint: https://((internal_ip)):25250
+          password: ((blobstore_agent_password))
+          tls:
+            cert:
+              ca: ((blobstore_ca.certificate))
+          user: agent
+        provider: dav
   name: vms
   network: default
 variables:
