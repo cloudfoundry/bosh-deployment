@@ -52,10 +52,8 @@
   type: replace
   value:
     options:
-      endpoint: http://((internal_ip)):25250
-      password: ((blobstore_agent_password))
-      user: agent
-    provider: dav
+      blobstore_path: /var/vcap/micro_bosh/data/cache
+    provider: local
 - path: /cloud_provider/properties/docker_cpi?
   type: replace
   value:
