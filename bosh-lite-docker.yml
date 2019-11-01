@@ -34,6 +34,14 @@
           tls: ((docker_client_tls))
         host_ip: 10.254.50.4
     release: bosh-docker-cpi
+- path: /resource_pools/0/env/bosh/blobstores?/-
+  type: replace
+  value:
+    options:
+      endpoint: http://10.254.50.4:25250
+      password: ((blobstore_agent_password))
+      user: agent
+    provider: dav
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
