@@ -27,13 +27,15 @@ bosh create-env "${bosh_deployment}/bosh.yml" \
   --ops-file "${bosh_deployment}/uaa.yml" \
   --ops-file "${bosh_deployment}/credhub.yml" \
   --ops-file "${bosh_deployment}/jumpbox-user.yml" \
+  --ops-file "${bosh_deployment}/enable-metrics-server.yml" \
+  --ops-file "${bosh_deployment}/local-bosh-release-tarball.yml" \
   --vars-store "${PWD}/creds.yml" \
   --var director_name=bosh-lite \
   --var internal_ip=192.168.50.6 \
   --var internal_gw=192.168.50.1 \
   --var internal_cidr=192.168.50.0/24 \
+  --var local_bosh_release=/home/pivotal/workspace/src/github.com/cloudfoundry/bosh/bosh.tgz \
   --var outbound_network_name=NatNetwork "$@"
-
 
 ####
 STEP "Adding Network Routes (sudo is required)"
