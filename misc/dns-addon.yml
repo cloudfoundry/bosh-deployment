@@ -1,4 +1,5 @@
-- type: replace	---
+---
+- type: replace
   path: /addons?/name=bosh-dns
   value:
     name: bosh-dns
