@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 8632b6cae9efc0043e933b43c5c708322a7d0e79
-    url: https://bosh-aws-light-stemcells.s3-accelerate.amazonaws.com/621.5/light-bosh-stemcell-621.5-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+    sha1: 5ab67040d6cc0ee50765293b97d0ee16b4e3f5ad
+    url: https://bosh-aws-light-stemcells.s3-accelerate.amazonaws.com/621.12/light-bosh-stemcell-621.12-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
@@ -19,7 +19,6 @@
     ephemeral_disk:
       size: 25000
       type: gp2
-    instance_type: m4.xlarge
     instance_type: m5.xlarge
 - path: /disk_pools/name=disks/cloud_properties?
   type: replace
