@@ -3,8 +3,8 @@
   type: replace
   value:
     name: garden-runc
-    sha1: e1780dc6e5885d7667f9309201ff9a9447862e2c
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.19.8-ubuntu-xenial-621.12-20191112-175924-475149164-20191112175935.tgz
+    sha1: 549530142a300ac655e251308e1c5949abf6136e
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.19.8-ubuntu-xenial-621.23-20191118-181834-851507162-20191118181845.tgz
     version: 1.19.8
 - path: /releases/-
   release: bosh-warden-cpi
