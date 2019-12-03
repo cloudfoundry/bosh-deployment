@@ -1,4 +1,5 @@
 - path: /releases/-
+  name: cpi
   type: replace
   value:
     name: bosh-openstack-cpi
