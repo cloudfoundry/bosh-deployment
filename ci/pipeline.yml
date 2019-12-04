@@ -13,6 +13,7 @@ groups:
   - update-azure-cpi
   - update-vsphere-cpi-release
   - update-virtualbox-cpi-release
+  - update-openstack-cpi-release
 - name: stemcells
   jobs:
   - update-aws-stemcell
@@ -200,6 +201,26 @@ jobs:
     params:
       CPI_OPS_FILE: virtualbox/cpi.yml
       CPI_NAME: bosh-virtualbox-cpi
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-openstack-cpi-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: openstack-cpi-release
+      trigger: true
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: openstack-cpi-release
+    params:
+      CPI_NAME: bosh-openstack-cpi
+      CPI_OPS_FILE: openstack/cpi.yml
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -844,6 +865,11 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/bosh-google-cpi-release
+
+- name: openstack-cpi-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bosh-openstack-cpi-release
 
 - name: os-conf-release
   type: bosh-io-release
