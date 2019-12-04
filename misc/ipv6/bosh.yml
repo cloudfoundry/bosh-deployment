@@ -27,3 +27,7 @@
 - type: replace
   path: /instance_groups/name=bosh/properties/blobstore/address
   value: "[((internal_ip))]"
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores/0/options/endpoint
+  value: "http://[((internal_ip))]:25250"
