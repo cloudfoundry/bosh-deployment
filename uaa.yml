@@ -100,6 +100,24 @@
           tag: admin
         tls: disabled
     release: uaa
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
+    name: bbr-uaadb
+    properties:
+      release_level_backup: true
+      uaadb:
+        address: 127.0.0.1
+        databases:
+        - name: uaa
+          tag: uaa
+        db_scheme: postgresql
+        port: 5432
+        roles:
+        - name: postgres
+          password: ((postgres_password))
+          tag: admin
+    release: uaa
 - path: /instance_groups/name=bosh/properties/postgres/additional_databases?/-
   type: replace
   value: uaa
