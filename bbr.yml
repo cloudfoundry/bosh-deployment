@@ -3,8 +3,8 @@
   type: replace
   value:
     name: backup-and-restore-sdk
-    sha1: 451581372489e25d3d68fae1321137acb6e9210c
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/backup-and-restore-sdk-1.17.2-ubuntu-xenial-621.29-20191209-225725-160731576-20191209225743.tgz
+    sha1: 8dacea6ac1aef89335f4ed59db87cf22c83e3aaf
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/backup-and-restore-sdk-1.17.2-ubuntu-xenial-621.41-20200106-205316-395267167-20200106205334.tgz
     version: 1.17.2
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
