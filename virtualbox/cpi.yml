@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: d439332eb00e49541bbe3f5bd255f3f1b7980618
-    url: https://s3.amazonaws.com/bosh-core-stemcells/456.27/bosh-stemcell-456.27-vsphere-esxi-ubuntu-xenial-go_agent.tgz
+    sha1: e6fd5a8e68d492b850662507018839ab447d5d69
+    url: https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.41/bosh-stemcell-621.41-vsphere-esxi-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
@@ -25,13 +25,7 @@
     properties:
       agent:
         mbus: nats://nats:((nats_password))@((internal_ip)):4222
-      blobstore:
-        address: ((internal_ip))
-        agent:
-          password: ((blobstore_agent_password))
-          user: agent
-        port: 25250
-        provider: dav
+      blobstore: null
       ntp:
       - 0.pool.ntp.org
       - 1.pool.ntp.org

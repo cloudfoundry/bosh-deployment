@@ -21,3 +21,9 @@
       credentials_source: static
       bucket_name: ((bucket_name))
       json_key: ((agent_gcs_credentials_json))
+
+- type: remove
+  path: /variables/name=blobstore_ca?
+
+- type: remove
+  path: /variables/name=blobstore_server_tls?

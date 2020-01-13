@@ -3,8 +3,8 @@
   type: replace
   value:
     name: bosh-docker-cpi
-    sha1: c518629ecc9f8cb1344c50d9f04d98b661aedf45
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-docker-cpi-0.0.5-ubuntu-xenial-456.27-20190924-221406-673537115-20190924221453.tgz
+    sha1: 155ea3430e0ac75fa471a68dd40ca75e371a7d1d
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-docker-cpi-0.0.5-ubuntu-xenial-621.41-20200106-205318-984137357-20200106205346.tgz
     version: 0.0.5
 - path: /releases/-
   type: replace
@@ -27,12 +27,7 @@
     properties:
       docker_cpi:
         agent:
-          blobstore:
-            options:
-              endpoint: http://10.254.50.4:25250
-              password: ((blobstore_agent_password))
-              user: agent
-            provider: dav
+          blobstore: null
           mbus: nats://nats:((nats_password))@10.254.50.4:4222
         docker:
           host: tcp://127.0.0.1:4243

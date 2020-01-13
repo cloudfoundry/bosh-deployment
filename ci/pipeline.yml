@@ -4,6 +4,7 @@ groups:
   jobs:
   - test-bosh-lite-gcp
   - test-smoke
+  - test-main-bosh-docker
   - promote
 - name: cpis
   jobs:
@@ -12,6 +13,7 @@ groups:
   - update-azure-cpi
   - update-vsphere-cpi-release
   - update-virtualbox-cpi-release
+  - update-openstack-cpi-release
 - name: stemcells
   jobs:
   - update-aws-stemcell
@@ -67,6 +69,16 @@ jobs:
   - task: test-smoke
     file: bosh-deployment/ci/tasks/test-smoke.yml
 
+- name: test-main-bosh-docker
+  serial: true
+  build_logs_to_retain: 250
+  plan:
+  - get: bosh-deployment
+    trigger: true
+  - task: test-main-bosh-docker
+    file: bosh-deployment/ci/tasks/test-main-bosh-docker.yml
+    privileged: true
+
 - name: promote
   serial: true
   build_logs_to_retain: 250
@@ -76,6 +88,7 @@ jobs:
     passed:
     - test-smoke
     - test-bosh-lite-gcp
+    - test-main-bosh-docker
   - put: bosh-deployment-commit-status
     params:
       state: success
@@ -83,7 +96,6 @@ jobs:
   - put: bosh-deployment-master
     params:
       repository: bosh-deployment
-      rebase: true
 
 ### CPIs
 
@@ -194,6 +206,26 @@ jobs:
       repository: bosh-deployment
       rebase: true
 
+- name: update-openstack-cpi-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: openstack-cpi-release
+      trigger: true
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: openstack-cpi-release
+    params:
+      CPI_NAME: bosh-openstack-cpi
+      CPI_OPS_FILE: openstack/cpi.yml
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
 ### Releases
 
 - name: compile-bbr-sdk-release
@@ -268,13 +300,6 @@ jobs:
     params:
       repository: bosh-deployment
       rebase: true
-  - put: bosh-deployment-tags
-    resource: bosh-deployment
-    params:
-      repository: bosh-deployment
-      force: true
-      only_tag: true
-      tag: bosh-release/version
 
 - name: compile-bpm-release
   plan:
@@ -679,6 +704,7 @@ jobs:
         clean_tags: true
     - get: dns-release
       trigger: true
+    - get: warden-ubuntu-xenial-stemcell
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -701,6 +727,7 @@ jobs:
         clean_tags: true
     - get: os-conf-release
       trigger: true
+    - get: warden-ubuntu-xenial-stemcell
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -838,6 +865,11 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/bosh-google-cpi-release
+
+- name: openstack-cpi-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/bosh-openstack-cpi-release
 
 - name: os-conf-release
   type: bosh-io-release

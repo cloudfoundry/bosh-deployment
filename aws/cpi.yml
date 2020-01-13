@@ -3,15 +3,15 @@
   type: replace
   value:
     name: bosh-aws-cpi
-    sha1: a0abf8f9bdeef2ea8b807fe78a6d20dfd0e34f78
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-aws-cpi-release?v=77
-    version: 77
+    sha1: 7be7577c063d8528864711a257891ebd245a6969
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-aws-cpi-release?v=80
+    version: 80
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 49dd9fc8a57571a67360bb795f58a8fb38a51f61
-    url: https://s3.amazonaws.com/bosh-aws-light-stemcells/456.27/light-bosh-stemcell-456.27-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+    sha1: 35eb04221f6ec7feacb59f8bf3e7828bf76f8f25
+    url: https://bosh-aws-light-stemcells.s3-accelerate.amazonaws.com/621.41/light-bosh-stemcell-621.41-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
@@ -19,7 +19,7 @@
     ephemeral_disk:
       size: 25000
       type: gp2
-    instance_type: m4.xlarge
+    instance_type: m5.xlarge
 - path: /disk_pools/name=disks/cloud_properties?
   type: replace
   value:

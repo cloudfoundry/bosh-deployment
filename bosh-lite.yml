@@ -3,16 +3,16 @@
   type: replace
   value:
     name: garden-runc
-    sha1: e6fe5868ce98cbac7577bd8e11c5ca6d8ca91d05
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.19.7-ubuntu-xenial-456.27-20190924-223041-293963698-20190924223052.tgz
-    version: 1.19.7
+    sha1: 3793d25d96a90cd5c57333127404be8d193fee8a
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.19.9-ubuntu-xenial-621.41-20200106-210117-02315703-20200106210129.tgz
+    version: 1.19.9
 - path: /releases/-
   release: bosh-warden-cpi
   type: replace
   value:
     name: bosh-warden-cpi
-    sha1: 3efdca625e09d4621c110fa49ea3d05bff655fd0
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-41-ubuntu-xenial-456.27-20191007-182831-158938519-20191007182837.tgz
+    sha1: 9ecb59b9fd920faf59c193912970d8228c40a107
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-41-ubuntu-xenial-621.41-20200106-205108-721477517-20200106205128.tgz
     version: 41
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
@@ -43,12 +43,7 @@
     actions:
       expand_stemcell_tarball: false
     agent:
-      blobstore:
-        options:
-          endpoint: http://10.254.50.4:25250
-          password: ((blobstore_agent_password))
-          user: agent
-        provider: dav
+      blobstore: null
       mbus: nats://nats:((nats_password))@10.254.50.4:4222
     host_ip: 10.254.50.4
     warden:

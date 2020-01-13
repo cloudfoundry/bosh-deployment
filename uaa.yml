@@ -3,9 +3,9 @@
   type: replace
   value:
     name: uaa
-    sha1: c5e80b372d99aa61b44a70b301f315d471ffa106
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-74.2.0-ubuntu-xenial-456.27-20191001-233538-993862717-20191001233552.tgz
-    version: 74.2.0
+    sha1: d133b0e51edbefb945b28d408fa410e2a1219864
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-74.12.0-ubuntu-xenial-621.41-20200106-204705-147942421-20200106204719.tgz
+    version: 74.12.0
 - path: /instance_groups/name=bosh/properties/director/user_management/provider
   type: replace
   value: uaa
@@ -99,6 +99,24 @@
           password: ((postgres_password))
           tag: admin
         tls: disabled
+    release: uaa
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
+    name: bbr-uaadb
+    properties:
+      release_level_backup: true
+      uaadb:
+        address: 127.0.0.1
+        databases:
+        - name: uaa
+          tag: uaa
+        db_scheme: postgresql
+        port: 5432
+        roles:
+        - name: postgres
+          password: ((postgres_password))
+          tag: admin
     release: uaa
 - path: /instance_groups/name=bosh/properties/postgres/additional_databases?/-
   type: replace
