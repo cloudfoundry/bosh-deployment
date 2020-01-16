@@ -58,7 +58,7 @@
             scope: ""
             secret: ((hm_password))
           uaa_admin:
-            authorities: clients.read,clients.write,clients.secret,uaa.admin,scim.read,scim.write,password.write
+            authorities: uaa.admin
             authorized-grant-types: client_credentials
             override: true
             scope: ""
