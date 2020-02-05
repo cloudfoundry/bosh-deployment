@@ -3,6 +3,6 @@
   path: /releases/name=uaa?
   value:
     name: uaa
-    version: "60.2"
-    url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=60.2
-    sha1: 667af417997467681fddf13c78e5a11c6f4a9d15
+    version: "74.13.0"
+    url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=74.13.0
+    sha1: 2eef558edc434d240d43ae255b59b10754d4785e
