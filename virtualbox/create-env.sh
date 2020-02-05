@@ -40,11 +40,7 @@ STEP "Adding Network Routes (sudo is required)"
 ####
 
 if [ "$(uname)" = "Darwin" ]; then
-  if [[ `route get 192.168.50.6 | grep vboxnet` ]]; then
-    echo "Skipping. Route already exists."
-  else
-    sudo route add -net 10.244.0.0/16 192.168.50.6
-  fi
+  sudo route add -net 10.244.0.0/16 192.168.50.6
 elif [ "$(uname)" = "Linux" ]; then
   if type ip > /dev/null 2>&1; then
     sudo ip route add 10.244.0.0/16 via 192.168.50.6
