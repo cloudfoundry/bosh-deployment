@@ -26,9 +26,6 @@
       agent:
         mbus: nats://nats:((nats_password))@((internal_ip)):4222
       blobstore: null
-      ntp:
-      - 0.pool.ntp.org
-      - 1.pool.ntp.org
     release: bosh-virtualbox-cpi
 - path: /instance_groups/name=bosh/properties/director/cpi_job?
   type: replace
@@ -38,3 +35,15 @@
   value:
     name: virtualbox_cpi
     release: bosh-virtualbox-cpi
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp?
+  value:
+  - 0.pool.ntp.org
+  - 1.pool.ntp.org
+
+- type: replace
+  path: /resource_pools/0/env/bosh/ntp?
+  value:
+  - 0.pool.ntp.org
+  - 1.pool.ntp.org

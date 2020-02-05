@@ -7,11 +7,6 @@ cloud_provider:
     blobstore:
       path: /var/vcap/micro_bosh/data/cache
       provider: local
-    ntp:
-    - time1.google.com
-    - time2.google.com
-    - time3.google.com
-    - time4.google.com
 disk_pools:
 - disk_size: 65536
   name: disks
@@ -49,6 +44,11 @@ instance_groups:
                   ca: ((blobstore_ca.certificate))
               user: agent
             provider: dav
+          ntp:
+          - time1.google.com
+          - time2.google.com
+          - time3.google.com
+          - time4.google.com
       mbus: nats://nats:((nats_password))@((internal_ip)):4222
     blobstore:
       address: ((internal_ip))
@@ -120,11 +120,6 @@ instance_groups:
           certificate: ((nats_server_tls.certificate))
           private_key: ((nats_server_tls.private_key))
       user: nats
-    ntp:
-    - time1.google.com
-    - time2.google.com
-    - time3.google.com
-    - time4.google.com
     postgres:
       adapter: postgres
       database: bosh
@@ -163,6 +158,11 @@ resource_pools:
       mbus:
         cert: ((mbus_bootstrap_ssl))
       password: '*'
+    ntp:
+    - time1.google.com
+    - time2.google.com
+    - time3.google.com
+    - time4.google.com
   name: vms
   network: default
 variables:

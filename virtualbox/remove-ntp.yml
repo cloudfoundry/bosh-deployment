@@ -1,7 +1,7 @@
 - type: replace
-  path: /instance_groups/name=bosh/properties/ntp
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp?
   value: []
 
 - type: replace
-  path: /cloud_provider/properties/ntp
+  path: /resource_pools/0/env/bosh/ntp?
   value: []
