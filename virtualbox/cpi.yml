@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: bedf9177bfdf856cd41a8ad2676e7dbef79c31e4
-    url: https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.51/bosh-stemcell-621.51-vsphere-esxi-ubuntu-xenial-go_agent.tgz
+    sha1: 8111c8e6ab9fdcc2a116c12002776c2f1e59938c
+    url: https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.55/bosh-stemcell-621.55-vsphere-esxi-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
@@ -35,15 +35,13 @@
   value:
     name: virtualbox_cpi
     release: bosh-virtualbox-cpi
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp?
+- path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp?
+  type: replace
   value:
   - 0.pool.ntp.org
   - 1.pool.ntp.org
-
-- type: replace
-  path: /resource_pools/0/env/bosh/ntp?
+- path: /resource_pools/0/env/bosh/ntp?
+  type: replace
   value:
   - 0.pool.ntp.org
   - 1.pool.ntp.org
