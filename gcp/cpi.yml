@@ -48,7 +48,16 @@
   value:
     json_key: ((gcp_credentials_json))
     project: ((project_id))
+- path: /cloud_provider/properties/google?
+  type: replace
+  value:
+    json_key: ((gcp_credentials_json))
+    project: ((project_id))
 - path: /resource_pools/0/env/bosh/ntp?
+  type: replace
+  value:
+  - 169.254.169.254
+- path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp?
   type: replace
   value:
   - 169.254.169.254
