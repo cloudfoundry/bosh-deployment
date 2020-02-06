@@ -7,11 +7,6 @@ cloud_provider:
     blobstore:
       path: /var/vcap/micro_bosh/data/cache
       provider: local
-    ntp:
-    - time1.google.com
-    - time2.google.com
-    - time3.google.com
-    - time4.google.com
 disk_pools:
 - disk_size: 65536
   name: disks
@@ -49,6 +44,11 @@ instance_groups:
                   ca: ((blobstore_ca.certificate))
               user: agent
             provider: dav
+          ntp:
+          - time1.google.com
+          - time2.google.com
+          - time3.google.com
+          - time4.google.com
       mbus: nats://nats:((nats_password))@((internal_ip)):4222
     blobstore:
       address: ((internal_ip))
@@ -120,11 +120,6 @@ instance_groups:
           certificate: ((nats_server_tls.certificate))
           private_key: ((nats_server_tls.private_key))
       user: nats
-    ntp:
-    - time1.google.com
-    - time2.google.com
-    - time3.google.com
-    - time4.google.com
     postgres:
       adapter: postgres
       database: bosh
@@ -146,12 +141,12 @@ networks:
   type: manual
 releases:
 - name: bosh
-  sha1: f8fbe8880ccfcc3d478bc485f0f3f74d89a9838a
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-270.11.0-ubuntu-xenial-621.51-20200124-185353-916128287-20200124185355.tgz
+  sha1: 8767b7ab9578f47d1fa220a2dd8e2bc002c1dd21
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-270.11.0-ubuntu-xenial-621.55-20200206-002119-837957149-20200206002123.tgz
   version: 270.11.0
 - name: bpm
-  sha1: 1688954b8f329d014cdf29368c69cda990cdc9df
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.6-ubuntu-xenial-621.51-20200124-185254-240811535-20200124185255.tgz
+  sha1: 6c498e268c2f0046dec6a7959fb7c10fa078f0e2
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.6-ubuntu-xenial-621.55-20200206-001515-393660696-20200206001521.tgz
   version: 1.1.6
 resource_pools:
 - env:
@@ -163,6 +158,11 @@ resource_pools:
       mbus:
         cert: ((mbus_bootstrap_ssl))
       password: '*'
+    ntp:
+    - time1.google.com
+    - time2.google.com
+    - time3.google.com
+    - time4.google.com
   name: vms
   network: default
 variables:

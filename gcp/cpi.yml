@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: f045bc6127d7eade5c831d4ea0c9c03cdffcbcd5
-    url: https://bosh-gce-light-stemcells.s3-accelerate.amazonaws.com/621.51/light-bosh-stemcell-621.51-google-kvm-ubuntu-xenial-go_agent.tgz
+    sha1: eadbbd43d09bef7e2877cde032d68321444d10df
+    url: https://bosh-gce-light-stemcells.s3-accelerate.amazonaws.com/621.55/light-bosh-stemcell-621.55-google-kvm-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
@@ -53,11 +53,11 @@
   value:
     json_key: ((gcp_credentials_json))
     project: ((project_id))
-- path: /instance_groups/name=bosh/properties/ntp
+- path: /resource_pools/0/env/bosh/ntp?
   type: replace
   value:
   - 169.254.169.254
-- path: /cloud_provider/properties/ntp
+- path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp?
   type: replace
   value:
   - 169.254.169.254
