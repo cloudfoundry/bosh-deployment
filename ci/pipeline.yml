@@ -480,6 +480,14 @@ jobs:
       release: compiled-release
     params:
       FILE_TO_UPDATE: uaa.yml
+  - task: update-source-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: uaa-release
+    params:
+      BOSH_IO_RELEASE: cloudfoundry/uaa-release
+      FILE_TO_UPDATE: misc/source-releases/uaa.yml
   - put: compiled-releases
     params:
       file: "compiled-release/*.tgz"
