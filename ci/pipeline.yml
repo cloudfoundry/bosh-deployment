@@ -252,6 +252,14 @@ jobs:
       release: compiled-release
     params:
       FILE_TO_UPDATE: bbr.yml
+  - task: update-source-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: backup-and-restore-sdk-release
+    params:
+      BOSH_IO_RELEASE: cloudfoundry-incubator/backup-and-restore-sdk-release
+      FILE_TO_UPDATE: misc/source-releases/bbr.yml
   - put: compiled-releases
     params:
       file: "compiled-release/*.tgz"
