@@ -1,6 +1,7 @@
 ---
 - type: replace
   path: /releases/name=uaa?
+  release: uaa
   value:
     name: uaa
     version: "60.2"
