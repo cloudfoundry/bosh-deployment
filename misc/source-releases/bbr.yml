@@ -1,6 +1,6 @@
-- type: replace
-  path: /release/name=backup-and-restore-sdk
+- path: /release/name=backup-and-restore-sdk
   release: backup-and-restore-sdk
+  type: replace
   value:
     name: backup-and-restore-sdk
     sha1: fca251cf474c67c38fafe531a314b3cfd2e91c0d
