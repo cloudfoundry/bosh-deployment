@@ -53,7 +53,6 @@ jobs:
         BBL_GCP_REGION: us-west1
     - task: test-bosh-lite-gcp
       file: bosh-deployment/ci/tasks/test-bosh-lite-gcp.yml
-      timeout: 2h
     ensure:
       task: bbl-down
       file: bosh-deployment/ci/tasks/bbl-down-bosh-lite-gcp.yml
