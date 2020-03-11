@@ -158,11 +158,11 @@ resource_pools:
       mbus:
         cert: ((mbus_bootstrap_ssl))
       password: '*'
-    ntp:
-    - time1.google.com
-    - time2.google.com
-    - time3.google.com
-    - time4.google.com
+      ntp:
+      - time1.google.com
+      - time2.google.com
+      - time3.google.com
+      - time4.google.com
   name: vms
   network: default
 variables:
