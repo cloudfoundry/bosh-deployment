@@ -4,7 +4,7 @@ set -eu -o pipefail
 
 if [ ! -f "${PWD}/creds.yml" ]; then
   echo "Cound't find 'creds.yml'."
-  echo "You are not running this within the bosh-lite diployment folder or you didn't deployed bosh-lite yet."
+  echo "You are not running this within the bosh-lite deployment folder or you didn't deploy bosh-lite yet."
   echo
 
   exit 1
