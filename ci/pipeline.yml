@@ -37,6 +37,7 @@ groups:
   - compile-warden-cpi
   - update-dns-release
   - update-os-conf-release
+  - update-syslog-release
 
 jobs:
 - name: test-bosh-lite-gcp
@@ -758,6 +759,28 @@ jobs:
       repository: bosh-deployment
       rebase: true
 
+- name: update-syslog-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: syslog-release
+      trigger: true
+    - get: warden-ubuntu-xenial-stemcell
+  - task: update-source-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-xenial-stemcell
+      release: syslog-release
+    params:
+      FILE_TO_UPDATE: syslog.yml
+      BOSH_IO_RELEASE: cloudfoundry/syslog-release
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
 resources:
 - name: bosh-deployment
   type: git
@@ -892,6 +915,11 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/os-conf-release
+
+- name: syslog-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry/syslog-release
 
 # outputs
 - name: compiled-releases
