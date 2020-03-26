@@ -1,0 +1,10 @@
+- type: replace
+  path: /releases/name=syslog/url
+  value: file://((local_syslog_release))
+
+- type: remove
+  path: /releases/name=syslog/sha1
+
+- type: replace
+  path: /releases/name=syslog/version
+  value: latest
