@@ -141,12 +141,12 @@ networks:
   type: manual
 releases:
 - name: bosh
-  sha1: d6b573c6f5f7ac4bce069ee9e9732140829dcd4c
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-270.12.0-ubuntu-xenial-621.61-20200324-184816-751551017-20200324184819.tgz
+  sha1: 2fe9f7c4ca199e91e325463d7dfff38b6e401068
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-270.12.0-ubuntu-xenial-621.64-20200406-195707-603360464-20200406195709.tgz
   version: 270.12.0
 - name: bpm
-  sha1: 87757e2f077512aae657a9ef48846b8485260699
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.8-ubuntu-xenial-621.61-20200324-183531-716271827-20200324183533.tgz
+  sha1: 604f3505dfde8281551d3273c8d346b4900da4c6
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.8-ubuntu-xenial-621.64-20200406-195250-465946795-20200406195251.tgz
   version: 1.1.8
 resource_pools:
 - env:
@@ -157,12 +157,12 @@ resource_pools:
         provider: local
       mbus:
         cert: ((mbus_bootstrap_ssl))
-      password: '*'
       ntp:
       - time1.google.com
       - time2.google.com
       - time3.google.com
       - time4.google.com
+      password: '*'
   name: vms
   network: default
 variables:
