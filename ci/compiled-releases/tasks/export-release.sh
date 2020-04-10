@@ -4,7 +4,7 @@ set -eu
 
 . $(dirname $0)/../../tasks/utils.sh
 
-. start-bosh
+start-bosh
 
 . /tmp/local-bosh/director/env
 
