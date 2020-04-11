@@ -5,9 +5,8 @@ set -eu
 rm -rf "/usr/local/bosh-deployment"
 cp -r "${PWD}/bosh-deployment" "/usr/local/bosh-deployment"
 
-start-bosh
-
-source /tmp/local-bosh/director/env
+. start-bosh
+. /tmp/local-bosh/director/env
 
 bosh upload-stemcell --sha1 35297b197426db1c9ead4d66afff47dab63a26ab \
   "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-xenial-go_agent?v=315.41"
