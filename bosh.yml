@@ -145,8 +145,8 @@ releases:
   url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-271.0.0-ubuntu-xenial-621.64-20200410-221745-99232062-20200410221747.tgz
   version: 271.0.0
 - name: bpm
-  sha1: 604f3505dfde8281551d3273c8d346b4900da4c6
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.8-ubuntu-xenial-621.64-20200406-195250-465946795-20200406195251.tgz
+  sha1: c52d25b9ee73e85c1290447255444e81f0be0f79
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.8-ubuntu-xenial-621.69-20200417-155306-741586091-20200417155307.tgz
   version: 1.1.8
 resource_pools:
 - env:
