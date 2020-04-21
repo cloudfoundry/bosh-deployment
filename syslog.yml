@@ -1,18 +1,18 @@
-- type: replace
-  path: /releases/-
+- path: /releases/-
+  release: syslog
+  type: replace
   value:
     name: syslog
-    version: 11
-    url: https://bosh.io/d/github.com/cloudfoundry/syslog-release?v=11
-    sha1: 332ac15609b220a3fdf5efad0e0aa069d8235788
-
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
+    sha1: e2649e48c49aedcbd0ff96b00f56b028682f1dd6
+    url: https://bosh.io/d/github.com/cloudfoundry/syslog-release?v=11.6.1
+    version: 11.6.1
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
   value:
     name: syslog_forwarder
-    release: syslog
     properties:
       syslog:
         address: ((syslog_address))
         port: ((syslog_port))
         transport: ((syslog_transport))
+    release: syslog
