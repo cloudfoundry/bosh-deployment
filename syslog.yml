@@ -1,5 +1,6 @@
 - type: replace
   path: /releases/-
+  release: syslog
   value:
     name: syslog
     version: 11
