@@ -47,9 +47,9 @@ addons:
   name: bosh-dns-windows
 releases:
 - name: bosh-dns
-  sha1: d61c2360c5a912379c0601a33b1e8b7c97ab30e0
-  url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.21.0
-  version: 1.21.0
+  sha1: 909b1f60c4b004bc4125292374fda8c8326db135
+  url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.22.0
+  version: 1.22.0
 variables:
 - name: /dns_healthcheck_tls_ca
   options:
