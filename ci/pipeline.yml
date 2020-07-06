@@ -847,7 +847,7 @@ resources:
 - name: alicloud-ubuntu-xenial-stemcell
   type: bosh-io-stemcell
   source:
-    name: bosh-alicloud-xen-hvm-ubuntu-xenial-go_agent
+    name: bosh-alicloud-kvm-ubuntu-xenial-go_agent
 
 - name: azure-ubuntu-xenial-stemcell
   type: bosh-io-stemcell
