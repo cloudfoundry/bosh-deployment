@@ -3,16 +3,16 @@
   type: replace
   value:
     name: garden-runc
-    sha1: ae7d57b96d7d8539bb8b9bd468bda2c7ac20f13e
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.19.15-ubuntu-xenial-621.77-20200724-162215-810970488-20200724162217.tgz
+    sha1: c41b5b10c3018729f9930ae225c47522b890796f
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.19.15-ubuntu-xenial-621.78-20200728-151325-400968047-20200728151327.tgz
     version: 1.19.15
 - path: /releases/-
   release: bosh-warden-cpi
   type: replace
   value:
     name: bosh-warden-cpi
-    sha1: 32b6073d91f3802ec4356d646ad0487bcc4b1f68
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-41-ubuntu-xenial-621.77-20200717-174148-661997883-20200717174149.tgz
+    sha1: d218ed6c7ebf690a2c3c978b5488e1b5a10dfb9c
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-41-ubuntu-xenial-621.78-20200728-150620-019084229-20200728150621.tgz
     version: 41
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
