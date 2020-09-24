@@ -28,6 +28,7 @@
     name: metrics_server_tls
     type: certificate
     options:
+      common_name: ((internal_ip))
       alternative_names:
         - ((internal_ip))
       ca: metrics_server_ca
@@ -41,6 +42,7 @@
     name: metrics_server_client_tls
     type: certificate
     options:
+      common_name: metrics_server_client_tls
       ca: metrics_server_ca
       extended_key_usage:
         - client_auth
