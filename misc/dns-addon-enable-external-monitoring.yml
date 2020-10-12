@@ -5,3 +5,7 @@
 - type: replace
   path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties?/metrics?/address
   value: ((address-to-bind-dns-metrics))
+
+- type: replace
+  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties?/metrics?/port
+  value: ((port-to-bind-dns-metrics))
