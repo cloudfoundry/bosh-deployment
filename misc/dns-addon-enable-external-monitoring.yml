@@ -1,0 +1,7 @@
+- type: replace
+  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties?/metrics?/enabled
+  value: true
+
+- type: replace
+  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties?/metrics?/address
+  value: ((address-to-bind-dns-metrics))
