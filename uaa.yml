@@ -3,8 +3,8 @@
   type: replace
   value:
     name: uaa
-    sha1: 35d1510d6c0a2c7e80a43d3618a3fb5c6fc5d881
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-74.26.0-ubuntu-xenial-621.89-20201020-115336-882909621-20201020115339.tgz
+    sha1: b552c0058409bb5e7f304dd1fb6ff74d9ea0ab89
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-74.26.0-ubuntu-xenial-621.90-20201022-102153-881628831-20201022102156.tgz
     version: 74.26.0
 - path: /instance_groups/name=bosh/properties/director/user_management/provider
   type: replace
