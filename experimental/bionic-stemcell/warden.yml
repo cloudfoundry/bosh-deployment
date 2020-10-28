@@ -1,0 +1,6 @@
+- name: stemcell
+  path: /resource_pools/name=vms/stemcell?
+  type: replace
+  value:
+    sha1: e9ae40b63763ebad01d4a6054d2b710b3e6773a4
+    url: https://s3.amazonaws.com/bosh-core-stemcells-candidate/warden/bosh-stemcell-168-warden-boshlite-ubuntu-bionic-go_agent.tgz

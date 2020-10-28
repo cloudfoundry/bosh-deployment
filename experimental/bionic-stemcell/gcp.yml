@@ -1,0 +1,6 @@
+- name: stemcell
+  path: /resource_pools/name=vms/stemcell?
+  type: replace
+  value:
+    sha1: 639370afc452acf82c1bf609996f8906928c2065
+    url: https://s3.amazonaws.com/bosh-core-stemcells-candidate/google/bosh-stemcell-168-google-kvm-ubuntu-bionic-go_agent.tgz

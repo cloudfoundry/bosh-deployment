@@ -1,0 +1,6 @@
+- name: stemcell
+  path: /resource_pools/name=vms/stemcell?
+  type: replace
+  value:
+    sha1: 3c48e96cc912f9a37414bb3763a3294165a047a5
+    url: https://s3.amazonaws.com/bosh-core-stemcells-candidate/vsphere/bosh-stemcell-168-vsphere-esxi-ubuntu-bionic-go_agent.tgz
