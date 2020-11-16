@@ -11,8 +11,8 @@
   type: replace
   value:
     name: bosh-warden-cpi
-    sha1: efa03f3bbded3abfc8e6ce0131376d9b19c0d9ad
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-41-ubuntu-xenial-621.90-20201022-102542-908822742-20201022102545.tgz
+    sha1: 7d94f337d3b03e41709a4426a26a3668b0994ef2
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-41-ubuntu-xenial-621.92-20201116-204145-547368907-20201116204146.tgz
     version: 41
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
