@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 37d0fb0044fa523733e25da11b8fe7bacad6c2ff
-    url: https://bosh-gce-light-stemcells.s3-accelerate.amazonaws.com/621.90/light-bosh-stemcell-621.90-google-kvm-ubuntu-xenial-go_agent.tgz
+    sha1: cd3123ddb5a87fd5e63e0a38a405ab453361e62a
+    url: https://bosh-gce-light-stemcells.s3-accelerate.amazonaws.com/621.92/light-bosh-stemcell-621.92-google-kvm-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
