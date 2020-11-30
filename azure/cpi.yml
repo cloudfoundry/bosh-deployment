@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 7f231f0ca5b521e0d13bc1e97c194c68baff3242
-    url: https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.92/bosh-stemcell-621.92-azure-hyperv-ubuntu-xenial-go_agent.tgz
+    sha1: b69ced8171d39958fa4cee11a1110401cd8718a8
+    url: https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.93/bosh-stemcell-621.93-azure-hyperv-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
