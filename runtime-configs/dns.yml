@@ -3,6 +3,7 @@ addons:
     stemcell:
     - os: ubuntu-trusty
     - os: ubuntu-xenial
+    - os: ubuntu-bionic
   jobs:
   - name: bosh-dns
     properties:
