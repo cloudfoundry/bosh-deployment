@@ -2,6 +2,20 @@
 
 This repository is intended to serve as a reference and starting point for developer-friendly configuration of the Bosh Director. Consume the `master` branch. 
 
+## Important notice for users of bosh-deployment and Bosh DNS versions older than 1.28
+
+As of Bosh DNS version 1.28, Bosh DNS is now built with Go 1.15. This version of Go demands that TLS certificates be created with a SAN field, in addition to the usual CN field.
+
+The following certificates are affected by this change and will need to be regenerated:
+
+* `/dns_healthcheck_server_tls`
+* `/dns_healthcheck_client_tls`
+* `/dns_api_server_tls`
+* `/dns_api_client_tls`
+
+If you're using Credhub or another external variable store, then you will need to use `update_mode: converge` as documented here: <https://bosh.io/docs/manifest-v2/#variables>.<br>
+If you are not using Credhub or another external variable store, then you will need to follow the usual procedure for regenerating your certificates.
+
 ## How is bosh-deployment updated?
 An automatic process updates Bosh, and other releases within bosh-deployment
 
