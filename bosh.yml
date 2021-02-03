@@ -141,8 +141,8 @@ networks:
   type: manual
 releases:
 - name: bosh
-  sha1: a673887cc475886fceee00d2fe5f76a143bfdeab
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-271.4.0-ubuntu-xenial-621.99-20210202-021123-989080333-20210202021125.tgz
+  sha1: 5808d896cecde9dcfd36797a39c8772ccd675b35
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-271.4.0-ubuntu-xenial-621.101-20210203-210836-888476764-20210203210838.tgz
   version: 271.4.0
 - name: bpm
   sha1: 61d3ee1de3bc0150e94a0848fc599f312611eb09
