@@ -61,6 +61,8 @@ variables:
   options:
     ca: /dns_healthcheck_tls_ca
     common_name: health.bosh-dns
+    alternative_names:
+    - health.bosh-dns
     extended_key_usage:
     - server_auth
   type: certificate
@@ -68,6 +70,8 @@ variables:
   options:
     ca: /dns_healthcheck_tls_ca
     common_name: health.bosh-dns
+    alternative_names:
+    - health.bosh-dns
     extended_key_usage:
     - client_auth
   type: certificate
@@ -80,6 +84,8 @@ variables:
   options:
     ca: /dns_api_tls_ca
     common_name: api.bosh-dns
+    alternative_names:
+    - api.bosh-dns
     extended_key_usage:
     - server_auth
   type: certificate
@@ -87,6 +93,8 @@ variables:
   options:
     ca: /dns_api_tls_ca
     common_name: api.bosh-dns
+    alternative_names:
+    - api.bosh-dns
     extended_key_usage:
     - client_auth
   type: certificate
