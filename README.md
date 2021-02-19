@@ -1,6 +1,6 @@
 # bosh-deployment
 
-This repository is intended to serve as a reference and starting point for developer-friendly configuration of the Bosh Director. Consume the `master` branch. 
+This repository is intended to serve as a reference and starting point for developer-friendly configuration of the Bosh Director. Consume the `master` branch. Any changes should be made against the `develop` branch (it will be automatically promoted once it passes tests).
 
 ## Important notice for users of bosh-deployment and Bosh DNS versions older than 1.28
 
