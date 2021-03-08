@@ -20,6 +20,19 @@
     secret_access_key: ((oss-access-key-secret))
 
 - type: remove
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores?/-
+  value:
+    provider: s3
+    options:
+      bucket_name: ((oss-bucket-name))
+      host: ((oss-host))
+      access_key_id: ((oss-access-key-id))
+      secret_access_key: ((oss-access-key-secret))
+
+- type: remove
   path: /variables/name=blobstore_ca?
 
 - type: remove
