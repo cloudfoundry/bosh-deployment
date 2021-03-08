@@ -11,6 +11,7 @@ groups:
   - update-aws-cpi
   - update-google-cpi
   - update-azure-cpi
+  - update-alicloud-cpi
   - update-vsphere-cpi-release
   - update-virtualbox-cpi-release
   - update-openstack-cpi-release
@@ -18,6 +19,7 @@ groups:
   jobs:
   - update-aws-stemcell
   - update-azure-stemcell
+  - update-alicloud-stemcell
   - update-docker-stemcell
   - update-gcp-stemcell
   - update-openstack-stemcell
@@ -137,6 +139,26 @@ jobs:
     params:
       CPI_NAME: bosh-azure-cpi
       CPI_OPS_FILE: azure/cpi.yml
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-alicloud-cpi
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: alicloud-cpi-release
+      trigger: true
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: alicloud-cpi-release
+    params:
+      CPI_OPS_FILE: alicloud/cpi.yml
+      CPI_NAME: bosh-alicloud-cpi
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -553,6 +575,26 @@ jobs:
       repository: bosh-deployment
       rebase: true
 
+- name: update-alicloud-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: alicloud-ubuntu-xenial-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: alicloud-ubuntu-xenial-stemcell
+    params:
+      CPI_OPS_FILE: alicloud/cpi.yml
+      STEMCELL_NAME: alicloud-ubuntu-xenial-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
 - name: update-azure-stemcell
   plan:
   - in_parallel:
@@ -823,6 +865,11 @@ resources:
   source:
     name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
 
+- name: alicloud-ubuntu-xenial-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-alicloud-kvm-ubuntu-xenial-go_agent
+
 - name: azure-ubuntu-xenial-stemcell
   type: bosh-io-stemcell
   source:
@@ -922,6 +969,11 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/bosh-aws-cpi-release
+
+- name: alicloud-cpi-release
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-incubator/bosh-alicloud-cpi-release
 
 - name: azure-cpi-release
   type: bosh-io-release
