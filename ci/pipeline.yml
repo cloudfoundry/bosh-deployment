@@ -21,6 +21,7 @@ groups:
   - update-docker-stemcell
   - update-gcp-stemcell
   - update-openstack-stemcell
+  - update-openstack-raw-stemcell
   - update-vcloud-stemcell
   - update-virtualbox-stemcell
   - update-vsphere-stemcell
@@ -632,6 +633,26 @@ jobs:
       repository: bosh-deployment
       rebase: true
 
+- name: update-openstack-raw-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: openstack-ubuntu-xenial-stemcell-raw
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: openstack-ubuntu-xenial-stemcell-raw
+    params:
+      CPI_OPS_FILE: openstack/use-openstack-raw-stemcell.yml
+      STEMCELL_NAME: openstack-ubuntu-xenial-stemcell-raw
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
 - name: update-vcloud-stemcell
   plan:
   - in_parallel:
@@ -817,6 +838,12 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-openstack-kvm-ubuntu-xenial-go_agent
+    force_regular: true
+
+- name: openstack-ubuntu-xenial-stemcell-raw
+  type: bosh-io-stemcell
+  source:
+    name: bosh-openstack-kvm-ubuntu-xenial-go_agent-raw
     force_regular: true
 
 - name: vcloud-ubuntu-xenial-stemcell
