@@ -124,24 +124,24 @@ jobs:
       rebase: true
 
 - name: update-alicloud-stemcell
-   plan:
-   - in_parallel:
-     - get: bosh-deployment
-       params:
-         clean_tags: true
-     - get: alicloud-ubuntu-xenial-stemcell
-       trigger: true
-   - task: update-stemcell
-     file: bosh-deployment/ci/tasks/update-stemcell.yml
-     input_mapping:
-       stemcell: alicloud-ubuntu-xenial-stemcell
-     params:
-       CPI_OPS_FILE: alicloud/cpi.yml
-       STEMCELL_NAME: alicloud-ubuntu-xenial-stemcell
-   - put: bosh-deployment
-     params:
-       repository: bosh-deployment
-       rebase: true
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: alicloud-ubuntu-xenial-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: alicloud-ubuntu-xenial-stemcell
+    params:
+      CPI_OPS_FILE: alicloud/cpi.yml
+      STEMCELL_NAME: alicloud-ubuntu-xenial-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
 - name: update-azure-cpi
   plan:
@@ -845,9 +845,9 @@ resources:
     name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
 
 - name: alicloud-ubuntu-xenial-stemcell
-   type: bosh-io-stemcell
-   source:
-     name: bosh-alicloud-kvm-ubuntu-xenial-go_agent
+  type: bosh-io-stemcell
+  source:
+    name: bosh-alicloud-kvm-ubuntu-xenial-go_agent
 
 - name: azure-ubuntu-xenial-stemcell
   type: bosh-io-stemcell
