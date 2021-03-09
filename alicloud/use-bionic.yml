@@ -1,5 +1,5 @@
 - type: replace
   path: /resource_pools/name=vms/stemcell?
   value:
-    sha1: 9174a7ced02f71227a3988375df205ea92c5d9af
-    url: https://bosh-alicloud-light-stemcells-cn.oss-cn-hangzhou.aliyuncs.com/light-bosh-stemcell-0.13-alicloud-kvm-ubuntu-bionic-go_agent.tgz
+    sha1: db0d0b4789296bb9b52e45a95bf028e8444f562b
+    url: https://bosh-alicloud-light-stemcells-cn.oss-cn-hangzhou.aliyuncs.com/light-bosh-stemcell-0.16-alicloud-kvm-ubuntu-bionic-go_agent.tgz
