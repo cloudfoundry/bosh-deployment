@@ -9,7 +9,8 @@
     sha1: 9ea843cc34ccf61d0c6809c9f6cdfd7da29bc7f1
 
 # light stemcell
-- type: replace
+- name: stemcell
+  type: replace
   path: /resource_pools/name=vms/stemcell?
   value:
     url: https://bosh-alicloud-light-stemcells-eu.oss-eu-central-1.aliyuncs.com/light-bosh-stemcell-456.1-alicloud-kvm-ubuntu-xenial-go_agent.tgz
