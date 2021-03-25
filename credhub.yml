@@ -3,8 +3,8 @@
   type: replace
   value:
     name: credhub
-    sha1: a829e1aa807cc4b66563e94873477de1a3db23f0
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.9.0-ubuntu-xenial-621.115-20210322-185956-205467611-20210322185957.tgz
+    sha1: 5c863ecf3809afc0a7c89c317253ba7fb1288b85
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.9.0-ubuntu-xenial-621.117-20210325-174336-2768148-20210325174337.tgz
     version: 2.9.0
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
