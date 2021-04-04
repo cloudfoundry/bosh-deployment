@@ -9,8 +9,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: a645dd716cc5e46d04277d55705a74d26a1bd64b
-    url: https://bosh-alicloud-light-stemcells-cn.oss-cn-hangzhou.aliyuncs.com/light-bosh-stemcell-621.115-alicloud-kvm-ubuntu-xenial-go_agent.tgz
+    sha1: 00a447994462b598c6d8642067116bbeadb331d2
+    url: https://bosh-alicloud-light-stemcells-cn.oss-cn-hangzhou.aliyuncs.com/light-bosh-stemcell-621.117-alicloud-kvm-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
