@@ -1,5 +1,5 @@
 - type: replace
   path: /resource_pools/name=vms/stemcell?
   value:
-    sha1: 6add0745290e16fec64f1899966dad592043c5b2
-    url: https://s3.amazonaws.com/bosh-softlayer-cpi-stemcells/light-bosh-stemcell-0.18-softlayer-xen-ubuntu-bionic-go_agent.tgz
+    sha1: 0765fa125071e3356a4995f93b826e71a694fc5e
+    url: https://s3.amazonaws.com/bosh-softlayer-cpi-stemcells/light-bosh-stemcell-0.24-softlayer-xen-ubuntu-bionic-go_agent.tgz
