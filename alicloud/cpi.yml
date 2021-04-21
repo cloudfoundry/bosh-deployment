@@ -2,9 +2,9 @@
   type: replace
   value:
     name: bosh-alicloud-cpi
-    sha1: 9ea843cc34ccf61d0c6809c9f6cdfd7da29bc7f1
-    url: https://github.com/cloudfoundry-incubator/bosh-alicloud-cpi-release/releases/download/v24.0.0/bosh-alicloud-cpi-release-24.0.0.tgz
-    version: 24.0.0
+    sha1: 93768978946838bcc52a724b2157e14109d1f705
+    url: https://github.com/cloudfoundry-incubator/bosh-alicloud-cpi-release/releases/download/v34.0.0/bosh-alicloud-cpi-release-34.0.0.tgz
+    version: 34.0.0
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
