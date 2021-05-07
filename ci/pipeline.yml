@@ -49,6 +49,7 @@ jobs:
   - do:
     - get: bosh-deployment
       trigger: true
+    - get: warden-ubuntu-bionic-stemcell
     - task: bbl-up
       file: bosh-deployment/ci/tasks/bbl-up-bosh-lite-gcp.yml
       params:
@@ -56,6 +57,8 @@ jobs:
         BBL_GCP_REGION: us-west1
     - task: test-bosh-lite-gcp
       file: bosh-deployment/ci/tasks/test-bosh-lite-gcp.yml
+      input_mapping:
+        stemcell: warden-ubuntu-bionic-stemcell
     ensure:
       task: bbl-down
       file: bosh-deployment/ci/tasks/bbl-down-bosh-lite-gcp.yml
@@ -78,9 +81,12 @@ jobs:
   plan:
   - get: bosh-deployment
     trigger: true
+  - get: warden-ubuntu-bionic-stemcell
   - task: test-main-bosh-docker
     timeout: 2h
     file: bosh-deployment/ci/tasks/test-main-bosh-docker.yml
+    input_mapping:
+      stemcell: warden-ubuntu-bionic-stemcell
     privileged: true
 
 - name: promote
