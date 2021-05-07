@@ -123,26 +123,6 @@ jobs:
       repository: bosh-deployment
       rebase: true
 
-- name: update-alicloud-stemcell
-  plan:
-  - in_parallel:
-    - get: bosh-deployment
-      params:
-        clean_tags: true
-    - get: alicloud-ubuntu-bionic-stemcell
-      trigger: true
-  - task: update-stemcell
-    file: bosh-deployment/ci/tasks/update-stemcell.yml
-    input_mapping:
-      stemcell: alicloud-ubuntu-bionic-stemcell
-    params:
-      CPI_OPS_FILE: alicloud/cpi.yml
-      STEMCELL_NAME: alicloud-ubuntu-bionic-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
-
 - name: update-azure-cpi
   plan:
   - in_parallel:
@@ -553,6 +533,26 @@ jobs:
       rebase: true
 
 ### Stemcells
+
+- name: update-alicloud-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: alicloud-ubuntu-bionic-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: alicloud-ubuntu-bionic-stemcell
+    params:
+      CPI_OPS_FILE: alicloud/cpi.yml
+      STEMCELL_NAME: alicloud-ubuntu-bionic-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
 
 - name: update-aws-stemcell
   plan:
