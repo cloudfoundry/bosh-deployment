@@ -2,10 +2,6 @@
 
 This repository is intended to serve as a reference and starting point for developer-friendly configuration of the Bosh Director. Consume the `master` branch. Any changes should be made against the `develop` branch (it will be automatically promoted once it passes tests).
 
-## Use Bionic stemcells
-
-Beta versions of Bionic stemcells are available on [Bosh.io](https://bosh.io/stemcells/). To enable the Bionic stemcell append the ops file `[IAAS]/use-bionic.yml` after the ops file `[IAAS]/cpi.yml`.
-
 ## Important notice for users of bosh-deployment and Bosh DNS versions older than 1.28
 
 As of Bosh DNS version 1.28, Bosh DNS is now built with Go 1.15. This version of Go demands that TLS certificates be created with a SAN field, in addition to the usual CN field.
@@ -63,7 +59,6 @@ Other releases such as [UAA](https://github.com/cloudfoundry/uaa-release), [Cred
 
 - `bosh.yml`: Base manifest that is meant to be used with different CPI configurations
 - `[alicloud|aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cpi.yml`: CPI configuration
-- `[alicloud|aws|azure|docker|gcp|openstack|softlayer|vcloud|virtualbox|vsphere|warden]/use-bionic.yml`: use Bionic stemcell (beta version) instead of Xenial stemcell.
 - `[alicloud|aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cloud-config.yml`: Simple cloud configs
 - `jumpbox-user.yml`: Adds user `jumpbox` for SSH-ing into the Director (see [Jumpbox User](docs/jumpbox-user.md))
 - `uaa.yml`: Deploys UAA and enables UAA user management in the Director
