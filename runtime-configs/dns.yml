@@ -48,9 +48,9 @@ addons:
   name: bosh-dns-windows
 releases:
 - name: bosh-dns
-  sha1: e4949efdf353742360955316d69e3c1d59a6cdf0
-  url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.28.0
-  version: 1.28.0
+  sha1: 9ca2c07df9ea63f4e23c511bf39ccaac7e133b9d
+  url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.29.0
+  version: 1.29.0
 variables:
 - name: /dns_healthcheck_tls_ca
   options:
@@ -59,17 +59,19 @@ variables:
   type: certificate
 - name: /dns_healthcheck_server_tls
   options:
+    alternative_names:
+    - health.bosh-dns
     ca: /dns_healthcheck_tls_ca
     common_name: health.bosh-dns
-    alternative_names: [health.bosh-dns]
     extended_key_usage:
     - server_auth
   type: certificate
 - name: /dns_healthcheck_client_tls
   options:
+    alternative_names:
+    - health.bosh-dns
     ca: /dns_healthcheck_tls_ca
     common_name: health.bosh-dns
-    alternative_names: [health.bosh-dns]
     extended_key_usage:
     - client_auth
   type: certificate
@@ -80,17 +82,19 @@ variables:
   type: certificate
 - name: /dns_api_server_tls
   options:
+    alternative_names:
+    - api.bosh-dns
     ca: /dns_api_tls_ca
     common_name: api.bosh-dns
-    alternative_names: [api.bosh-dns]
     extended_key_usage:
     - server_auth
   type: certificate
 - name: /dns_api_client_tls
   options:
+    alternative_names:
+    - api.bosh-dns
     ca: /dns_api_tls_ca
     common_name: api.bosh-dns
-    alternative_names: [api.bosh-dns]
     extended_key_usage:
     - client_auth
   type: certificate
