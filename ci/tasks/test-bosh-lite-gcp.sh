@@ -1,12 +1,12 @@
 #!/bin/bash -ex
 
+URL=$(cat stemcell/url)
+SHA1=$(cat stemcell/sha1)
+
 pushd "${PWD}/bbl-state"
   set +x
   eval "$(bbl print-env)"
   set -x
-
-  URL=$(cat stemcell/url)
-  SHA1=$(cat stemcell/sha1)
 
   bosh upload-stemcell --sha1 "$SHA1" "$URL"
 
