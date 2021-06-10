@@ -141,8 +141,8 @@ networks:
   type: manual
 releases:
 - name: bosh
-  sha1: fa49f6a08dd65fd35ff3473f632f74e7a30ddb81
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-271.8.0-ubuntu-bionic-1.1-20210517-195545-923589637-20210517195550.tgz
+  sha1: bac81303bba8bcb3eaa6ff3ccd0fce98243c01f1
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-271.8.0-ubuntu-bionic-1.10-20210610-140155-588950002-20210610140156.tgz
   version: 271.8.0
 - name: bpm
   sha1: b3d266813d64960daaff4e4edb6536045638cb8d
