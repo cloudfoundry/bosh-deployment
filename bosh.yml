@@ -145,8 +145,8 @@ releases:
   url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-271.8.0-ubuntu-bionic-1.1-20210517-195545-923589637-20210517195550.tgz
   version: 271.8.0
 - name: bpm
-  sha1: a7c1bf84b76490b4bc4c2e077cea25b95b669363
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.12-ubuntu-bionic-1.1-20210602-220942-32220638-20210602220943.tgz
+  sha1: b3d266813d64960daaff4e4edb6536045638cb8d
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.12-ubuntu-bionic-1.10-20210610-135915-228230683-20210610135916.tgz
   version: 1.1.12
 resource_pools:
 - env:
