@@ -72,6 +72,7 @@
     default_security_groups: ((default_security_groups))
     region: ((region))
     secret_access_key: ((secret_access_key))
+    session_token: ((session_token))
 - path: /cloud_provider/ssh_tunnel?
   type: replace
   value:
@@ -87,6 +88,7 @@
     default_security_groups: ((default_security_groups))
     region: ((region))
     secret_access_key: ((secret_access_key))
+    session_token: ((session_token))
 - path: /variables/-
   type: replace
   value:
