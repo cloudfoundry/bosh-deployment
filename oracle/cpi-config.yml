@@ -1,0 +1,10 @@
+cpis:
+- name: oracle-cpi-ref
+  type: oracle
+  properties:
+    tenancy: ((tenancy))
+    compartment: ((compartment))
+    apikey: ((apikey))
+    user: ((user))
+    fingerprint: ((fingerprint))
+    region: ((region))

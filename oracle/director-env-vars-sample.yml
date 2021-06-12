@@ -1,0 +1,36 @@
+# Properties controlling BOSH director deployment
+director_name: sample-bosh-director
+local_oracle_cpi_release: /full/path/to/cpi/release.tgz
+local_oracle_light_stemcell: /full/path/to/light/stemcell.tgz
+# Tenancy OCID
+tenancy: "ocid1.tenancy.oc1..."
+# User OCID
+user: "ocid1.user.oc1..."
+# Compartment OCID
+compartment: "ocid1.compartment.oc1.."
+# Region name
+region: "us-phoenix-1"
+# VCN name
+vcn: "BoshDirectorVCN"
+# Subnet name
+subnet: "director-subnet-ad1"
+# Availability Domain name
+ad: WZYX:PHX-AD-1
+# CIDR range of the subnet listed above.
+internal_cidr: 10.0.1.0/24
+# Subnet gateway
+internal_gw: 10.0.1.1
+# Private IP that will be assigned to the BOSH director VM
+# Must fall within the subnet CIDR range above and must be available
+internal_ip: 10.0.1.XX
+#Fingerprint and contents of the API signing key associated with the User
+fingerprint:
+apikey: |
+       -----BEGIN RSA PRIVATE KEY-----
+       MIIEowIBAAKCAQEA3EZNS3CHAZrvg5gdZHZlB93OrOujKYIfRRSnp0y/dogUB/LN
+       RzjyS0fpvQUXWPk2a/ywGS84xb2V/CXJtna6gMzX3oOEKzLLJlSxpF8wHF+gFQUm
+       ......
+       qIcj56P9+mehiKmglQ1Rlwo72hcc0zZAyBhPeZrR5EcsGp6/l6Le4/XIFFVRpqKu
+       LZeO6W6RMUo4nWxZ/ZqgQi0QFguCG3SSqq00PKZcMUOvnJhJCIVo
+       -----END RSA PRIVATE KEY-----
+
