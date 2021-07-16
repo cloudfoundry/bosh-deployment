@@ -11,6 +11,7 @@ groups:
   - update-aws-cpi
   - update-google-cpi
   - update-azure-cpi
+  - update-alicloud-cpi
   - update-vsphere-cpi-release
   - update-virtualbox-cpi-release
   - update-openstack-cpi-release
@@ -144,6 +145,27 @@ jobs:
     params:
       CPI_NAME: bosh-azure-cpi
       CPI_OPS_FILE: azure/cpi.yml
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-alicloud-cpi
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: alicloud-cpi-release
+      trigger: true
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: alicloud-cpi-release
+    params:
+      CPI_OPS_FILE: alicloud/cpi.yml
+      CPI_NAME: bosh-alicloud-cpi
+      GITHUB_RELEASE: true
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -959,6 +981,13 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/bosh-azure-cpi-release
+
+- name: alicloud-cpi-release
+  type: github-release
+  source:
+    owner: cloudfoundry-incubator
+    repository: bosh-alicloud-cpi-release
+    tag_filter: "v(.*)"
 
 - name: google-cpi-release
   type: bosh-io-release

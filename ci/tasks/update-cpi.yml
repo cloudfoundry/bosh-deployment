@@ -13,6 +13,7 @@ inputs:
 params:
   CPI_OPS_FILE: ~
   CPI_NAME: ~
+  GITHUB_RELEASE: false
 
 outputs:
   - name: bosh-deployment
