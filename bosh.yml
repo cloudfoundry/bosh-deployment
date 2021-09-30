@@ -52,9 +52,6 @@ instance_groups:
       mbus: nats://nats:((nats_password))@((internal_ip)):4222
     blobstore:
       address: ((internal_ip))
-      agent:
-        password: ((blobstore_agent_password))
-        user: agent
       director:
         password: ((blobstore_director_password))
         user: director
