@@ -50,6 +50,26 @@ bosh create-env bosh.yml \
   -v private_key=test \
   -v subnet_id=test
 
+echo "- AWS with signed URLs"
+bosh create-env bosh.yml \
+  -o aws/cpi.yml \
+  -o misc/blobstore-signed-urls.yml \
+  -o misc/blobstore-remove-agent-creds.yml \
+  --state=$tmp_file \
+  --vars-store $(mktemp ${tmp_file}.XXXXXX) \
+  -v director_name=test \
+  -v internal_cidr=test \
+  -v internal_gw=test \
+  -v internal_ip=test \
+  -v access_key_id=test \
+  -v secret_access_key=test \
+  -v az=test \
+  -v region=test \
+  -v default_key_name=test \
+  -v default_security_groups=[test] \
+  -v private_key=test \
+  -v subnet_id=test
+
 echo "- AWS with UAA"
 bosh create-env bosh.yml \
   -o aws/cpi.yml \
