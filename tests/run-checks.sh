@@ -2,14 +2,15 @@
 
 set -eu
 
-cd ..
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)
+cd "${script_dir}/.."
 
-tmp_file=/tmp/bosh-deployment-test
-touch $tmp_file
+tmp_file="/tmp/bosh-deployment-test"
+touch "${tmp_file}"
 
-clean_tmp() {
-  rm -f $tmp_file
-  rm -f ${tmp_file}.*
+function clean_tmp() {
+  rm -f "${tmp_file}"
+  rm -f "${tmp_file}."*
 }
 
 trap clean_tmp EXIT
@@ -21,7 +22,7 @@ function bosh() {
 }
 
 echo -e "\nCheck YAML syntax\n"
-find .|grep yml|xargs -n1 bosh int
+find . -type "f" -name "*.yml" -print | tee /dev/stderr | xargs -n1 bosh interpolate > /dev/null
 
 echo -e "\nUsed compiled releases\n"
 grep -r -i s3.amazonaws.com/bosh-compiled-release-tarballs . | grep -v grep | grep -v ./.git
