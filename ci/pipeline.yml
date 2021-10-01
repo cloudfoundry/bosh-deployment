@@ -970,7 +970,7 @@ resources:
 - name: virtualbox-cpi-release
   type: bosh-io-release
   source:
-    repository: cppforlife/bosh-virtualbox-cpi-release
+    repository: cloudfoundry/bosh-virtualbox-cpi-release
 
 - name: aws-cpi-release
   type: bosh-io-release
