@@ -1,4 +1,11 @@
 ---
+
+- type: remove
+  path: /instance_groups/name=bosh/properties/blobstore/agent/user?
+
+- type: remove
+  path: /instance_groups/name=bosh/properties/blobstore/agent/password?
+
 - type: replace
   path: /instance_groups/name=bosh/properties/blobstore/enable_signed_urls?
   value: true
