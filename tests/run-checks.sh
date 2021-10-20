@@ -54,7 +54,6 @@ echo "- AWS with signed URLs"
 bosh create-env bosh.yml \
   -o aws/cpi.yml \
   -o misc/blobstore-signed-urls.yml \
-  -o misc/blobstore-remove-agent-creds.yml \
   --state=$tmp_file \
   --vars-store $(mktemp ${tmp_file}.XXXXXX) \
   -v director_name=test \
