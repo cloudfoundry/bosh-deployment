@@ -6,11 +6,13 @@
 - type: remove
   path: /instance_groups/name=bosh/properties/blobstore/agent/password
 
-- type: remove
+- type: replace
   path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores/0/options/password
+  value: not_used_but_required_by_agent_using_singed_urls
 
-- type: remove
+- type: replace
   path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores/0/options/user
+  value: not_used_but_required_by_agent_using_singed_urls
 
 
 
