@@ -26,7 +26,7 @@ bosh delete-env ${bosh_deployment}/bosh.yml \
   --ops-file ${bosh_deployment}/jumpbox-user.yml \
   --vars-store creds.yml \
   --var director_name=bosh-lite \
-  --var internal_ip=192.168.50.6 \
-  --var internal_gw=192.168.50.1 \
-  --var internal_cidr=192.168.50.0/24 \
+  --var internal_ip=192.168.56.6 \
+  --var internal_gw=192.168.56.1 \
+  --var internal_cidr=192.168.56.0/24 \
   --var outbound_network_name=NatNetwork

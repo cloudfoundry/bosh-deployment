@@ -12,4 +12,4 @@ fi
 
 bosh int  "${PWD}/creds.yml" --path /jumpbox_ssh/private_key > "${PWD}/ssh_key"
 chmod 600 "${PWD}/ssh_key"
-ssh -i "${PWD}/ssh_key" jumpbox@192.168.50.6
+ssh -i "${PWD}/ssh_key" jumpbox@192.168.56.6
