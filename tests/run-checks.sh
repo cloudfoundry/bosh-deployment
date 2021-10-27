@@ -499,7 +499,7 @@ bosh create-env bosh.yml \
   -v internal_cidr=10.245.0.0/16 \
   -v internal_gw=10.245.0.1 \
   -v internal_ip=10.245.0.10 \
-  -v docker_host=tcp://192.168.50.8:4243 \
+  -v docker_host=tcp://192.168.56.8:4243 \
   --var-file docker_tls.ca=$tmp_file \
   --var-file docker_tls.certificate=$tmp_file \
   --var-file docker_tls.private_key=$tmp_file \
