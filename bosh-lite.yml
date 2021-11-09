@@ -68,7 +68,7 @@
   type: replace
   value:
     options:
-      blobstore_path: /var/vcap/store/tmp/compiled_package_cache
+      blobstore_path: /var/vcap/store/director/compiled_package_cache
     provider: local
 - path: /variables/name=nats_server_tls/options/alternative_names?/-
   type: replace
