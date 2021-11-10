@@ -1,0 +1,33 @@
+---
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/agent/user
+  value: not_used_but_required_by_some_cpis
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/agent/password
+  value: not_used_but_required_by_some_cpis
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores/0/options/password
+  value: not_used_but_required_by_some_cpis
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores/0/options/user
+  value: not_used_but_required_by_some_cpis
+
+
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/enable_signed_urls?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/blobstore/secret?
+  value: ((blobstore_secret))
+
+- type: replace
+  path: /variables/-
+  value:
+    name: blobstore_secret
+    type: password
