@@ -212,7 +212,7 @@ bosh create-env bosh.yml \
   -v external_db_user_uaa=test \
   -v external_db_name_uaa=test \
   -v external_db_password_uaa=test \
-  -v external_db_scheme_uaa=test 
+  -v external_db_scheme_uaa=test
 
 echo "- AWS (cloud-config)"
 bosh update-cloud-config aws/cloud-config.yml \
@@ -447,6 +447,43 @@ bosh create-env bosh.yml \
   -v tenant_id=test \
   -v client_id=test \
   -v client_secret=test \
+  -v resource_group_name=test \
+  -v storage_account_name=test \
+  -v default_security_group=nsg-bosh
+
+echo "- Azure (managed-identity)"
+bosh create-env bosh.yml \
+  -o azure/cpi.yml \
+  -o azure/use-managed-identity.yml \
+  --state=$tmp_file \
+  --vars-store $(mktemp ${tmp_file}.XXXXXX) \
+  -v director_name=test \
+  -v internal_cidr=10.0.0.0/24 \
+  -v internal_gw=10.0.0.1 \
+  -v internal_ip=10.0.0.4 \
+  -v vnet_name=boshvnet-crp \
+  -v subnet_name=Bosh \
+  -v subscription_id=test \
+  -v azure-managed-identity=test \
+  -v resource_group_name=test \
+  -v storage_account_name=test \
+  -v default_security_group=nsg-bosh
+
+echo "- Azure (managed-identity-for-bosh-managed-vms)"
+bosh create-env bosh.yml \
+  -o azure/cpi.yml \
+  -o azure/use-managed-identity.yml \
+  -o azure/use-managed-identity-for-bosh-managed-vms.yml \
+  --state=$tmp_file \
+  --vars-store $(mktemp ${tmp_file}.XXXXXX) \
+  -v director_name=test \
+  -v internal_cidr=10.0.0.0/24 \
+  -v internal_gw=10.0.0.1 \
+  -v internal_ip=10.0.0.4 \
+  -v vnet_name=boshvnet-crp \
+  -v subnet_name=Bosh \
+  -v subscription_id=test \
+  -v azure-managed-identity=test \
   -v resource_group_name=test \
   -v storage_account_name=test \
   -v default_security_group=nsg-bosh
