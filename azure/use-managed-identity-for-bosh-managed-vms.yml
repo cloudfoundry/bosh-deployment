@@ -1,0 +1,9 @@
+# If you also want the bosh-managed VMs to have this managed identity (can be dangerous for diego cells, since untrusted code can run there), then add these as well:
+#
+# If you use this operator, you also have to use the azure/cpi.yml operator.
+- path: /instance_groups/name=bosh/properties/azure/default_managed_identity?/type?
+  type: replace
+  value: UserAssigned
+- path: /instance_groups/name=bosh/properties/azure/default_managed_identity?/user_assigned_identity_name?
+  type: replace
+  value: ((azure-managed-identity))
