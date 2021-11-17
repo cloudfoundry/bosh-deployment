@@ -1,7 +1,7 @@
 # If you don't want to use the Azure client_id/client_secret, but Azure Managed Identities instead (https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/qs-configure-cli-windows-vm).
 # The BOSH director VM will get a Managed Identity assigned, and with that (and the proper roles/permissions for that identity) it can do all Azure control plane actions.
 #
-- # If you use this operator, you also have to use the azure/cpi.yml operator.
+# If you use this operator, you also have to use the azure/cpi.yml operator.
 - path: /cloud_provider/properties/azure/credentials_source?
   type: replace
   value: managed_identity
