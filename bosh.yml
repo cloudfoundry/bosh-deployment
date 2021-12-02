@@ -83,6 +83,7 @@ instance_groups:
       generate_vm_passwords: true
       local_dns:
         enabled: true
+        use_dns_addresses: true
       name: ((director_name))
       ssl:
         cert: ((director_ssl.certificate))
