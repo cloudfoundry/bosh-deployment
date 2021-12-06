@@ -26,6 +26,8 @@ instance_groups:
         release: zookeeper
         provides:
           conn: {shared: true}
+        consumes:
+          peers: {ip_addresses: true}
         properties: {}
       - name: status
         release: zookeeper
