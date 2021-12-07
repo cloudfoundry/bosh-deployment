@@ -15,6 +15,7 @@ groups:
   - update-vsphere-cpi-release
   - update-virtualbox-cpi-release
   - update-openstack-cpi-release
+  - update-warden-cpi-release
 - name: stemcells
   jobs:
   - update-aws-stemcell
@@ -253,6 +254,26 @@ jobs:
     params:
       CPI_NAME: bosh-openstack-cpi
       CPI_OPS_FILE: openstack/cpi.yml
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-warden-cpi-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: warden-cpi
+      trigger: true
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: warden-cpi
+    params:
+      CPI_NAME: bosh-warden-cpi
+      CPI_OPS_FILE: warden/cpi.yml
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -955,7 +976,7 @@ resources:
 - name: warden-cpi
   type: bosh-io-release
   source:
-    repository: cppforlife/bosh-warden-cpi-release
+    repository: cloudfoundry/bosh-warden-cpi-release
 
 - name: dns-release
   type: bosh-io-release
