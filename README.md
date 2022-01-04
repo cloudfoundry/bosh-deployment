@@ -69,7 +69,6 @@ Other releases such as [UAA](https://github.com/cloudfoundry/uaa-release), [Cred
 - `misc/config-server.yml`: Deploys config-server (see `credhub.yml`)
 - `misc/proxy.yml`: Configure HTTP proxy for Director and CPI
 - `runtime-configs/syslog.yml`: Runtime config to enable syslog forwarding
-- `experimental/remove-registry.yml`: Remove the registry for compatible director/CPI/stemcell versions.
 
 See [tests/run-checks.sh](tests/run-checks.sh) for example usage of different ops files.
 

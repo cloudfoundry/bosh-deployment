@@ -40,29 +40,6 @@
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
-    name: registry
-    release: bosh
-- path: /instance_groups/name=bosh/properties/registry?
-  type: replace
-  value:
-    address: ((internal_ip))
-    db:
-      adapter: postgres
-      database: bosh
-      host: 127.0.0.1
-      password: ((postgres_password))
-      user: postgres
-    host: ((internal_ip))
-    http:
-      password: ((registry_password))
-      port: 25777
-      user: registry
-    password: ((registry_password))
-    port: 25777
-    username: registry
-- path: /instance_groups/name=bosh/jobs/-
-  type: replace
-  value:
     name: alicloud_cpi
     release: bosh-alicloud-cpi
 - path: /instance_groups/name=bosh/properties/director/cpi_job?
@@ -94,11 +71,6 @@
     port: 22
     private_key: ((private_key))
     user: vcap
-- path: /variables/-
-  type: replace
-  value:
-    name: registry_password
-    type: password
 - path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp?
   type: replace
   value:

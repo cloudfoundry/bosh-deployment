@@ -24,26 +24,6 @@
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
-    name: registry
-    release: bosh
-- path: /instance_groups/name=bosh/properties/registry?
-  type: replace
-  value:
-    address: ((internal_ip))
-    db:
-      adapter: postgres
-      database: bosh
-      host: 127.0.0.1
-      password: ((postgres_password))
-      user: postgres
-    endpoint: http://registry:((registry_password))@((internal_ip)):25777
-    host: ((internal_ip))
-    password: ((registry_password))
-    port: 25777
-    username: registry
-- path: /instance_groups/name=bosh/jobs/-
-  type: replace
-  value:
     name: openstack_cpi
     release: bosh-openstack-cpi
 - path: /instance_groups/name=bosh/properties/director/cpi_job?
@@ -85,8 +65,3 @@
     project: ((openstack_project))
     region: ((region))
     username: ((openstack_username))
-- path: /variables/-
-  type: replace
-  value:
-    name: registry_password
-    type: password

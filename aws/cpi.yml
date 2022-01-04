@@ -31,29 +31,6 @@
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
-    name: registry
-    release: bosh
-- path: /instance_groups/name=bosh/properties/registry?
-  type: replace
-  value:
-    address: ((internal_ip))
-    db:
-      adapter: postgres
-      database: bosh
-      host: 127.0.0.1
-      password: ((postgres_password))
-      user: postgres
-    host: ((internal_ip))
-    http:
-      password: ((registry_password))
-      port: 25777
-      user: registry
-    password: ((registry_password))
-    port: 25777
-    username: registry
-- path: /instance_groups/name=bosh/jobs/-
-  type: replace
-  value:
     name: aws_cpi
     release: bosh-aws-cpi
 - path: /instance_groups/name=bosh/properties/director/cpi_job?
@@ -87,8 +64,3 @@
     default_security_groups: ((default_security_groups))
     region: ((region))
     secret_access_key: ((secret_access_key))
-- path: /variables/-
-  type: replace
-  value:
-    name: registry_password
-    type: password
