@@ -68,31 +68,6 @@
     default_zone: ((cloudstack_zone))
 
 - type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value:
-    name: registry
-    release: bosh
-
-- path: /instance_groups/name=bosh/properties/registry?
-  type: replace
-  value:
-    address: ((internal_ip))
-    db:
-      adapter: postgres
-      database: bosh
-      host: 127.0.0.1
-      password: ((postgres_password))
-      user: postgres
-    host: ((internal_ip))
-    http:
-      user: registry
-      password: ((registry_password))
-      port: 25777
-    username: registry
-    password: ((registry_password))
-    port: 25777
-
-- type: replace
   path: /instance_groups/name=bosh/properties/agent/blobstore?
   value:
     provider: dav
@@ -122,9 +97,3 @@
 - path: /cloud_provider/properties/cloudstack?
   type: replace
   value: *cloudstack
-
-- path: /variables/-
-  type: replace
-  value:
-    name: registry_password
-    type: password
