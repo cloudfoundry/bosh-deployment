@@ -3,9 +3,9 @@
   type: replace
   value:
     name: garden-runc
-    sha1: 7b6599e704b8e73c3b108c9c328836d158f269f0
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.20.0-ubuntu-bionic-1.61-20220218-191740-293631392-20220218191743.tgz
-    version: 1.20.0
+    sha1: d86c6f57f902753fdcf397b19885b73fb70312de
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.20.1-ubuntu-bionic-1.61-20220304-202714-01851295-20220304202717.tgz
+    version: 1.20.1
 - path: /releases/-
   release: bosh-warden-cpi
   type: replace
