@@ -64,13 +64,6 @@
     access_key_secret: ((access_key_secret))
     availability_zone: ((zone))
     region: ((region))
-- path: /cloud_provider/ssh_tunnel?
-  type: replace
-  value:
-    host: ((internal_ip))
-    port: 22
-    private_key: ((private_key))
-    user: vcap
 - path: /instance_groups/name=bosh/properties/agent/env/bosh/ntp?
   type: replace
   value:

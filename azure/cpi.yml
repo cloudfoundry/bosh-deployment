@@ -47,13 +47,6 @@
     storage_account_name: ((storage_account_name))
     subscription_id: ((subscription_id))
     tenant_id: ((tenant_id))
-- path: /cloud_provider/ssh_tunnel?
-  type: replace
-  value:
-    host: ((internal_ip))
-    port: 22
-    private_key: ((ssh.private_key))
-    user: vcap
 - path: /cloud_provider/properties/azure?
   type: replace
   value:

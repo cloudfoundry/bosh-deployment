@@ -46,13 +46,6 @@
     project: ((openstack_project))
     region: ((region))
     username: ((openstack_username))
-- path: /cloud_provider/ssh_tunnel?
-  type: replace
-  value:
-    host: ((internal_ip))
-    port: 22
-    private_key: ((private_key))
-    user: vcap
 - path: /cloud_provider/properties/openstack?
   type: replace
   value:

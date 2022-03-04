@@ -86,14 +86,6 @@
     options:
       blobstore_path: /var/vcap/micro_bosh/data/cache
 
-- path: /cloud_provider/ssh_tunnel?
-  type: replace
-  value:
-    host: ((internal_ip))
-    port: 22
-    private_key: ((private_key))
-    user: vcap
-
 - path: /cloud_provider/properties/cloudstack?
   type: replace
   value: *cloudstack
