@@ -47,7 +47,6 @@ bosh create-env bosh.yml \
   -v region=test \
   -v default_key_name=test \
   -v default_security_groups=[test] \
-  -v private_key=test \
   -v subnet_id=test
 
 echo "- AWS with signed URLs"
@@ -66,7 +65,6 @@ bosh create-env bosh.yml \
   -v region=test \
   -v default_key_name=test \
   -v default_security_groups=[test] \
-  -v private_key=test \
   -v subnet_id=test
 
 echo "- AWS with UAA"
@@ -85,7 +83,6 @@ bosh create-env bosh.yml \
   -v region=test \
   -v default_key_name=test \
   -v default_security_groups=[test] \
-  -v private_key=test \
   -v subnet_id=test
 
 echo "- AWS with UAA + config-server"
@@ -105,7 +102,6 @@ bosh create-env bosh.yml \
   -v region=test \
   -v default_key_name=test \
   -v default_security_groups=[test] \
-  -v private_key=test \
   -v subnet_id=test
 
 echo "- AWS with UAA + CredHub + Turbulence"
@@ -126,7 +122,6 @@ bosh create-env bosh.yml \
   -v region=test \
   -v default_key_name=test \
   -v default_security_groups=[test] \
-  -v private_key=test \
   -v subnet_id=test \
   -v credhub_encryption_password=test
 
@@ -162,7 +157,6 @@ bosh create-env bosh.yml \
   -v region=test \
   -v default_key_name=test \
   -v default_security_groups=[test] \
-  -v private_key=test \
   -v subnet_id=test \
   -v external_db_host=test \
   -v external_db_port=test \
@@ -191,7 +185,6 @@ bosh create-env bosh.yml \
   -v region=test \
   -v default_key_name=test \
   -v default_security_groups=[test] \
-  -v private_key=test \
   -v subnet_id=test \
   -v credhub_encryption_password=test \
   -v external_db_host=test \
@@ -358,7 +351,6 @@ bosh create-env bosh.yml \
   -v openstack_username=test \
   -v openstack_domain=test \
   -v openstack_project=test \
-  -v private_key=test \
   -v region=test
 
 echo "- Openstack (cloud-config)"
@@ -598,5 +590,4 @@ bosh create-env bosh.yml \
   -v region=test \
   -v default_key_name=test \
   -v default_security_groups=[test] \
-  -v private_key=test \
   -v subnet_id=test
