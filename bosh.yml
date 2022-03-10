@@ -185,6 +185,7 @@ variables:
   options:
     common_name: ca
     is_ca: true
+    duration: 3650
   type: certificate
 - name: mbus_bootstrap_ssl
   options:
@@ -192,6 +193,7 @@ variables:
     - ((internal_ip))
     ca: default_ca
     common_name: ((internal_ip))
+    duration: 3650
   type: certificate
 - name: director_ssl
   options:
@@ -199,11 +201,13 @@ variables:
     - ((internal_ip))
     ca: default_ca
     common_name: ((internal_ip))
+    duration: 3650
   type: certificate
 - name: nats_ca
   options:
     common_name: default.nats-ca.bosh-internal
     is_ca: true
+    duration: 3650
   type: certificate
 - name: nats_server_tls
   options:
@@ -213,6 +217,7 @@ variables:
     common_name: default.nats.bosh-internal
     extended_key_usage:
     - server_auth
+    duration: 3650
   type: certificate
 - name: nats_clients_director_tls
   options:
@@ -220,6 +225,7 @@ variables:
     common_name: default.director.bosh-internal
     extended_key_usage:
     - client_auth
+    duration: 3650
   type: certificate
 - name: nats_clients_health_monitor_tls
   options:
@@ -227,11 +233,13 @@ variables:
     common_name: default.hm.bosh-internal
     extended_key_usage:
     - client_auth
+    duration: 3650
   type: certificate
 - name: blobstore_ca
   options:
     common_name: default.blobstore-ca.bosh-internal
     is_ca: true
+    duration: 3650
   type: certificate
 - name: blobstore_server_tls
   options:
@@ -239,4 +247,5 @@ variables:
     - ((internal_ip))
     ca: blobstore_ca
     common_name: ((internal_ip))
+    duration: 3650
   type: certificate

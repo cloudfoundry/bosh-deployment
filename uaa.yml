@@ -151,6 +151,7 @@
       - ((internal_ip))
       ca: default_ca
       common_name: ((internal_ip))
+      duration: 3650
     type: certificate
 - path: /variables/-
   type: replace
@@ -161,4 +162,5 @@
       - ((internal_ip))
       ca: default_ca
       common_name: ((internal_ip))
+      duration: 3650
     type: certificate

@@ -123,6 +123,7 @@
     options:
       common_name: CredHub CA
       is_ca: true
+    duration: 3650
     type: certificate
 - path: /variables/-
   type: replace
@@ -133,6 +134,7 @@
       - ((internal_ip))
       ca: credhub_ca
       common_name: ((internal_ip))
+    duration: 3650
     type: certificate
 - path: /variables/-
   type: replace
