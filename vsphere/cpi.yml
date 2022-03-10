@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 4a53a630705e2952ff5e7b883e1da6a5f46472e4
-    url: https://storage.googleapis.com/bosh-core-stemcells/1.61/bosh-stemcell-1.61-vsphere-esxi-ubuntu-bionic-go_agent.tgz
+    sha1: 92f8d2c43dbcbb3304386e499b28718b49daba72
+    url: https://storage.googleapis.com/bosh-core-stemcells/1.67/bosh-stemcell-1.67-vsphere-esxi-ubuntu-bionic-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
