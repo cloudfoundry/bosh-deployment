@@ -1,0 +1,6 @@
+- path: /variables/name=credhub_ca/options/duration?
+  type: replace
+  value: ((certificate_duration))
+- path: /variables/name=credhub_tls/options/duration?
+  type: replace
+  value: ((certificate_duration))
