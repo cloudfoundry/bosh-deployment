@@ -1,3 +1,6 @@
-# Using this file will upgrade postgres to v10. Once this file is used, downgrading back to older versions is not allowed.
-
-# Postgres 10 is now default.
+---
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=postgres?
+  value:
+    name: postgres-10
+    release: bosh
