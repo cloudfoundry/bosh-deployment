@@ -1043,7 +1043,7 @@ resources:
   type: github-status
   source:
     repository: cloudfoundry/bosh-deployment
-    access_token: ((github_access_token))
+    access_token: ((github_public_repo_token))
     branch: develop
     context: ci/passed
 
