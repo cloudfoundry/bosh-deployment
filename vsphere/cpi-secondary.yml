@@ -3,9 +3,9 @@
   type: replace
   value:
     name: bosh-vsphere-cpi
-    sha1: 3ac3de9b6e1ef5242e6abbae5d8a71a434b06b32
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-vsphere-cpi-release?v=72
-    version: 72
+    sha1: e62604d5af353cac110fb455a8679abef53950d2
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-vsphere-cpi-release?v=73
+    version: 73
 - path: /instance_groups/name=bosh/properties/vcenter?
   type: replace
   value:
