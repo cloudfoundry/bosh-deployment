@@ -3,7 +3,7 @@
   value:
     name: bosh-docker-cpi
     sha1: 9052069d3aeabf5c3db36da88789dd89ce5e14cb
-    url: https://bosh.io/d/github.com/cppforlife/bosh-docker-cpi-release?v=0.0.6
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-docker-cpi-release?v=0.0.6
     version: 0.0.5
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
