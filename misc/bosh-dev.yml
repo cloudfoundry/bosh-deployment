@@ -30,7 +30,7 @@
   path: /stemcells?/-
   value:
     alias: default
-    os: ubuntu-xenial
+    os: ubuntu-bionic
     version: latest
 
 - type: replace
