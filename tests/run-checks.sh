@@ -125,6 +125,31 @@ bosh create-env bosh.yml \
   -v subnet_id=test \
   -v credhub_encryption_password=test
 
+echo "- AWS with UAA + CredHub + Turbulence + configurable certificate duration"
+bosh create-env bosh.yml \
+  -o misc/certificate-duration/bosh.yml \
+  -o aws/cpi.yml \
+  -o uaa.yml \
+  -o credhub.yml \
+  -o misc/certificate-duration/uaa.yml \
+  -o misc/certificate-duration/credhub.yml \
+  -o turbulence.yml \
+  --state=$tmp_file \
+  --vars-store $(mktemp ${tmp_file}.XXXXXX) \
+  -v director_name=test \
+  -v internal_cidr=test \
+  -v internal_gw=test \
+  -v internal_ip=test \
+  -v access_key_id=test \
+  -v secret_access_key=test \
+  -v az=test \
+  -v region=test \
+  -v default_key_name=test \
+  -v default_security_groups=[test] \
+  -v subnet_id=test \
+  -v credhub_encryption_password=test \
+  -v certificate_duration=3650
+
 echo "- AWS with UAA for BOSH development"
 bosh deploy bosh.yml \
   -o aws/cpi.yml \

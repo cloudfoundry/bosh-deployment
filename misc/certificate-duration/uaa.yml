@@ -1,0 +1,6 @@
+- path: /variables/name=uaa_ssl/options/duration?
+  type: replace
+  value: ((certificate_duration))
+- path: /variables/name=uaa_service_provider_ssl/options/duration?
+  type: replace
+  value: ((certificate_duration))
