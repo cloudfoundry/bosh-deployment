@@ -1,0 +1,39 @@
+- path: /releases/name=garden-runc?
+  release: garden-runc
+  type: replace
+  value:
+    name: garden-runc
+    version: "1.20.6"
+    url: "https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.20.6"
+    sha1: "55307cd007129bfb95703aaf44ad2e40312429ef"
+- path: /releases/name=bosh-warden-cpi?
+  release: bosh-warden-cpi
+  type: replace
+  value:
+    name: bosh-warden-cpi
+    sha1: eea3e6e863ff63eda68470a7d622b01ba6f80b46
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-warden-cpi-release?v=43
+    version: 43
+- path: /releases/name=bosh?
+  release: bosh
+  type: replace
+  value:
+    name: bosh
+    sha1: 2bac32b40b413a377460bf8a5fd9d50da624f1a4
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=272.2.0
+    version: 272.2.0
+- path: /releases/name=bpm?
+  release: bpm
+  type: replace
+  value:
+    name: bpm
+    sha1: d8656c331cf0604a54df779f40bbddda9d9fc2eb
+    url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.17
+    version: 1.1.17
+
+- name: stemcell
+  path: /resource_pools/name=vms/stemcell?
+  type: replace
+  value:
+    sha1: aa87325a0bc1eb1d17043a4e9267a83ec0a04a72
+    url: https://storage.googleapis.com/bosh-core-stemcells/0.1.1/bosh-stemcell-0.1.1-vsphere-esxi-ubuntu-jammy-go_agent.tgz
