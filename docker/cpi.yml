@@ -44,7 +44,7 @@
   value:
     agent:
       blobstore: null
-      mbus: nats://nats:((nats_password))@((internal_ip)):4222
+      mbus: nats://((internal_ip)):4222
     docker:
       host: ((docker_host))
       tls: ((docker_tls))

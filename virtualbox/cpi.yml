@@ -24,7 +24,7 @@
     name: virtualbox_cpi
     properties:
       agent:
-        mbus: nats://nats:((nats_password))@((internal_ip)):4222
+        mbus: nats://((internal_ip)):4222
       blobstore: null
     release: bosh-virtualbox-cpi
 - path: /instance_groups/name=bosh/properties/director/cpi_job?
