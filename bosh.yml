@@ -49,7 +49,7 @@ instance_groups:
           - time2.google.com
           - time3.google.com
           - time4.google.com
-      mbus: nats://nats:((nats_password))@((internal_ip)):4222
+      mbus: nats://((internal_ip)):4222
     blobstore:
       address: ((internal_ip))
       agent:
