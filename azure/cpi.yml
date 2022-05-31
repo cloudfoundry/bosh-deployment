@@ -15,7 +15,7 @@
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
-    instance_type: Standard_D1_v2
+    instance_type: Standard_B2s
 - path: /networks/name=default/subnets/0/cloud_properties?
   type: replace
   value:
