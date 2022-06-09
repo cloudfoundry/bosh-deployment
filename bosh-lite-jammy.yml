@@ -19,9 +19,9 @@
   type: replace
   value:
     name: bosh
-    sha1: 2bac32b40b413a377460bf8a5fd9d50da624f1a4
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=272.2.0
-    version: 272.2.0
+    sha1: fe7154b78fe928cf5654f2f66bc099c5488991f9
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-272.5.0-ubuntu-jammy-0.1.10-20220609-204014-227292028-20220609204015.tgz
+    version: 272.5.0
 - path: /releases/name=bpm?
   release: bpm
   type: replace
