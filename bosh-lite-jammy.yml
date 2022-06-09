@@ -3,8 +3,8 @@
   type: replace
   value:
     name: garden-runc
-    sha1: 55307cd007129bfb95703aaf44ad2e40312429ef
-    url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.20.6
+    sha1: d7bbca4843f1be8dd5c2acee824cdb2882b43676
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.20.6-ubuntu-jammy-0.1.10-20220609-194908-511599017-20220609194912.tgz
     version: 1.20.6
 - path: /releases/name=bosh-warden-cpi?
   release: bosh-warden-cpi
