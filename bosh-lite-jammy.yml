@@ -3,9 +3,9 @@
   type: replace
   value:
     name: garden-runc
-    version: "1.20.6"
-    url: "https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.20.6"
-    sha1: "55307cd007129bfb95703aaf44ad2e40312429ef"
+    sha1: 55307cd007129bfb95703aaf44ad2e40312429ef
+    url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.20.6
+    version: 1.20.6
 - path: /releases/name=bosh-warden-cpi?
   release: bosh-warden-cpi
   type: replace
@@ -30,10 +30,9 @@
     sha1: d8656c331cf0604a54df779f40bbddda9d9fc2eb
     url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.17
     version: 1.1.17
-
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: aa87325a0bc1eb1d17043a4e9267a83ec0a04a72
-    url: https://storage.googleapis.com/bosh-core-stemcells/0.1.1/bosh-stemcell-0.1.1-vsphere-esxi-ubuntu-jammy-go_agent.tgz
+    sha1: 739f3ae5655894caa187fbc2552b300a541648a3
+    url: https://storage.googleapis.com/bosh-core-stemcells/0.1.10/bosh-stemcell-0.1.10-warden-boshlite-ubuntu-jammy-go_agent.tgz
