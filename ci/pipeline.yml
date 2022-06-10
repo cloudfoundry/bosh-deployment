@@ -866,6 +866,8 @@ jobs:
         clean_tags: true
     - get: vsphere-ubuntu-bionic-stemcell
       trigger: true
+    - get: vsphere-ubuntu-jammy-stemcell
+      trigger: true
   - task: update-stemcell
     file: bosh-deployment/ci/tasks/update-stemcell.yml
     input_mapping:
@@ -873,6 +875,13 @@ jobs:
     params:
       CPI_OPS_FILE: vsphere/cpi.yml
       STEMCELL_NAME: vsphere-ubuntu-bionic-stemcell
+  - task: update-stemcell-jammy
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: vsphere-ubuntu-jammy-stemcell
+    params:
+      CPI_OPS_FILE: vsphere/use-jammy.yml
+      STEMCELL_NAME: vsphere-ubuntu-jammy-stemcell
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -1045,6 +1054,11 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-vsphere-esxi-ubuntu-bionic-go_agent
+
+- name: vsphere-ubuntu-jammy-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-vsphere-esxi-ubuntu-jammy-go_agent
 
 # releases
 - name: backup-and-restore-sdk-release
