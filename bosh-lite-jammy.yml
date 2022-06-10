@@ -27,9 +27,9 @@
   type: replace
   value:
     name: bpm
-    sha1: d8656c331cf0604a54df779f40bbddda9d9fc2eb
-    url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.17
-    version: 1.1.17
+    sha1: 1b0fd2b3103987701cbe9fa2814add1fb38ebf8d
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.18-ubuntu-jammy-0.1.10-20220609-213203-246787284-20220609213205.tgz
+    version: 1.1.18
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
