@@ -274,6 +274,13 @@ jobs:
     params:
       CPI_NAME: bosh-warden-cpi
       CPI_OPS_FILE: warden/cpi.yml
+  - task: update-release-jammy
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: warden-cpi
+    params:
+      CPI_NAME: bosh-warden-cpi
+      CPI_OPS_FILE: bosh-lite-jammy.yml
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -332,12 +339,24 @@ jobs:
     - get: warden-ubuntu-bionic-stemcell
       passed: [update-warden-stemcell]
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
-    input_mapping:
-      stemcell: warden-ubuntu-bionic-stemcell
-      release: bosh-release
+    - get: warden-ubuntu-jammy-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - in_parallel:
+    - task: export-release
+      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+      privileged: true
+      input_mapping:
+        stemcell: warden-ubuntu-bionic-stemcell
+        release: bosh-release
+    - task: export-release-jammy
+      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+      privileged: true
+      input_mapping:
+        stemcell: warden-ubuntu-jammy-stemcell
+        release: bosh-release
+      output_mapping:
+        compiled-release: compiled-release-jammy
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -346,6 +365,13 @@ jobs:
     params:
       UPDATING_BASE_MANIFEST: true
       FILE_TO_UPDATE: bosh.yml
+  - task: update-release-jammy
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-jammy-stemcell
+      release: compiled-release-jammy
+    params:
+      FILE_TO_UPDATE: bosh-lite-jammy.yml
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -357,6 +383,9 @@ jobs:
   - put: compiled-releases
     params:
       file: "compiled-release/*.tgz"
+  - put: compiled-releases
+    params:
+      file: "compiled-release-jammy/*.tgz"
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -373,12 +402,24 @@ jobs:
     - get: warden-ubuntu-bionic-stemcell
       passed: [update-warden-stemcell]
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
-    input_mapping:
-      stemcell: warden-ubuntu-bionic-stemcell
-      release: bpm-release
+    - get: warden-ubuntu-jammy-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - in_parallel:
+    - task: export-release
+      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+      privileged: true
+      input_mapping:
+        stemcell: warden-ubuntu-bionic-stemcell
+        release: bpm-release
+    - task: export-release-jammy
+      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+      privileged: true
+      input_mapping:
+        stemcell: warden-ubuntu-jammy-stemcell
+        release: bpm-release
+      output_mapping:
+        compiled-release: compiled-release-jammy
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -387,6 +428,13 @@ jobs:
     params:
       UPDATING_BASE_MANIFEST: true
       FILE_TO_UPDATE: bosh.yml
+  - task: update-release-jammy
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-jammy-stemcell
+      release: compiled-release-jammy
+    params:
+      FILE_TO_UPDATE: bosh-lite-jammy.yml
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -398,6 +446,9 @@ jobs:
   - put: compiled-releases
     params:
       file: "compiled-release/*.tgz"
+  - put: compiled-releases
+    params:
+      file: "compiled-release-jammy/*.tgz"
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -488,12 +539,24 @@ jobs:
     - get: warden-ubuntu-bionic-stemcell
       passed: [update-warden-stemcell]
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
-    input_mapping:
-      stemcell: warden-ubuntu-bionic-stemcell
-      release: garden-runc
+    - get: warden-ubuntu-jammy-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - in_parallel:
+    - task: export-release
+      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+      privileged: true
+      input_mapping:
+        stemcell: warden-ubuntu-bionic-stemcell
+        release: garden-runc
+    - task: export-release-jammy
+      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+      privileged: true
+      input_mapping:
+        stemcell: warden-ubuntu-jammy-stemcell
+        release: garden-runc
+      output_mapping:
+        compiled-release: compiled-release-jammy
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -501,9 +564,19 @@ jobs:
       release: compiled-release
     params:
       FILE_TO_UPDATE: bosh-lite.yml
+  - task: update-release-jammy
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-jammy-stemcell
+      release: compiled-release-jammy
+    params:
+      FILE_TO_UPDATE: bosh-lite-jammy.yml
   - put: compiled-releases
     params:
       file: "compiled-release/*.tgz"
+  - put: compiled-releases
+    params:
+      file: "compiled-release-jammy/*.tgz"
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -560,12 +633,24 @@ jobs:
     - get: warden-ubuntu-bionic-stemcell
       passed: [update-warden-stemcell]
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
-    input_mapping:
-      stemcell: warden-ubuntu-bionic-stemcell
-      release: warden-cpi
+    - get: warden-ubuntu-jammy-stemcell
+      passed: [update-warden-stemcell]
+      trigger: true
+  - in_parallel:
+    - task: export-release
+      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+      privileged: true
+      input_mapping:
+        stemcell: warden-ubuntu-bionic-stemcell
+        release: warden-cpi
+    - task: export-release-jammy
+      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+      privileged: true
+      input_mapping:
+        stemcell: warden-ubuntu-jammy-stemcell
+        release: warden-cpi
+      output_mapping:
+        compiled-release: compiled-release-jammy
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -573,9 +658,19 @@ jobs:
       release: compiled-release
     params:
       FILE_TO_UPDATE: bosh-lite.yml
+  - task: update-release-jammy
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      stemcell: warden-ubuntu-jammy-stemcell
+      release: compiled-release-jammy
+    params:
+      FILE_TO_UPDATE: bosh-lite-jammy.yml
   - put: compiled-releases
     params:
       file: "compiled-release/*.tgz"
+  - put: compiled-releases
+    params:
+      file: "compiled-release-jammy/*.tgz"
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -791,6 +886,8 @@ jobs:
         clean_tags: true
     - get: warden-ubuntu-bionic-stemcell
       trigger: true
+    - get: warden-ubuntu-jammy-stemcell
+      trigger: true
   - task: update-stemcell
     file: bosh-deployment/ci/tasks/update-stemcell.yml
     input_mapping:
@@ -798,6 +895,13 @@ jobs:
     params:
       CPI_OPS_FILE: warden/cpi.yml
       STEMCELL_NAME: warden-ubuntu-bionic-stemcell
+  - task: update-stemcell-jammy
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: warden-ubuntu-jammy-stemcell
+    params:
+      CPI_OPS_FILE: bosh-lite-jammy.yml
+      STEMCELL_NAME: warden-ubuntu-jammy-stemcell
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -931,6 +1035,11 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-warden-boshlite-ubuntu-bionic-go_agent
+
+- name: warden-ubuntu-jammy-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-warden-boshlite-ubuntu-jammy-go_agent
 
 - name: vsphere-ubuntu-bionic-stemcell
   type: bosh-io-stemcell
