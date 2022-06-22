@@ -3,9 +3,9 @@
   type: replace
   value:
     name: backup-and-restore-sdk
-    sha1: d0b4ae568556cca7930dc15862b3446c1d726836
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/backup-and-restore-sdk-1.18.43-ubuntu-bionic-1.90-20220621-103916-372921897-20220621103921.tgz
-    version: 1.18.43
+    sha1: 3bf1a3cd1d8701114a73785844fbe6da1ddd0860
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/backup-and-restore-sdk-1.18.44-ubuntu-bionic-1.90-20220622-142218-509035314-20220622142223.tgz
+    version: 1.18.44
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
