@@ -18,12 +18,12 @@
     availability_zone: ((az))
     ephemeral_disk:
       size: 25000
-      type: gp2
-    instance_type: m5.xlarge
+      type: gp3
+    instance_type: t3.medium
 - path: /disk_pools/name=disks/cloud_properties?
   type: replace
   value:
-    type: gp2
+    type: gp3
 - path: /networks/name=default/subnets/0/cloud_properties?
   type: replace
   value:

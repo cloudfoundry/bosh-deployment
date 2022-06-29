@@ -15,7 +15,7 @@
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
-    machine_type: n1-standard-1
+    machine_type: e2-medium
     root_disk_size_gb: 40
     root_disk_type: pd-standard
     zone: ((zone))
