@@ -19,9 +19,9 @@
   type: replace
   value:
     name: bosh
-    sha1: 417310a3281f155e2eae1dffa1560416c826f5ae
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-272.6.0-ubuntu-jammy-0.1.10-20220624-194456-468854595-20220624194457.tgz
-    version: 272.6.0
+    sha1: e4821e9903984e7784733de24171c3f49c883427
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-273.0.0-ubuntu-jammy-0.1.10-20220702-023927-678138018-20220702023928.tgz
+    version: 273.0.0
 - path: /releases/name=bpm?
   release: bpm
   type: replace
