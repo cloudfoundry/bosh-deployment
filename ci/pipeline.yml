@@ -29,6 +29,19 @@ groups:
   - update-virtualbox-stemcell
   - update-vsphere-stemcell
   - update-warden-stemcell
+- name: stemcells-bionic
+  jobs:
+  - update-aws-bionic-stemcell
+  - update-alicloud-bionic-stemcell
+  - update-azure-bionic-stemcell
+  - update-docker-bionic-stemcell
+  - update-gcp-bionic-stemcell
+  - update-openstack-bionic-stemcell
+  - update-openstack-raw-bionic-stemcell
+  - update-vcloud-bionic-stemcell
+  - update-virtualbox-bionic-stemcell
+  - update-vsphere-bionic-stemcell
+  - update-warden-bionic-stemcell
 - name: releases
   jobs:
   - compile-bbr-sdk-release
@@ -274,13 +287,6 @@ jobs:
     params:
       CPI_NAME: bosh-warden-cpi
       CPI_OPS_FILE: warden/cpi.yml
-  - task: update-release-jammy
-    file: bosh-deployment/ci/tasks/update-cpi.yml
-    input_mapping:
-      cpi: warden-cpi
-    params:
-      CPI_NAME: bosh-warden-cpi
-      CPI_OPS_FILE: bosh-lite-jammy.yml
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -339,24 +345,12 @@ jobs:
     - get: warden-ubuntu-jammy-stemcell
       passed: [update-warden-stemcell]
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
-      passed: [update-warden-stemcell]
-      trigger: true
-  - in_parallel:
-    - task: export-release
-      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-      privileged: true
-      input_mapping:
-        stemcell: warden-ubuntu-jammy-stemcell
-        release: bosh-release
-    - task: export-release-jammy
-      file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-      privileged: true
-      input_mapping:
-        stemcell: warden-ubuntu-jammy-stemcell
-        release: bosh-release
-      output_mapping:
-        compiled-release: compiled-release-jammy
+  - task: export-release
+    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
+    privileged: true
+    input_mapping:
+      stemcell: warden-ubuntu-jammy-stemcell
+      release: bosh-release
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -365,13 +359,6 @@ jobs:
     params:
       UPDATING_BASE_MANIFEST: true
       FILE_TO_UPDATE: bosh.yml
-  - task: update-release-jammy
-    file: bosh-deployment/ci/tasks/update-release.yml
-    input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
-      release: compiled-release-jammy
-    params:
-      FILE_TO_UPDATE: bosh-lite-jammy.yml
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
@@ -383,9 +370,6 @@ jobs:
   - put: compiled-releases
     params:
       file: "compiled-release/*.tgz"
-  - put: compiled-releases
-    params:
-      file: "compiled-release-jammy/*.tgz"
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -820,8 +804,6 @@ jobs:
         clean_tags: true
     - get: warden-ubuntu-jammy-stemcell
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
-      trigger: true
   - task: update-stemcell
     file: bosh-deployment/ci/tasks/update-stemcell.yml
     input_mapping:
@@ -829,13 +811,226 @@ jobs:
     params:
       CPI_OPS_FILE: warden/cpi.yml
       STEMCELL_NAME: warden-ubuntu-jammy-stemcell
-  - task: update-stemcell-jammy
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-alicloud-bionic-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: alicloud-ubuntu-bionic-stemcell
+      trigger: true
+  - task: update-stemcell
     file: bosh-deployment/ci/tasks/update-stemcell.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
+      stemcell: alicloud-ubuntu-bionic-stemcell
     params:
-      CPI_OPS_FILE: bosh-lite-jammy.yml
-      STEMCELL_NAME: warden-ubuntu-jammy-stemcell
+      CPI_OPS_FILE: alicloud/use-bionic.yml
+      STEMCELL_NAME: alicloud-ubuntu-bionic-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-aws-bionic-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: aws-ubuntu-bionic-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: aws-ubuntu-bionic-stemcell
+    params:
+      CPI_OPS_FILE: aws/use-bionic.yml
+      STEMCELL_NAME: aws-ubuntu-bionic-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-azure-bionic-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: azure-ubuntu-bionic-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: azure-ubuntu-bionic-stemcell
+    params:
+      CPI_OPS_FILE: azure/use-bionic.yml
+      STEMCELL_NAME: azure-ubuntu-bionic-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-docker-bionic-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: warden-ubuntu-bionic-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: warden-ubuntu-bionic-stemcell
+    params:
+      CPI_OPS_FILE: docker/use-bionic.yml
+      STEMCELL_NAME: warden-ubuntu-bionic-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-gcp-bionic-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: gcp-ubuntu-bionic-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: gcp-ubuntu-bionic-stemcell
+    params:
+      CPI_OPS_FILE: gcp/use-bionic.yml
+      STEMCELL_NAME: gcp-ubuntu-bionic-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-openstack-bionic-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: openstack-ubuntu-bionic-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: openstack-ubuntu-bionic-stemcell
+    params:
+      CPI_OPS_FILE: openstack/use-bionic.yml
+      STEMCELL_NAME: openstack-ubuntu-bionic-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-openstack-raw-bionic-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: openstack-ubuntu-bionic-stemcell-raw
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: openstack-ubuntu-bionic-stemcell-raw
+    params:
+      CPI_OPS_FILE: openstack/use-openstack-raw-stemcell.yml
+      STEMCELL_NAME: openstack-ubuntu-bionic-stemcell-raw
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-vcloud-bionic-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: vcloud-ubuntu-bionic-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: vcloud-ubuntu-bionic-stemcell
+    params:
+      CPI_OPS_FILE: vcloud/use-bionic.yml
+      STEMCELL_NAME: vcloud-ubuntu-bionic-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-virtualbox-bionic-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: vsphere-ubuntu-bionic-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: vsphere-ubuntu-bionic-stemcell
+    params:
+      CPI_OPS_FILE: virtualbox/use-bionic.yml
+      STEMCELL_NAME: vsphere-ubuntu-bionic-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-vsphere-bionic-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: vsphere-ubuntu-bionic-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: vsphere-ubuntu-bionic-stemcell
+    params:
+      CPI_OPS_FILE: vsphere/use-bionic.yml
+      STEMCELL_NAME: vsphere-ubuntu-bionic-stemcell
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-warden-bionic-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: warden-ubuntu-bionic-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: warden-ubuntu-bionic-stemcell
+    params:
+      CPI_OPS_FILE: warden/use-bionic.yml
+      STEMCELL_NAME: warden-ubuntu-bionic-stemcell
   - put: bosh-deployment
     params:
       repository: bosh-deployment
@@ -974,6 +1169,55 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-vsphere-esxi-ubuntu-jammy-go_agent
+
+- name: aws-ubuntu-bionic-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-aws-xen-hvm-ubuntu-bionic-go_agent
+
+- name: alicloud-ubuntu-bionic-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-alicloud-kvm-ubuntu-bionic-go_agent
+
+- name: azure-ubuntu-bionic-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-azure-hyperv-ubuntu-bionic-go_agent
+    force_regular: true
+
+- name: gcp-ubuntu-bionic-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-bionic-go_agent
+
+- name: openstack-ubuntu-bionic-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-openstack-kvm-ubuntu-bionic-go_agent
+    force_regular: true
+
+- name: openstack-ubuntu-bionic-stemcell-raw
+  type: bosh-io-stemcell
+  source:
+    name: bosh-openstack-kvm-ubuntu-bionic-go_agent-raw
+    force_regular: true
+
+- name: vcloud-ubuntu-bionic-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-openstack-kvm-ubuntu-bionic-go_agent
+    force_regular: true
+
+- name: warden-ubuntu-bionic-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-warden-boshlite-ubuntu-bionic-go_agent
+
+- name: vsphere-ubuntu-bionic-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-vsphere-esxi-ubuntu-bionic-go_agent
 
 # releases
 - name: backup-and-restore-sdk-release

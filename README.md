@@ -16,12 +16,16 @@ The following certificates are affected by this change and will need to be regen
 If you're using Credhub or another external variable store, then you will need to use `update_mode: converge` as documented here: <https://bosh.io/docs/manifest-v2/#variables>.<br>
 If you are not using Credhub or another external variable store, then you will need to follow the usual procedure for regenerating your certificates.
 
+## Jammy stemcells
+
+We deploy using the new beta Jammy stemcells; however, if you would prefer to use the Bionic stemcells, append the ops files `[IAAS]/use-bionic.yml` and `misc/source-releases/bosh.yml` after the ops file `[IAAS]/cpi.yml`.
+
 ## How is bosh-deployment updated?
 An automatic process updates Bosh, and other releases within bosh-deployment
 
 1. A new release of [bosh](https://github.com/cloudfoundry/bosh) is created.
 1. A CI pipeline updates bosh-deployment on `develop` with a compiled bosh release.
-1. Smoke tests are performed to ensure `create-env` works with this potential collection of resources and the new release. 
+1. Smoke tests are performed to ensure `create-env` works with this potential collection of resources and the new release.
 1. A commit to `master` is made.
 
 Other releases such as [UAA](https://github.com/cloudfoundry/uaa-release), [CredHub](https://github.com/pivotal-cf/credhub-release), and various CPIs are also updated automatically.
@@ -60,6 +64,7 @@ Other releases such as [UAA](https://github.com/cloudfoundry/uaa-release), [Cred
 - `bosh.yml`: Base manifest that is meant to be used with different CPI configurations
 - `[alicloud|aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cpi.yml`: CPI configuration
 - `[alicloud|aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cloud-config.yml`: Simple cloud configs
+- `[alicloud|aws|azure|docker|gcp|openstack|vcloud|virtualbox|vsphere|warden]/use-bionic.yml`: use Bionic stemcell instead of beta Jammy stemcell
 - `jumpbox-user.yml`: Adds user `jumpbox` for SSH-ing into the Director (see [Jumpbox User](docs/jumpbox-user.md))
 - `uaa.yml`: Deploys UAA and enables UAA user management in the Director
 - `credhub.yml`: Deploys CredHub and enables CredHub integration in the Director
