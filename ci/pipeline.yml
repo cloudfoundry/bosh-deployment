@@ -1243,7 +1243,7 @@ resources:
 - name: docker-cpi
   type: bosh-io-release
   source:
-    repository: cppforlife/bosh-docker-cpi-release
+    repository: cloudfoundry/bosh-docker-cpi-release
 
 - name: garden-runc
   type: bosh-io-release
