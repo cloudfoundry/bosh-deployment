@@ -464,8 +464,6 @@ jobs:
         clean_tags: true
     - get: docker-cpi
       trigger: true
-      version:
-        version: "0.0.5"
     - get: warden-ubuntu-jammy-stemcell
       passed: [update-warden-stemcell]
       trigger: true
