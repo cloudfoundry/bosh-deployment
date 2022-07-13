@@ -3,8 +3,8 @@
   type: replace
   value:
     name: garden-runc
-    sha1: 2bc7b712fac758f0ae0e28dfcfd790de80c27186
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.20.8-ubuntu-jammy-0.1.10-20220706-231824-652834355-20220706231827.tgz
+    sha1: e6936d1230bdf2bc2ed00725039f79eb58a4c867
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.20.8-ubuntu-jammy-0.1.13-20220713-163657-294912205-20220713163700.tgz
     version: 1.20.8
 - path: /releases/-
   release: bosh-warden-cpi
