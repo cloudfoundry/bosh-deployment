@@ -18,7 +18,7 @@ If you are not using Credhub or another external variable store, then you will n
 
 ## Jammy stemcells
 
-We deploy using the new beta Jammy stemcells; however, if you would prefer to use the Bionic stemcells, append the ops files `[IAAS]/use-bionic.yml` and `misc/source-releases/bosh.yml` after the ops file `[IAAS]/cpi.yml`.
+We deploy using Jammy stemcells; however, if you would prefer to use the Bionic stemcells, append the ops files `[IAAS]/use-bionic.yml` and `misc/source-releases/bosh.yml` after the ops file `[IAAS]/cpi.yml`.
 
 ## How is bosh-deployment updated?
 An automatic process updates Bosh, and other releases within bosh-deployment
@@ -64,7 +64,7 @@ Other releases such as [UAA](https://github.com/cloudfoundry/uaa-release), [Cred
 - `bosh.yml`: Base manifest that is meant to be used with different CPI configurations
 - `[alicloud|aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cpi.yml`: CPI configuration
 - `[alicloud|aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cloud-config.yml`: Simple cloud configs
-- `[alicloud|aws|azure|docker|gcp|openstack|vcloud|virtualbox|vsphere|warden]/use-bionic.yml`: use Bionic stemcell instead of beta Jammy stemcell
+- `[alicloud|aws|azure|docker|gcp|openstack|vcloud|virtualbox|vsphere|warden]/use-bionic.yml`: use Bionic stemcell instead of Jammy stemcell
 - `jumpbox-user.yml`: Adds user `jumpbox` for SSH-ing into the Director (see [Jumpbox User](docs/jumpbox-user.md))
 - `uaa.yml`: Deploys UAA and enables UAA user management in the Director
 - `credhub.yml`: Deploys CredHub and enables CredHub integration in the Director
