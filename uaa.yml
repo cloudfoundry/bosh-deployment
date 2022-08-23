@@ -63,6 +63,12 @@
             override: true
             scope: ""
             secret: ((uaa_admin_client_secret))
+          nats:
+            authorities: bosh.admin
+            authorized-grant-types: client_credentials
+            override: true
+            scope: ""
+            secret: ((nats_sync_password))
         jwt:
           policy:
             active_key_id: uaa-jwt-key-1
@@ -127,6 +133,12 @@
 - path: /instance_groups/name=bosh/properties/hm/director_account/client_secret?
   type: replace
   value: ((hm_password))
+- path: /instance_groups/name=bosh/properties/nats/director_account/client_id?
+  type: replace
+  value: nats
+- path: /instance_groups/name=bosh/properties/nats/director_account/client_secret?
+  type: replace
+  value: ((nats_sync_password))
 - path: /variables/-
   type: replace
   value:

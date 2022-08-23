@@ -95,6 +95,8 @@ instance_groups:
             password: ((admin_password))
           - name: hm
             password: ((hm_password))
+          - name: nats
+            password: ((nats_sync_password))
         provider: local
       workers: 4
     hm:
@@ -106,6 +108,10 @@ instance_groups:
     nats:
       address: ((internal_ip))
       password: ((nats_password))
+      director_account:
+        ca_cert: ((director_ssl.ca))
+        password: ((nats_sync_password))
+        user: nats
       tls:
         ca: ((nats_server_tls.ca))
         client_ca:
@@ -178,6 +184,8 @@ variables:
 - name: mbus_bootstrap_password
   type: password
 - name: nats_password
+  type: password
+- name: nats_sync_password
   type: password
 - name: postgres_password
   type: password
