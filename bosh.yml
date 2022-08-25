@@ -107,11 +107,11 @@ instance_groups:
       resurrector_enabled: true
     nats:
       address: ((internal_ip))
-      password: ((nats_password))
       director_account:
         ca_cert: ((director_ssl.ca))
         password: ((nats_sync_password))
         user: nats
+      password: ((nats_password))
       tls:
         ca: ((nats_server_tls.ca))
         client_ca:
@@ -148,9 +148,9 @@ networks:
   type: manual
 releases:
 - name: bosh
-  sha1: f9f7d13df4384c0562e1fd31431053d705326f64
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-273.1.0-ubuntu-jammy-1.8-20220822-191956-046681798-20220822191957.tgz
-  version: 273.1.0
+  sha1: f6e0ad436c5e0835265838dff29bb8af52af32e1
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-274.0.0-ubuntu-jammy-1.8-20220825-190939-494525942-20220825190940.tgz
+  version: 274.0.0
 - name: bpm
   sha1: 2e0cae21c6032607ba010f3e553a41258517144f
   url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.18-ubuntu-jammy-1.8-20220822-191534-520585683-20220822191536.tgz
