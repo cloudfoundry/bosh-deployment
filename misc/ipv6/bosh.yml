@@ -22,7 +22,7 @@
 
 - type: replace
   path: /instance_groups/name=bosh/properties/agent/mbus
-  value: "nats://nats:((nats_password))@[((internal_ip))]:4222"
+  value: "nats://[((internal_ip))]:4222"
 
 - type: replace
   path: /instance_groups/name=bosh/properties/blobstore/address
