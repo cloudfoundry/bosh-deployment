@@ -1,9 +1,9 @@
 cloud_provider:
   cert: ((mbus_bootstrap_ssl))
-  mbus: https://mbus:((mbus_bootstrap_password))@((internal_ip)):6868
+  mbus: https://((internal_ip)):6868
   properties:
     agent:
-      mbus: https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868
+      mbus: https://0.0.0.0:6868
     blobstore:
       path: /var/vcap/micro_bosh/data/cache
       provider: local
