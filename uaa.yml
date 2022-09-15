@@ -3,9 +3,9 @@
   type: replace
   value:
     name: uaa
-    sha1: 666da9868967ff26bfcadead8cdf21078d795206
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-75.23.0-ubuntu-jammy-1.8-20220822-191411-359602583-20220822191416.tgz
-    version: 75.23.0
+    sha1: 425cb98f82cf23b9739e73ebb89413e2c0170ded
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-76.0.0-ubuntu-jammy-1.8-20220915-231700-798324211-20220915231703.tgz
+    version: 76.0.0
 - path: /instance_groups/name=bosh/properties/director/user_management/provider
   type: replace
   value: uaa
@@ -57,18 +57,18 @@
             override: true
             scope: ""
             secret: ((hm_password))
-          uaa_admin:
-            authorities: uaa.admin
-            authorized-grant-types: client_credentials
-            override: true
-            scope: ""
-            secret: ((uaa_admin_client_secret))
           nats:
             authorities: bosh.admin
             authorized-grant-types: client_credentials
             override: true
             scope: ""
             secret: ((nats_sync_password))
+          uaa_admin:
+            authorities: uaa.admin
+            authorized-grant-types: client_credentials
+            override: true
+            scope: ""
+            secret: ((uaa_admin_client_secret))
         jwt:
           policy:
             active_key_id: uaa-jwt-key-1
