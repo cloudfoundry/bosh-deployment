@@ -2,5 +2,5 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: fa113fbef36c4a17868260dfd5b2d7b75c520b68
-    url: https://storage.googleapis.com/bosh-core-stemcells/1.18/bosh-stemcell-1.18-openstack-kvm-ubuntu-jammy-go_agent-raw.tgz
+    sha1: c39a6256430c75a67a39d40582f0fee7f17e48cc
+    url: https://storage.googleapis.com/bosh-core-stemcells/1.115/bosh-stemcell-1.115-openstack-kvm-ubuntu-bionic-go_agent-raw.tgz
