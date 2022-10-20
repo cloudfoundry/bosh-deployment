@@ -71,7 +71,6 @@ instance_groups:
         adapter: postgres
         database: bosh
         host: 127.0.0.1
-        listen_address: 127.0.0.1
         password: ((postgres_password))
         user: postgres
       enable_dedicated_status_worker: true
