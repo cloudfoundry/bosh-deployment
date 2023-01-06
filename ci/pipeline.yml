@@ -68,7 +68,7 @@ jobs:
     - task: bbl-up
       file: bosh-deployment/ci/tasks/bbl-up-bosh-lite-gcp.yml
       params:
-        BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_json))
+        BBL_GCP_SERVICE_ACCOUNT_KEY: ((cf-bosh-core_test-bosh-deployment_gcp_credentials_json))
         BBL_GCP_REGION: us-west1
     - task: test-bosh-lite-gcp
       file: bosh-deployment/ci/tasks/test-bosh-lite-gcp.yml
@@ -78,7 +78,7 @@ jobs:
       task: bbl-down
       file: bosh-deployment/ci/tasks/bbl-down-bosh-lite-gcp.yml
       params:
-        BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_json))
+        BBL_GCP_SERVICE_ACCOUNT_KEY: ((cf-bosh-core_test-bosh-deployment_gcp_credentials_json))
         BBL_GCP_REGION: us-west1
 
 - name: test-smoke
@@ -1109,14 +1109,14 @@ resources:
   source:
     uri: git@github.com:cloudfoundry/bosh-deployment
     branch: develop
-    private_key: ((bosh_deployment_deploy_key))
+    private_key: ((github_deploy_key_bosh-deployment.private_key))
 
 - name: bosh-deployment-master
   type: git
   source:
     uri: git@github.com:cloudfoundry/bosh-deployment
     branch: master
-    private_key: ((bosh_deployment_deploy_key))
+    private_key: ((github_deploy_key_bosh-deployment.private_key))
 
 # stemcells
 - name: aws-ubuntu-jammy-stemcell
@@ -1315,8 +1315,8 @@ resources:
   type: s3
   source:
     bucket: "bosh-compiled-release-tarballs"
-    access_key_id: ((aws_key_id))
-    secret_access_key: ((aws_secret_access_key))
+    access_key_id: ((concourse-compiled-release-tarballs-uploader_aws_access_key.username))
+    secret_access_key: ((concourse-compiled-release-tarballs-uploader_aws_access_key.password))
     regexp: ".*-(\\d+).tgz"
 
 - name: bosh-deployment-commit-status
