@@ -11,8 +11,8 @@
   type: replace
   value:
     name: bosh-warden-cpi
-    sha1: 143ae0b386668b6f0932320bdfe4d0ba049aa0e8
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-43-ubuntu-jammy-1.80-20230120-154142-607411556-20230120154144.tgz
+    sha1: 4e241f1878722229edc2639936d4bd3b14157319
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-43-ubuntu-jammy-1.83-20230209-003209-435786464-20230209003212.tgz
     version: 43
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
