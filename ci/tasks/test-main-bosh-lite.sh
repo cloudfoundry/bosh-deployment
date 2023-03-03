@@ -7,8 +7,8 @@ bosh_deployment="${PWD}/bosh-deployment"
 rm -rf "/usr/local/bosh-deployment"
 cp -r "${PWD}/bosh-deployment" "/usr/local/bosh-deployment"
 
-. start-bosh -o ${bosh_deployment}/uaa.yml \
-  -o ${bosh_deployment}/credhub.yml
+export USE_LOCAL_RELEASES=false
+. start-bosh
 . /tmp/local-bosh/director/env
 
 URL=$(cat stemcell/url)

@@ -4,7 +4,7 @@ groups:
   jobs:
   - test-bosh-lite-gcp
   - test-smoke
-  - test-main-bosh-docker
+  - test-main-bosh-lite
   - promote
 - name: cpis
   jobs:
@@ -90,16 +90,16 @@ jobs:
   - task: test-smoke
     file: bosh-deployment/ci/tasks/test-smoke.yml
 
-- name: test-main-bosh-docker
+- name: test-main-bosh-lite
   serial: true
   build_logs_to_retain: 250
   plan:
   - get: bosh-deployment
     trigger: true
   - get: warden-ubuntu-jammy-stemcell
-  - task: test-main-bosh-docker
+  - task: test-main-bosh-lite
     timeout: 2h
-    file: bosh-deployment/ci/tasks/test-main-bosh-docker.yml
+    file: bosh-deployment/ci/tasks/test-main-bosh-lite.yml
     input_mapping:
       stemcell: warden-ubuntu-jammy-stemcell
     privileged: true
@@ -113,7 +113,7 @@ jobs:
     passed:
     - test-smoke
     - test-bosh-lite-gcp
-    - test-main-bosh-docker
+    - test-main-bosh-lite
   - put: bosh-deployment-commit-status
     params:
       state: success
