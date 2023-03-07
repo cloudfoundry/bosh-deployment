@@ -9,6 +9,7 @@ groups:
 - name: cpis
   jobs:
   - update-aws-cpi
+  - update-docker-cpi-release
   - update-google-cpi
   - update-azure-cpi
   - update-alicloud-cpi
@@ -287,6 +288,26 @@ jobs:
     params:
       CPI_NAME: bosh-warden-cpi
       CPI_OPS_FILE: warden/cpi.yml
+  - put: bosh-deployment
+    params:
+      repository: bosh-deployment
+      rebase: true
+
+- name: update-docker-cpi-release
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: docker-cpi
+      trigger: true
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: docker-cpi
+    params:
+      CPI_NAME: bosh-docker-cpi
+      CPI_OPS_FILE: docker/cpi.yml
   - put: bosh-deployment
     params:
       repository: bosh-deployment
