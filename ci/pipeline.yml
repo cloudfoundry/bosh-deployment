@@ -1338,7 +1338,7 @@ resources:
     bucket: "bosh-compiled-release-tarballs"
     access_key_id: ((concourse-compiled-release-tarballs-uploader_assume_aws_access_key.username))
     secret_access_key: ((concourse-compiled-release-tarballs-uploader_assume_aws_access_key.password))
-    role_arn: ((concourse-compiled-release-tarballs-uploader_assume_aws_access_key.role_arn))
+    aws_role_arn: ((concourse-compiled-release-tarballs-uploader_assume_aws_access_key.role_arn))
     regexp: ".*-(\\d+).tgz"
 
 - name: bosh-deployment-commit-status
