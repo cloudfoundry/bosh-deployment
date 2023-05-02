@@ -4,9 +4,6 @@ cloud_provider:
   properties:
     agent:
       mbus: https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868
-    blobstore:
-      path: /var/vcap/micro_bosh/data/cache
-      provider: local
 disk_pools:
 - disk_size: 65536
   name: disks
