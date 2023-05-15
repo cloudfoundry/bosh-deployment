@@ -148,9 +148,9 @@ releases:
   url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-277.3.1-ubuntu-jammy-1.108-20230503-215806-690745388-20230503215807.tgz
   version: 277.3.1
 - name: bpm
-  sha1: 1659e891efc1b6253e1927e6a76eca88340ba934
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.2.1-ubuntu-jammy-1.108-20230509-213200-506479271-20230509213201.tgz
-  version: 1.2.1
+  sha1: 81525ee3ca9c3b2c1a1bab52326e70a60d9b9b4e
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.2.2-ubuntu-jammy-1.108-20230515-153646-817846591-20230515153648.tgz
+  version: 1.2.2
 resource_pools:
 - env:
     bosh:
