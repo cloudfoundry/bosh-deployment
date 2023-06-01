@@ -3,9 +3,9 @@
   type: replace
   value:
     name: bosh-virtualbox-cpi
-    sha1: 0806a782c68d4c11952c69ac18317a9a13ad43ad
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-virtualbox-cpi-release?v=0.3.0
-    version: 0.3.0
+    sha1: 30684292ad9c18ef3ffe48a2da5f76ea369ed387
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-virtualbox-cpi-release?v=0.4.0
+    version: 0.4.0
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
