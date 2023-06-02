@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: db4fe48eaad09eea546bf952b5869bca03865fff
-    url: https://storage.googleapis.com/bosh-core-stemcells/1.117/bosh-stemcell-1.117-warden-boshlite-ubuntu-jammy-go_agent.tgz
+    sha1: 7972d8ed3b5a3d60862e17d7e28fab4bf6cb0fa3
+    url: https://storage.googleapis.com/bosh-core-stemcells/1.125/bosh-stemcell-1.125-warden-boshlite-ubuntu-jammy-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
