@@ -50,6 +50,7 @@
       vm_folder: ((vcenter_vms))
     password: ((vcenter_password))
     user: ((vcenter_user))
+    enable_human_readable_name: true
 - path: /cloud_provider/properties/vcenter?
   type: replace
   value:
