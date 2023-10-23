@@ -3,9 +3,9 @@
   type: replace
   value:
     name: backup-and-restore-sdk
-    sha1: d9a45f08862d7ab02e46ad6ac7005b9e706f1e3d
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/backup-and-restore-sdk-1.18.101-ubuntu-jammy-1.260-20231016-080423-345084732-20231016080427.tgz
-    version: 1.18.101
+    sha1: 9a95b8f885ac83eff302538e62af1acd4bda2e2f
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/backup-and-restore-sdk-1.18.102-ubuntu-jammy-1.260-20231023-084456-802585173-20231023084501.tgz
+    version: 1.18.102
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
