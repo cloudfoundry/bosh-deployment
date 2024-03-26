@@ -1307,6 +1307,7 @@ resources:
 - name: alicloud-cpi-release
   type: github-release
   source:
+    access_token: ((github_public_repo_token))
     owner: cloudfoundry-incubator
     repository: bosh-alicloud-cpi-release
     tag_filter: "v(.*)"
