@@ -5,6 +5,7 @@ addons:
     - os: ubuntu-xenial
     - os: ubuntu-bionic
     - os: ubuntu-jammy
+    - os: ubuntu-noble
   jobs:
   - name: bosh-dns
     properties:
