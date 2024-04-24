@@ -3,9 +3,9 @@
   type: replace
   value:
     name: bosh-aws-cpi
-    sha1: 002513d105e6985478150b8da37f17d55b6d39ee
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-aws-cpi-release?v=103
-    version: 103
+    sha1: 34691190b0ed5c5f81ddc051aa899f20102a5dc2
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-aws-cpi-release?v=104
+    version: 104
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
