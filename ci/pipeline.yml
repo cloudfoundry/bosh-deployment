@@ -326,7 +326,7 @@ jobs:
     - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
   - task: compile-release
-    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
     image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
       release: backup-and-restore-sdk-release
@@ -362,7 +362,7 @@ jobs:
     - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
   - task: compile-release
-    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
     image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
       release: bosh-release
@@ -399,7 +399,7 @@ jobs:
     - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
   - task: compile-release
-    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
     image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
       release: bpm-release
@@ -436,7 +436,7 @@ jobs:
     - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
   - task: compile-release
-    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
     image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
       release: credhub-release
@@ -472,7 +472,7 @@ jobs:
     - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
   - task: compile-release
-    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
     image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
       release: docker-cpi
@@ -501,7 +501,7 @@ jobs:
     - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
   - task: compile-release
-    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
     image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
       release: garden-runc
@@ -530,7 +530,7 @@ jobs:
     - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
   - task: compile-release
-    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
     image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
       release: uaa-release
@@ -566,7 +566,7 @@ jobs:
     - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
   - task: compile-release
-    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
     image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
       release: warden-cpi
