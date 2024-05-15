@@ -344,6 +344,7 @@ jobs:
       BOSH_IO_RELEASE: cloudfoundry-incubator/backup-and-restore-sdk-release
       FILE_TO_UPDATE: misc/source-releases/bbr.yml
   - put: compiled-releases
+    no_get: true
     params:
       file: "compiled-release/*.tgz"
   - put: bosh-deployment
@@ -381,6 +382,7 @@ jobs:
       BOSH_IO_RELEASE: cloudfoundry/bosh
       FILE_TO_UPDATE: misc/source-releases/bosh.yml
   - put: compiled-releases
+    no_get: true
     params:
       file: "compiled-release/*.tgz"
   - put: bosh-deployment
@@ -418,6 +420,7 @@ jobs:
       BOSH_IO_RELEASE: cloudfoundry/bpm-release
       FILE_TO_UPDATE: misc/source-releases/bosh.yml
   - put: compiled-releases
+    no_get: true
     params:
       file: "compiled-release/*.tgz"
   - put: bosh-deployment
@@ -454,6 +457,7 @@ jobs:
       BOSH_IO_RELEASE: pivotal-cf/credhub-release
       FILE_TO_UPDATE: misc/source-releases/credhub.yml
   - put: compiled-releases
+    no_get: true
     params:
       file: "compiled-release/*.tgz"
   - put: bosh-deployment
@@ -483,6 +487,7 @@ jobs:
     params:
       FILE_TO_UPDATE: bosh-lite-docker.yml
   - put: compiled-releases
+    no_get: true
     params:
       file: "compiled-release/*.tgz"
   - put: bosh-deployment
@@ -512,6 +517,7 @@ jobs:
     params:
       FILE_TO_UPDATE: bosh-lite.yml
   - put: compiled-releases
+    no_get: true
     params:
       file: "compiled-release/*.tgz"
   - put: bosh-deployment
@@ -548,6 +554,7 @@ jobs:
       BOSH_IO_RELEASE: cloudfoundry/uaa-release
       FILE_TO_UPDATE: misc/source-releases/uaa.yml
   - put: compiled-releases
+    no_get: true
     params:
       file: "compiled-release/*.tgz"
   - put: bosh-deployment
@@ -577,6 +584,7 @@ jobs:
     params:
       FILE_TO_UPDATE: bosh-lite.yml
   - put: compiled-releases
+    no_get: true
     params:
       file: "compiled-release/*.tgz"
   - put: bosh-deployment
