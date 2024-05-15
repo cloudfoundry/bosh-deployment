@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: registry-image
+  source:
+    repository: ghcr.io/cloudfoundry/ubuntu-jammy-stemcell
+
+inputs:
+  - name: release
+
+outputs:
+  - name: compiled-release
+
+run:
+  path: /bin/bash
+  args:
+  - -exc
+  - |
+    /var/vcap/bosh/bin/bosh-agent compile --output-directory compiled-release release/*.tgz
