@@ -14,7 +14,6 @@ params:
 inputs:
 - name: bosh-deployment
 - name: release
-- name: stemcell
 
 outputs:
 - name: bosh-deployment

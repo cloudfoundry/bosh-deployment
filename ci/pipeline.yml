@@ -323,26 +323,22 @@ jobs:
         clean_tags: true
     - get: backup-and-restore-sdk-release
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
-      passed: [update-warden-stemcell]
+    - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: backup-and-restore-sdk-release
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: bbr.yml
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: backup-and-restore-sdk-release
     params:
       BOSH_IO_RELEASE: cloudfoundry-incubator/backup-and-restore-sdk-release
@@ -363,19 +359,16 @@ jobs:
         clean_tags: true
     - get: bosh-release
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
-      passed: [update-warden-stemcell]
+    - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: bosh-release
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: compiled-release
     params:
       UPDATING_BASE_MANIFEST: true
@@ -383,7 +376,6 @@ jobs:
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: bosh-release
     params:
       BOSH_IO_RELEASE: cloudfoundry/bosh
@@ -404,19 +396,16 @@ jobs:
         clean_tags: true
     - get: bpm-release
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
-      passed: [update-warden-stemcell]
+    - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: bpm-release
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: compiled-release
     params:
       UPDATING_BASE_MANIFEST: true
@@ -424,7 +413,6 @@ jobs:
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: bpm-release
     params:
       BOSH_IO_RELEASE: cloudfoundry/bpm-release
@@ -445,26 +433,22 @@ jobs:
         clean_tags: true
     - get: credhub-release
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
-      passed: [update-warden-stemcell]
+    - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: credhub-release
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: credhub.yml
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: credhub-release
     params:
       BOSH_IO_RELEASE: pivotal-cf/credhub-release
@@ -485,19 +469,16 @@ jobs:
         clean_tags: true
     - get: docker-cpi
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
-      passed: [update-warden-stemcell]
+    - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: docker-cpi
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: bosh-lite-docker.yml
@@ -517,19 +498,16 @@ jobs:
         clean_tags: true
     - get: garden-runc
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
-      passed: [update-warden-stemcell]
+    - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: garden-runc
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: bosh-lite.yml
@@ -549,26 +527,22 @@ jobs:
         clean_tags: true
     - get: uaa-release
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
-      passed: [update-warden-stemcell]
+    - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: uaa-release
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: uaa.yml
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: uaa-release
     params:
       BOSH_IO_RELEASE: cloudfoundry/uaa-release
@@ -589,19 +563,16 @@ jobs:
         clean_tags: true
     - get: warden-cpi
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
-      passed: [update-warden-stemcell]
+    - get: registry-image-ubuntu-jammy-stemcell
       trigger: true
-  - task: export-release
-    file: bosh-deployment/ci/compiled-releases/tasks/export-release.yml
-    privileged: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/bosh-agent-compile.yml
+    image: registry-image-ubuntu-jammy-stemcell
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: warden-cpi
   - task: update-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: compiled-release
     params:
       FILE_TO_UPDATE: bosh-lite.yml
@@ -1065,11 +1036,9 @@ jobs:
         clean_tags: true
     - get: dns-release
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: dns-release
     params:
       UPDATING_BASE_MANIFEST: true
@@ -1088,11 +1057,9 @@ jobs:
         clean_tags: true
     - get: os-conf-release
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: os-conf-release
     params:
       FILE_TO_UPDATE: jumpbox-user.yml
@@ -1110,11 +1077,9 @@ jobs:
         clean_tags: true
     - get: syslog-release
       trigger: true
-    - get: warden-ubuntu-jammy-stemcell
   - task: update-source-release
     file: bosh-deployment/ci/tasks/update-release.yml
     input_mapping:
-      stemcell: warden-ubuntu-jammy-stemcell
       release: syslog-release
     params:
       FILE_TO_UPDATE: syslog.yml
@@ -1349,6 +1314,11 @@ resources:
     access_token: ((github_public_repo_token))
     branch: develop
     context: ci/passed
+
+- name: registry-image-ubuntu-jammy-stemcell
+  type: registry-image
+  source:
+    repository: ghcr.io/cloudfoundry/ubuntu-jammy-stemcell
 
 resource_types:
 - name: github-status
