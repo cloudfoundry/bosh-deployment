@@ -3,9 +3,9 @@
   type: replace
   value:
     name: os-conf
-    sha1: daf34e35f1ac678ba05db3496c4226064b99b3e4
-    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=22.2.1
-    version: 22.2.1
+    sha1: 0f88a29315d8d9f900bb30a81c0eaf6d34a61639
+    url: https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=22.3.0
+    version: 22.3.0
 - path: /instance_groups/0/properties/director/default_ssh_options?/gateway_user
   type: replace
   value: jumpbox
