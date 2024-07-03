@@ -25,27 +25,27 @@ addons:
   name: bosh-dns
 - include:
     stemcell:
-      - os: ubuntu-noble
+    - os: ubuntu-noble
   jobs:
-    - name: bosh-dns
-      properties:
-        api:
-          client:
-            tls: ((/dns_api_client_tls))
-          server:
-            tls: ((/dns_api_server_tls))
-        cache:
-          enabled: true
-        configure_systemd_resolved: true
-        disable_recursors: true
-        health:
-          client:
-            tls: ((/dns_healthcheck_client_tls))
-          enabled: true
-          server:
-            tls: ((/dns_healthcheck_server_tls))
-        override_nameserver: false
-      release: bosh-dns
+  - name: bosh-dns
+    properties:
+      api:
+        client:
+          tls: ((/dns_api_client_tls))
+        server:
+          tls: ((/dns_api_server_tls))
+      cache:
+        enabled: true
+      configure_systemd_resolved: true
+      disable_recursors: true
+      health:
+        client:
+          tls: ((/dns_healthcheck_client_tls))
+        enabled: true
+        server:
+          tls: ((/dns_healthcheck_server_tls))
+      override_nameserver: false
+    release: bosh-dns
   name: bosh-dns-systemd
 - include:
     stemcell:
@@ -73,9 +73,9 @@ addons:
   name: bosh-dns-windows
 releases:
 - name: bosh-dns
-  sha1: 32b867fbd87e3d3702614d9dfe3bd87824f78b70
-  url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.38.0
-  version: 1.38.0
+  sha1: 931ad4844302c6e7e6174daf7355a927919ae0bc
+  url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.38.1
+  version: 1.38.1
 variables:
 - name: /dns_healthcheck_tls_ca
   options:
