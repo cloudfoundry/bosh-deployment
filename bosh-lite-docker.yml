@@ -3,8 +3,8 @@
   type: replace
   value:
     name: bosh-docker-cpi
-    sha1: 679b5a782810990913d66de55bc06ba0981b18ae
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-docker-cpi-0.0.13-ubuntu-jammy-1.486.tgz
+    sha1: 475460d9e5f131b5d68a7e661f5db4a66694eecb
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-docker-cpi-0.0.13-ubuntu-jammy-1.492.tgz
     version: 0.0.13
 - path: /releases/-
   type: replace
