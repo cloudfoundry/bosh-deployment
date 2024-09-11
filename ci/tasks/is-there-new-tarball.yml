@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: bosh/docker-cpi
+
+inputs:
+- name: bosh-deployment
+
+
+run:
+  path: /bin/bash
+  args:
+    - -exc
+    - |
+      cd ./bosh-deployment
+      git show > /tmp/git-show.patch
+      cat /tmp/git-show.patch
+      grep "^+[[:space:]]*url:" /tmp/git-show.patch
+      exit $?

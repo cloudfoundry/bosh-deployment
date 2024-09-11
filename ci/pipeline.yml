@@ -1,4 +1,23 @@
 ---
+commit-when-new-tarball: &commit-when-new-tarball
+  try:
+    do:
+    - task: is-there-new-tarball
+      file: bosh-deployment/ci/tasks/is-there-new-tarball.yml
+      on_success:
+        do:
+          - put: compiled-releases
+            no_get: true
+            params:
+              file: "compiled-release/*.tgz"
+          - put: bosh-deployment
+            params:
+              repository: bosh-deployment
+              rebase: true
+      on_failure:
+        task: echo-skip-message
+        file: bosh-deployment/ci/tasks/echo-skip-upload-message.yml
+
 groups:
 - name: bosh-deployment
   jobs:
@@ -419,14 +438,7 @@ jobs:
     params:
       BOSH_IO_RELEASE: cloudfoundry/bpm-release
       FILE_TO_UPDATE: misc/source-releases/bosh.yml
-  - put: compiled-releases
-    no_get: true
-    params:
-      file: "compiled-release/*.tgz"
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-tarball
 
 - name: compile-credhub-release
   plan:
