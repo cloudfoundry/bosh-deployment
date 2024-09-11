@@ -1,9 +1,27 @@
 ---
-commit-when-new-tarball: &commit-when-new-tarball
+on-failure-echo: &on-failure-echo
+  on_failure:
+    task: echo-skip-message
+    file: bosh-deployment/ci/tasks/echo-skip-upload-message.yml
+
+commit-when-new-asset: &commit-when-new-asset
   try:
     do:
-    - task: is-there-new-tarball
-      file: bosh-deployment/ci/tasks/is-there-new-tarball.yml
+    - task: is-there-new-asset
+      file: bosh-deployment/ci/tasks/is-there-new-asset.yml
+      on_success:
+        do:
+          - put: bosh-deployment
+            params:
+              repository: bosh-deployment
+              rebase: true
+      <<: *on-failure-echo
+
+commit-and-upload-when-new-release: &commit-and-upload-when-new-release
+  try:
+    do:
+    - task: is-there-new-asset
+      file: bosh-deployment/ci/tasks/is-there-new-asset.yml
       on_success:
         do:
           - put: compiled-releases
@@ -14,9 +32,7 @@ commit-when-new-tarball: &commit-when-new-tarball
             params:
               repository: bosh-deployment
               rebase: true
-      on_failure:
-        task: echo-skip-message
-        file: bosh-deployment/ci/tasks/echo-skip-upload-message.yml
+      <<: *on-failure-echo
 
 groups:
 - name: bosh-deployment
@@ -159,10 +175,7 @@ jobs:
     params:
       CPI_OPS_FILE: aws/cpi.yml
       CPI_NAME: bosh-aws-cpi
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-azure-cpi
   plan:
@@ -179,10 +192,7 @@ jobs:
     params:
       CPI_NAME: bosh-azure-cpi
       CPI_OPS_FILE: azure/cpi.yml
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-alicloud-cpi
   plan:
@@ -200,10 +210,7 @@ jobs:
       CPI_OPS_FILE: alicloud/cpi.yml
       CPI_NAME: bosh-alicloud-cpi
       GITHUB_RELEASE: true
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-google-cpi
   plan:
@@ -220,10 +227,7 @@ jobs:
     params:
       CPI_NAME: bosh-google-cpi
       CPI_OPS_FILE: gcp/cpi.yml
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-vsphere-cpi-release
   plan:
@@ -247,10 +251,7 @@ jobs:
     params:
       CPI_OPS_FILE: vsphere/cpi-secondary.yml
       CPI_NAME: bosh-vsphere-cpi
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-virtualbox-cpi-release
   plan:
@@ -267,10 +268,7 @@ jobs:
     params:
       CPI_OPS_FILE: virtualbox/cpi.yml
       CPI_NAME: bosh-virtualbox-cpi
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-openstack-cpi-release
   plan:
@@ -287,10 +285,7 @@ jobs:
     params:
       CPI_NAME: bosh-openstack-cpi
       CPI_OPS_FILE: openstack/cpi.yml
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-warden-cpi-release
   plan:
@@ -307,10 +302,7 @@ jobs:
     params:
       CPI_NAME: bosh-warden-cpi
       CPI_OPS_FILE: warden/cpi.yml
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-docker-cpi-release
   plan:
@@ -327,10 +319,7 @@ jobs:
     params:
       CPI_NAME: bosh-docker-cpi
       CPI_OPS_FILE: docker/cpi.yml
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 ### Releases
 
@@ -362,14 +351,7 @@ jobs:
     params:
       BOSH_IO_RELEASE: cloudfoundry-incubator/backup-and-restore-sdk-release
       FILE_TO_UPDATE: misc/source-releases/bbr.yml
-  - put: compiled-releases
-    no_get: true
-    params:
-      file: "compiled-release/*.tgz"
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-and-upload-when-new-release
 
 - name: compile-bosh-release
   plan:
@@ -400,14 +382,7 @@ jobs:
     params:
       BOSH_IO_RELEASE: cloudfoundry/bosh
       FILE_TO_UPDATE: misc/source-releases/bosh.yml
-  - put: compiled-releases
-    no_get: true
-    params:
-      file: "compiled-release/*.tgz"
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-and-upload-when-new-release
 
 - name: compile-bpm-release
   plan:
@@ -438,7 +413,7 @@ jobs:
     params:
       BOSH_IO_RELEASE: cloudfoundry/bpm-release
       FILE_TO_UPDATE: misc/source-releases/bosh.yml
-  - <<: *commit-when-new-tarball
+  - <<: *commit-and-upload-when-new-release
 
 - name: compile-credhub-release
   plan:
@@ -468,14 +443,7 @@ jobs:
     params:
       BOSH_IO_RELEASE: pivotal-cf/credhub-release
       FILE_TO_UPDATE: misc/source-releases/credhub.yml
-  - put: compiled-releases
-    no_get: true
-    params:
-      file: "compiled-release/*.tgz"
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-and-upload-when-new-release
 
 - name: compile-docker-cpi
   plan:
@@ -498,14 +466,7 @@ jobs:
       release: compiled-release
     params:
       FILE_TO_UPDATE: bosh-lite-docker.yml
-  - put: compiled-releases
-    no_get: true
-    params:
-      file: "compiled-release/*.tgz"
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-and-upload-when-new-release
 
 - name: compile-garden-runc
   plan:
@@ -528,14 +489,7 @@ jobs:
       release: compiled-release
     params:
       FILE_TO_UPDATE: bosh-lite.yml
-  - put: compiled-releases
-    no_get: true
-    params:
-      file: "compiled-release/*.tgz"
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-and-upload-when-new-release
 
 - name: compile-uaa-release
   plan:
@@ -565,14 +519,7 @@ jobs:
     params:
       BOSH_IO_RELEASE: cloudfoundry/uaa-release
       FILE_TO_UPDATE: misc/source-releases/uaa.yml
-  - put: compiled-releases
-    no_get: true
-    params:
-      file: "compiled-release/*.tgz"
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-and-upload-when-new-release
 
 - name: compile-warden-cpi
   plan:
@@ -595,14 +542,7 @@ jobs:
       release: compiled-release
     params:
       FILE_TO_UPDATE: bosh-lite.yml
-  - put: compiled-releases
-    no_get: true
-    params:
-      file: "compiled-release/*.tgz"
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-and-upload-when-new-release
 
 ### Stemcells
 
@@ -621,10 +561,7 @@ jobs:
     params:
       CPI_OPS_FILE: alicloud/cpi.yml
       STEMCELL_NAME: alicloud-ubuntu-jammy-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-aws-stemcell
   plan:
@@ -641,10 +578,7 @@ jobs:
     params:
       CPI_OPS_FILE: aws/cpi.yml
       STEMCELL_NAME: aws-ubuntu-jammy-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-azure-stemcell
   plan:
@@ -661,10 +595,7 @@ jobs:
     params:
       CPI_OPS_FILE: azure/cpi.yml
       STEMCELL_NAME: azure-ubuntu-jammy-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-docker-stemcell
   plan:
@@ -681,10 +612,7 @@ jobs:
     params:
       CPI_OPS_FILE: docker/cpi.yml
       STEMCELL_NAME: warden-ubuntu-jammy-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-gcp-stemcell
   plan:
@@ -701,10 +629,7 @@ jobs:
     params:
       CPI_OPS_FILE: gcp/cpi.yml
       STEMCELL_NAME: gcp-ubuntu-jammy-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-openstack-stemcell
   plan:
@@ -721,10 +646,7 @@ jobs:
     params:
       CPI_OPS_FILE: openstack/cpi.yml
       STEMCELL_NAME: openstack-ubuntu-jammy-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-openstack-raw-stemcell
   plan:
@@ -741,10 +663,7 @@ jobs:
     params:
       CPI_OPS_FILE: openstack/use-openstack-raw-stemcell.yml
       STEMCELL_NAME: openstack-ubuntu-jammy-stemcell-raw
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-vcloud-stemcell
   plan:
@@ -761,10 +680,7 @@ jobs:
     params:
       CPI_OPS_FILE: vcloud/cpi.yml
       STEMCELL_NAME: vcloud-ubuntu-jammy-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-virtualbox-stemcell
   plan:
@@ -781,10 +697,7 @@ jobs:
     params:
       CPI_OPS_FILE: virtualbox/cpi.yml
       STEMCELL_NAME: vsphere-ubuntu-jammy-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-vsphere-stemcell
   plan:
@@ -801,10 +714,7 @@ jobs:
     params:
       CPI_OPS_FILE: vsphere/cpi.yml
       STEMCELL_NAME: vsphere-ubuntu-jammy-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-warden-stemcell
   plan:
@@ -821,10 +731,7 @@ jobs:
     params:
       CPI_OPS_FILE: warden/cpi.yml
       STEMCELL_NAME: warden-ubuntu-jammy-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-alicloud-bionic-stemcell
   plan:
@@ -841,10 +748,7 @@ jobs:
     params:
       CPI_OPS_FILE: alicloud/use-bionic.yml
       STEMCELL_NAME: alicloud-ubuntu-bionic-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-aws-bionic-stemcell
   plan:
@@ -861,10 +765,7 @@ jobs:
     params:
       CPI_OPS_FILE: aws/use-bionic.yml
       STEMCELL_NAME: aws-ubuntu-bionic-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-azure-bionic-stemcell
   plan:
@@ -881,10 +782,7 @@ jobs:
     params:
       CPI_OPS_FILE: azure/use-bionic.yml
       STEMCELL_NAME: azure-ubuntu-bionic-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-docker-bionic-stemcell
   plan:
@@ -901,10 +799,7 @@ jobs:
     params:
       CPI_OPS_FILE: docker/use-bionic.yml
       STEMCELL_NAME: warden-ubuntu-bionic-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-gcp-bionic-stemcell
   plan:
@@ -921,10 +816,7 @@ jobs:
     params:
       CPI_OPS_FILE: gcp/use-bionic.yml
       STEMCELL_NAME: gcp-ubuntu-bionic-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-openstack-bionic-stemcell
   plan:
@@ -941,10 +833,7 @@ jobs:
     params:
       CPI_OPS_FILE: openstack/use-bionic.yml
       STEMCELL_NAME: openstack-ubuntu-bionic-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-openstack-raw-bionic-stemcell
   plan:
@@ -961,10 +850,7 @@ jobs:
     params:
       CPI_OPS_FILE: openstack/use-openstack-raw-stemcell.yml
       STEMCELL_NAME: openstack-ubuntu-bionic-stemcell-raw
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-vcloud-bionic-stemcell
   plan:
@@ -981,10 +867,7 @@ jobs:
     params:
       CPI_OPS_FILE: vcloud/use-bionic.yml
       STEMCELL_NAME: vcloud-ubuntu-bionic-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-virtualbox-bionic-stemcell
   plan:
@@ -1001,10 +884,7 @@ jobs:
     params:
       CPI_OPS_FILE: virtualbox/use-bionic.yml
       STEMCELL_NAME: vsphere-ubuntu-bionic-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-vsphere-bionic-stemcell
   plan:
@@ -1021,10 +901,7 @@ jobs:
     params:
       CPI_OPS_FILE: vsphere/use-bionic.yml
       STEMCELL_NAME: vsphere-ubuntu-bionic-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-warden-bionic-stemcell
   plan:
@@ -1041,10 +918,7 @@ jobs:
     params:
       CPI_OPS_FILE: warden/use-bionic.yml
       STEMCELL_NAME: warden-ubuntu-bionic-stemcell
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 # Source releases
 
@@ -1064,10 +938,7 @@ jobs:
       UPDATING_BASE_MANIFEST: true
       FILE_TO_UPDATE: runtime-configs/dns.yml
       BOSH_IO_RELEASE: cloudfoundry/bosh-dns-release
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-os-conf-release
   plan:
@@ -1084,10 +955,7 @@ jobs:
     params:
       FILE_TO_UPDATE: jumpbox-user.yml
       BOSH_IO_RELEASE: cloudfoundry/os-conf-release
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 - name: update-syslog-release
   plan:
@@ -1104,10 +972,7 @@ jobs:
     params:
       FILE_TO_UPDATE: syslog.yml
       BOSH_IO_RELEASE: cloudfoundry/syslog-release
-  - put: bosh-deployment
-    params:
-      repository: bosh-deployment
-      rebase: true
+  - <<: *commit-when-new-asset
 
 resources:
 - name: bosh-deployment
