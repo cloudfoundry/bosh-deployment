@@ -123,37 +123,9 @@
 - type: replace
   path: /variables/name=blobstore_server_tls/options/alternative_names?/-
   value: "127.0.0.1"
-  
-# Enable registry job
-- type: replace
-  path: /instance_groups/name=bosh/jobs/-
-  value:
-    name: registry
-    release: bosh
-
-- type: replace
-  path: /instance_groups/name=bosh/properties/registry?
-  value:
-    address: ((internal_ip))
-    host: ((internal_ip))
-    db: # todo remove
-      host: 127.0.0.1
-      user: postgres
-      password: ((postgres_password))
-      database: bosh
-      adapter: postgres
-    username: registry
-    password: ((registry_password))
-    port: 25777
 
 - type: replace
   path: /variables/-
   value:
     name: sl_sshkey
     type: ssh
-
-- type: replace
-  path: /variables/-
-  value:
-    name: registry_password
-    type: password
