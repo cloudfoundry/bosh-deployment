@@ -87,6 +87,11 @@ The director can optionally add configuration to all VMs in all deployments. The
 - `bpm.yml`: Install bosh process manager on every VM (see [BPM-Release](https://github.com/cloudfoundry/bpm-release)
 - `syslog.yml`: Install a syslog forwarder agent in every VM.
 
+Runtime config files are applied after bosh director has been deployed:
+```
+bosh -n -e bosh-1 update-runtime-config bosh-deployment/runtime-configs/dns.yml
+```
+
 See [runtime-configs/](runtime-configs/) for examples of different runtime configs.
 Other uses include installation of prometheus exporters, os-conf (to modify os level configurations), virus scanning, compliance agents.
 
