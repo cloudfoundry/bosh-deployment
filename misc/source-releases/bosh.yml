@@ -3,9 +3,9 @@
   type: replace
   value:
     name: bosh
-    sha1: 0693cd5c87ee797a47e3636235d0e29fcc5be208
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=280.1.6
-    version: 280.1.6
+    sha1: ddae413fbdad0b3221f01bd8a80d8ce3226c45d4
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=280.1.7
+    version: 280.1.7
 - path: /releases/name=bpm?
   release: bpm
   type: replace
