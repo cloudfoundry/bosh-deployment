@@ -1,3 +1,7 @@
-# Now default in bosh.yml.
-# This ops-file is temporarily here for backwards compatibility
+# This file was used to enable the local_dns feature of bosh.
+# bosh dns is now the default in bosh.yml.
+#
+# This ops-file is temporarily here for backwards compatibility to ensure no pipelines are broken.
+#
+# To configure your upstream DNS provider please use the misc/dns.yml ops file to override the default (Google DNS).
 ---
