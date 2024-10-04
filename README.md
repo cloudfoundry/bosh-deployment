@@ -84,7 +84,7 @@ See [tests/run-checks.sh](tests/run-checks.sh) for example usage of different op
 The director can optionally add configuration to all VMs in all deployments. The YAML defines an IaaS agnostic configuration that applies to all deployments. (See [Director Runtime Config](https://bosh.io/docs/runtime-config/).)
 
 - `dns.yml`: Install bosh defined dns release in every deployed VM. This allows bosh VMs to use the VM name as a FQDN. *It is extremely common for deployments require this addon*. (eg concourse-ci with UAA). For more information see [Native DNS Support](https://bosh.io/docs/dns/).
-- `bpm.yml`: Install bosh process manager on every VM (see [BPM-Release](https://github.com/cloudfoundry/bpm-release)
+- `bpm.yml`: Install bosh process manager on every VM (see [BPM-Release](https://github.com/cloudfoundry/bpm-release))
 - `syslog.yml`: Install a syslog forwarder agent in every VM.
 
 Runtime config files are applied after bosh director has been deployed:
