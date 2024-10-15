@@ -3,8 +3,8 @@
   type: replace
   value:
     name: uaa
-    sha1: c3ecc93028216ca8d6d17f6892f7eeaefd4b9f7d
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-77.17.0-ubuntu-jammy-1.572.tgz
+    sha1: 4720256a161640f1620d67db3a2045513f315d93
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-77.17.0-ubuntu-jammy-1.613.tgz
     version: 77.17.0
 - path: /instance_groups/name=bosh/properties/director/user_management/provider
   type: replace
