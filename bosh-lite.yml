@@ -23,6 +23,7 @@
   type: replace
   value:
     allow_host_access: true
+    containerd_mode: false
     debug_listen_address: 127.0.0.1:17013
     default_container_grace_time: 0
     destroy_containers_on_start: true
