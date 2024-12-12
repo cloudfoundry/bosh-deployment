@@ -102,7 +102,7 @@ instance_groups:
         user: hm
       resurrector_enabled: true
     nats:
-      address: ((internal_ip))
+      address: ((static_ip))
       director_account:
         ca_cert: ((director_ssl.ca))
         password: ((nats_sync_password))
@@ -140,7 +140,7 @@ networks:
     gateway: ((internal_gw))
     range: ((internal_cidr))
     static:
-    - ((internal_ip))
+    - ((static_ip))
   type: manual
 releases:
 - name: bosh
