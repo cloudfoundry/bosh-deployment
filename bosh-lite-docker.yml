@@ -23,20 +23,6 @@
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
-    name: docker_cpi
-    properties:
-      docker_cpi:
-        agent:
-          blobstore: null
-          mbus: nats://nats:((nats_password))@10.254.50.4:4222
-        docker:
-          host: tcp://127.0.0.1:4243
-          tls: ((docker_client_tls))
-        host_ip: 10.254.50.4
-    release: bosh-docker-cpi
-- path: /instance_groups/name=bosh/jobs/-
-  type: replace
-  value:
     name: docker
     properties:
       listen_address: 127.0.0.1
@@ -82,7 +68,7 @@
     type: certificate
 - path: /variables/name=nats_server_tls/options/alternative_names?/-
   type: replace
-  value: 10.254.50.4
+  value: ((static_ip))
 - path: /variables/name=blobstore_server_tls/options/alternative_names/-
   type: replace
-  value: 10.254.50.4
+  value: ((static_ip))
