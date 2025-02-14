@@ -1,0 +1,6 @@
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=garden/properties/garden/apparmor_profile?
+  value: "" # overwrites garden-default which is the default
+- path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores/provider=dav/options/endpoint
+  type: replace
+  value: https://10.254.50.4:25250
