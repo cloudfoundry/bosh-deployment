@@ -148,9 +148,9 @@ releases:
   url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-282.0.2-ubuntu-jammy-1.808.tgz
   version: 282.0.2
 - name: bpm
-  sha1: 8f25d8a7d750b50a1d21b42833e188441f77f9cd
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.4.17-ubuntu-jammy-1.808.tgz
-  version: 1.4.17
+  sha1: 896d9050d2814c0601bb8cd922d32befc11cb9f0
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.4.18-ubuntu-jammy-1.808.tgz
+  version: 1.4.18
 resource_pools:
 - env:
     bosh:
