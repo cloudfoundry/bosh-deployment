@@ -144,8 +144,8 @@ networks:
   type: manual
 releases:
 - name: bosh
-  sha1: be2679f79d4e8642df11fbaceb51c0be97a6d258
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-282.0.4-ubuntu-jammy-1.822.tgz
+  sha1: eb73297fba0d81d7e328efce48059271455336b4
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-282.0.4-ubuntu-jammy-1.824.tgz
   version: 282.0.4
 - name: bpm
   sha1: cd432d8046e998fc0b55a646f1f191e87e542b6e
