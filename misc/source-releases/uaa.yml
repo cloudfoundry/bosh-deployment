@@ -3,6 +3,6 @@
   type: replace
   value:
     name: uaa
-    sha1: 8477c72bf721e36d4784119c0c9afe6eca6960ae
-    url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=78.1.0
-    version: 78.1.0
+    sha1: cc937b048b65966954bffb6ae8f07be5915f6bb6
+    url: https://bosh.io/d/github.com/cloudfoundry/uaa-release?v=78.2.0
+    version: 78.2.0
