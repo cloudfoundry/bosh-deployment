@@ -1,0 +1,10 @@
+# By default Credhub will accept any minimum duration for certificates. Setting this value will overwrite the lifetime of certificates to at least the configured values.
+# This can be used in cases where environments need longer living certificates to avoid writing ops files for every single certificate.
+# This does NOT affect the certificates that the director vm uses, for those you need the other ops files
+# As the Director uses 365 days by default this will only have an effect if you want more than those 365 days.
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=credhub/properties/credhub/certificates/ca_minimum_duration_in_days?
+  value: ((credhub_ca_minimum_duration))
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=credhub/properties/credhub/certificates/leaf_minimum_duration_in_days?
+  value: ((credhub_leaf_minimum_duration))
