@@ -16,9 +16,9 @@ The following certificates are affected by this change and will need to be regen
 If you're using Credhub or another external variable store, then you will need to use `update_mode: converge` as documented here: <https://bosh.io/docs/manifest-v2/#variables>.<br>
 If you are not using Credhub or another external variable store, then you will need to follow the usual procedure for regenerating your certificates.
 
-## Jammy stemcells
+## Noble stemcells
 
-We deploy using Jammy stemcells; however, if you would prefer to use the Bionic stemcells, append the ops files `[IAAS]/use-bionic.yml` and `misc/source-releases/bosh.yml` after the ops file `[IAAS]/cpi.yml`.
+We deploy using Noble stemcells; however, if you would prefer to use the Jammy stemcells, append the ops files `[IAAS]/use-jammy.yml` and `misc/source-releases/bosh.yml` after the ops file `[IAAS]/cpi.yml`.
 
 ## How is bosh-deployment updated?
 An automatic process updates Bosh, and other releases within bosh-deployment
@@ -64,7 +64,7 @@ Other releases such as [UAA](https://github.com/cloudfoundry/uaa-release), [Cred
 - `bosh.yml`: Base manifest that is meant to be used with different CPI configurations
 - `[alicloud|aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cpi.yml`: CPI configuration
 - `[alicloud|aws|azure|docker|gcp|openstack|softlayer|vcloud|vsphere|virtualbox]/cloud-config.yml`: Simple cloud configs
-- `[alicloud|aws|azure|docker|gcp|openstack|vcloud|virtualbox|vsphere|warden]/use-bionic.yml`: use Bionic stemcell instead of Jammy stemcell
+- `[alicloud|aws|azure|docker|gcp|openstack|vcloud|virtualbox|vsphere|warden]/use-jammy.yml`: use Jammy stemcell instead of Noble stemcell
 - `jumpbox-user.yml`: Adds user `jumpbox` for SSH-ing into the Director (see [Jumpbox User](docs/jumpbox-user.md))
 - `uaa.yml`: Deploys UAA and enables UAA user management in the Director
 - `credhub.yml`: Deploys CredHub and enables CredHub integration in the Director
