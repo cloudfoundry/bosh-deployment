@@ -997,51 +997,51 @@ resources:
 - name: aws-ubuntu-noble-stemcell
   type: bosh-io-stemcell
   source:
-    name: bosh-aws-xen-hvm-ubuntu-noble-go_agent
+    name: bosh-aws-xen-hvm-ubuntu-noble
 
 - name: alicloud-ubuntu-noble-stemcell
   type: bosh-io-stemcell
   source:
-    name: bosh-alicloud-kvm-ubuntu-noble-go_agent
+    name: bosh-alicloud-kvm-ubuntu-noble
 
 - name: azure-ubuntu-noble-stemcell
   type: bosh-io-stemcell
   source:
-    name: bosh-azure-hyperv-ubuntu-noble-go_agent
+    name: bosh-azure-hyperv-ubuntu-noble
     force_regular: true
 
 - name: gcp-ubuntu-noble-stemcell
   type: bosh-io-stemcell
   source:
-    name: bosh-google-kvm-ubuntu-noble-go_agent
+    name: bosh-google-kvm-ubuntu-noble
 
 - name: openstack-ubuntu-noble-stemcell
   type: bosh-io-stemcell
   source:
-    name: bosh-openstack-kvm-ubuntu-noble-go_agent
+    name: bosh-openstack-kvm-ubuntu-noble
     force_regular: true
 
 - name: openstack-ubuntu-noble-stemcell-raw
   type: bosh-io-stemcell
   source:
-    name: bosh-openstack-kvm-ubuntu-noble-go_agent-raw
+    name: bosh-openstack-kvm-ubuntu-noble-raw
     force_regular: true
 
 - name: vcloud-ubuntu-noble-stemcell
   type: bosh-io-stemcell
   source:
-    name: bosh-openstack-kvm-ubuntu-noble-go_agent
+    name: bosh-openstack-kvm-ubuntu-noble
     force_regular: true
 
 - name: warden-ubuntu-noble-stemcell
   type: bosh-io-stemcell
   source:
-    name: bosh-warden-boshlite-ubuntu-noble-go_agent
+    name: bosh-warden-boshlite-ubuntu-noble
 
 - name: vsphere-ubuntu-noble-stemcell
   type: bosh-io-stemcell
   source:
-    name: bosh-vsphere-esxi-ubuntu-noble-go_agent
+    name: bosh-vsphere-esxi-ubuntu-noble
 
 - name: aws-ubuntu-jammy-stemcell
   type: bosh-io-stemcell
