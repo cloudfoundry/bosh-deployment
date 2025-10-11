@@ -30,7 +30,7 @@
   path: /stemcells?/-
   value:
     alias: default
-    os: ubuntu-jammy
+    os: ubuntu-noble
     version: latest
 
 - type: replace
