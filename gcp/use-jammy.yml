@@ -1,0 +1,6 @@
+---
+- type: replace
+  path: /name=stemcell/value
+  value:
+    sha1: 993fd41efc2afba08963a0af082448e752c211cc
+    url: https://storage.googleapis.com/bosh-gce-light-stemcells/1.918/light-bosh-stemcell-1.918-google-kvm-ubuntu-jammy-go_agent.tgz
