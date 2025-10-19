@@ -73,7 +73,7 @@ make_new_stemcell_opsfile() {
   SHA=$2
 
   cat << EOF > new_stemcell_ops.yml
-- type: stemcell
+- name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:

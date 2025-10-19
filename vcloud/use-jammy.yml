@@ -1,4 +1,4 @@
-- type: stemcell
+- name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
