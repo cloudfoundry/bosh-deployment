@@ -11,8 +11,8 @@ inputs:
   - name: stemcell
 
 params:
-  CPI_OPS_FILE: ~
-  STEMCELL_NAME: ~
+  CPI_OPS_FILE: aws/use-jammy.yml
+  STEMCELL_NAME: aws-ubuntu-jammy-stemcell
 
 outputs:
   - name: bosh-deployment

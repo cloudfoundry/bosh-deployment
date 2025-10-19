@@ -59,11 +59,27 @@ make_stemcell_opsfile() {
   cat << EOF > update_stemcell_ops.yml
 ---
 - type: replace
-  path: //resource_pools/name=vms/stemcell?
+  path: /name=stemcell/value
   value:
     sha1: ${SHA}
     url: ${URL}
 EOF
 
   echo update_stemcell_ops.yml
+}
+
+make_new_stemcell_opsfile() {
+  URL=$1
+  SHA=$2
+
+  cat << EOF > new_stemcell_ops.yml
+- type: stemcell
+  path: /resource_pools/name=vms/stemcell?
+  type: replace
+  value:
+    sha1: ${SHA}
+    url: ${URL}
+EOF
+
+  echo new_stemcell_ops.yml
 }
