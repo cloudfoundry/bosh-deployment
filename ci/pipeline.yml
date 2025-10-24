@@ -37,7 +37,7 @@ commit-and-upload-when-new-release: &commit-and-upload-when-new-release
 groups:
 - name: bosh-deployment
   jobs:
-  - test-bosh-lite-gcp
+  - test-bosh-gcp
   - test-smoke
   - test-main-bosh-lite
   - promote
@@ -93,7 +93,7 @@ groups:
   - update-syslog-release
 
 jobs:
-- name: test-bosh-lite-gcp
+- name: test-bosh-gcp
   serial: true
   build_log_retention:
     builds: 250
@@ -101,22 +101,22 @@ jobs:
   - do:
     - get: bosh-deployment
       trigger: true
-    - get: warden-ubuntu-noble-stemcell
+    - get: gcp-ubuntu-noble-stemcell
     - task: bbl-up
-      file: bosh-deployment/ci/tasks/bbl-up-bosh-lite-gcp.yml
+      file: bosh-deployment/ci/tasks/bbl-up-bosh-gcp.yml
       params:
         BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_json_key))
-        BBL_GCP_REGION: us-west1
-    - task: test-bosh-lite-gcp
-      file: bosh-deployment/ci/tasks/test-bosh-lite-gcp.yml
+        BBL_GCP_REGION: europe-north1
+    - task: test-bosh-gcp
+      file: bosh-deployment/ci/tasks/test-bosh-gcp.yml
       input_mapping:
-        stemcell: warden-ubuntu-noble-stemcell
+        stemcell: gcp-ubuntu-noble-stemcell
     ensure:
       task: bbl-down
-      file: bosh-deployment/ci/tasks/bbl-down-bosh-lite-gcp.yml
+      file: bosh-deployment/ci/tasks/bbl-down-bosh-gcp.yml
       params:
         BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_json_key))
-        BBL_GCP_REGION: us-west1
+        BBL_GCP_REGION: europe-north1
 
 - name: test-smoke
   serial: true

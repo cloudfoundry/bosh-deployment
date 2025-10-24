@@ -18,4 +18,4 @@ params:
   BBL_GCP_REGION: replace-me
 
 run:
-  path: bosh-deployment/ci/tasks/bbl-up-bosh-lite-gcp.sh
+  path: bosh-deployment/ci/tasks/bbl-up-bosh-gcp.sh

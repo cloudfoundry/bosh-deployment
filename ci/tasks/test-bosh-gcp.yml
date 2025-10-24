@@ -9,11 +9,7 @@ image_resource:
 inputs:
   - name: bosh-deployment
   - name: bbl-state
-
-params:
-  BBL_GCP_SERVICE_ACCOUNT_KEY: replace-me
-  BBL_IAAS: gcp
-  BBL_GCP_REGION: replace-me
+  - name: stemcell
 
 run:
-  path: bosh-deployment/ci/tasks/bbl-down-bosh-lite-gcp.sh
+  path: bosh-deployment/ci/tasks/test-bosh-gcp.sh
