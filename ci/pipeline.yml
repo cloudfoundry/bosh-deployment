@@ -152,7 +152,7 @@ jobs:
     trigger: true
     passed:
     - test-smoke
-    - test-bosh-lite-gcp
+    - test-bosh-gcp
     - test-main-bosh-lite
   - put: bosh-deployment-commit-status
     params:
