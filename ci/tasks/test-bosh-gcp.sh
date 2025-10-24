@@ -22,5 +22,8 @@ pushd "${PWD}/bbl-state"
   bosh -n -d zookeeper recreate
 
   echo "-----> `date`: Clean up disks, etc."
-  bosh -n -d zookeeper clean-up --all
+  bosh -n -d zookeeper delete-deployment
+
+  echo "-----> `date`: Clean up disks, etc."
+  bosh -n clean-up --all
 popd
