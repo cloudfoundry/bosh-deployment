@@ -24,7 +24,7 @@ docker_network_ip=10.245.0.10
 docker_network_gw=10.245.0.1
 docker_network_cidr=10.245.0.0/16
 
-if docker network ls | grep -q "${docker_network}"; then
+if ! docker network ls | grep -q "${docker_network}"; then
     echo "Creating docker network: ${docker_network} with range: ${docker_network_cidr}"
     docker network create -d bridge --subnet=${docker_network_cidr} ${docker_network} --attachable 1>/dev/null
 else
@@ -40,7 +40,7 @@ docker_host=$(docker context inspect | jq -r '.[0].Endpoints.docker.Host')
 docker_tls=$(docker context inspect | jq -r '.[0].Endpoints.docker.SkipTLSVerify')
 
 #time bosh create-env "${bosh_deployment}/bosh.yml" \
-time ~/workspace/bosh-cli/out/bosh create-env "${bosh_deployment}/bosh.yml" \
+bosh create-env "${bosh_deployment}/bosh.yml" \
   --state "${PWD}/state.json" \
   --ops-file "${bosh_deployment}/docker/cpi.yml" \
   --ops-file "${bosh_deployment}/docker/localhost.yml" \
@@ -65,12 +65,12 @@ STEP "Adding Network Routes (sudo is required)"
 ####
 
 if [ "$(uname)" = "Darwin" ]; then
-  sudo route add -net 10.244.0.0/16 192.168.56.6
+  sudo route add -net 10.244.0.0/16 ${docker_network_ip}
 elif [ "$(uname)" = "Linux" ]; then
   if type ip > /dev/null 2>&1; then
-    sudo ip route add 10.244.0.0/16 via 192.168.56.6
+    sudo ip route add 10.244.0.0/16 via ${docker_network_ip}
   elif type route > /dev/null 2>&1; then
-    sudo route add -net 10.244.0.0/16 gw 192.168.56.6
+    sudo route add -net 10.244.0.0/16 gw ${docker_network_ip}
   else
     echo "ERROR adding route"
     exit 1
