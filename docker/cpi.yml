@@ -3,9 +3,9 @@
   type: replace
   value:
     name: bosh-docker-cpi
-    sha1: d2f249c327712f3d459ddb8b40ae8d46196315f1
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-docker-cpi-release?v=0.0.35
-    version: 0.0.35
+    sha1: 6154f5216470073f725a3278a66addc26743a540
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-docker-cpi-release?v=0.1.0
+    version: 0.1.0
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
@@ -43,13 +43,13 @@
 - path: /instance_groups/name=bosh/properties/docker_cpi?
   type: replace
   value:
-    start_containers_with_systemd: true
     agent:
       blobstore: null
       mbus: nats://((internal_ip)):4222
     docker:
       host: ((docker_host))
       tls: ((docker_tls))
+    start_containers_with_systemd: true
 - path: /cloud_provider/properties/docker_cpi?
   type: replace
   value:
