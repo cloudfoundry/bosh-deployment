@@ -42,3 +42,4 @@
     warden:
       connect_address: ((garden_host)):7777
       connect_network: tcp
+    start_containers_with_systemd: true
