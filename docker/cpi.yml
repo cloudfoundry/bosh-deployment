@@ -43,6 +43,7 @@
 - path: /instance_groups/name=bosh/properties/docker_cpi?
   type: replace
   value:
+    start_containers_with_systemd: true
     agent:
       blobstore: null
       mbus: nats://((internal_ip)):4222
