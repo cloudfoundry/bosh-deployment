@@ -50,6 +50,7 @@
     warden:
       connect_address: 127.0.0.1:7777
       connect_network: tcp
+    start_containers_with_systemd: true
 - path: /releases/name=os-conf?
   type: replace
   value:

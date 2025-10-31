@@ -12,3 +12,7 @@ inputs:
 
 run:
   path: bosh-deployment/ci/tasks/test-main-bosh-lite.sh
+
+params:
+  container_limits:
+    cgroupns_mode: host
