@@ -101,6 +101,7 @@ jobs:
   - do:
     - get: bosh-deployment
       trigger: true
+    - get: bosh-bootloader
     - get: gcp-ubuntu-noble-stemcell
     - task: bbl-up
       file: bosh-deployment/ci/tasks/bbl-up-bosh-gcp.yml
@@ -990,6 +991,13 @@ resources:
   type: git
   source:
     uri: git@github.com:cloudfoundry/bosh-deployment.git
+    branch: master
+    private_key: ((github_deploy_key_bosh-deployment.private_key))
+
+- name: bosh-bootloader
+  type: git
+  source:
+    uri: git@github.com:cloudfoundry/bosh-bootloader.git
     branch: master
     private_key: ((github_deploy_key_bosh-deployment.private_key))
 
