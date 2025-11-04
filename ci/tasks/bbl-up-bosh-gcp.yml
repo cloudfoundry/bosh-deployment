@@ -8,6 +8,7 @@ image_resource:
 
 inputs:
   - name: bosh-deployment
+  - name: bosh-bootloader
 
 outputs:
   - name: bbl-state
