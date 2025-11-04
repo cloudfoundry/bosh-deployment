@@ -19,6 +19,7 @@ update:
 
 instance_groups:
   - name: zookeeper
+    vm_extensions: [spot]
     azs: [z1, z2, z3]
     instances: 5
     jobs:
