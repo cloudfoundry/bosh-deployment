@@ -5,7 +5,7 @@ bbl_up() {
   rm -rf bosh-deployment
   cp -rfp "${bosh_deployment}" .
 
-  cp -R "${bosh_bootloader}/plan-patches/spot-gcp/*" .
+  cp -R ${bosh_bootloader}/plan-patches/spot-gcp/* .
 
   bbl --debug up
 }
