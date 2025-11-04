@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: fbefa7b6306fa2d9dde1ac3db72814a664c88d9d
-    url: https://storage.googleapis.com/bosh-core-stemcells/1.103/bosh-stemcell-1.103-warden-boshlite-ubuntu-noble.tgz
+    sha1: 116a9023f9cb0aecf1a44951d7db1d1a82f6a4e8
+    url: https://storage.googleapis.com/bosh-core-stemcells/1.126/bosh-stemcell-1.126-warden-boshlite-ubuntu-noble.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
@@ -39,7 +39,7 @@
           blobstore_path: /var/vcap/micro_bosh/data/cache
         provider: local
       mbus: https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868
+    start_containers_with_systemd: true
     warden:
       connect_address: ((garden_host)):7777
       connect_network: tcp
-    start_containers_with_systemd: true
