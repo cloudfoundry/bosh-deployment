@@ -47,6 +47,7 @@
       blobstore: null
       mbus: nats://10.254.50.4:4222
     host_ip: 10.254.50.4
+    start_containers_with_systemd: true
     warden:
       connect_address: 127.0.0.1:7777
       connect_network: tcp
