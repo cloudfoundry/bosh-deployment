@@ -1,0 +1,10 @@
+- path: /variables/name=metrics_server_ca/options/duration?
+  type: replace
+  value: ((certificate_duration))
+- path: /variables/name=metrics_server_tls/options/duration?
+  type: replace
+  value: ((certificate_duration))
+- path: /variables/name=metrics_server_client_tls/options/duration?
+  type: replace
+  value: ((certificate_duration))
+  
