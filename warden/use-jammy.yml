@@ -7,3 +7,6 @@
 - path: /instance_groups/name=bosh/properties/warden_cpi/start_containers_with_systemd?
   type: replace
   value: false
+- path: /cloud_provider/properties/warden_cpi/start_containers_with_systemd?
+  type: replace
+  value: false
