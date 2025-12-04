@@ -418,6 +418,13 @@ jobs:
     params:
       BOSH_IO_RELEASE: cloudfoundry/bpm-release
       FILE_TO_UPDATE: misc/source-releases/bosh.yml
+  - task: update-source-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      release: bpm-release
+    params:
+      BOSH_IO_RELEASE: cloudfoundry/bpm-release
+      FILE_TO_UPDATE: misc/source-releases/bpm.yml
   - <<: *commit-and-upload-when-new-release
 
 - name: compile-credhub-release

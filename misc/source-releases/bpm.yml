@@ -1,0 +1,8 @@
+- path: /releases/name=bpm?
+  release: bpm
+  type: replace
+  value:
+    name: bpm
+    sha1: b11da068ee5fcec4cd6f7753b9303625501f01bc
+    url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.4.23
+    version: 1.4.23
