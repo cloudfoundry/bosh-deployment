@@ -58,3 +58,4 @@
     docker:
       host: ((docker_host))
       tls: ((docker_tls))
+    start_containers_with_systemd: true
