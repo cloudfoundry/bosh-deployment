@@ -148,8 +148,8 @@ releases:
   url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-282.1.2-ubuntu-noble-1.188.tgz
   version: 282.1.2
 - name: bpm
-  sha1: d362cdf95d70646b46a4bfd44fc74580be3d3ea5
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.4.24-ubuntu-noble-1.188.tgz
+  sha1: b043b1b63daa127c12869c02fccd4b8c238e3332
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.4.24-ubuntu-noble-1.199.tgz
   version: 1.4.24
 resource_pools:
 - env:
