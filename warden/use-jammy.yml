@@ -2,8 +2,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: eb5a6e168486876fedc5c5ee1ef8b6252f234b82
-    url: https://storage.googleapis.com/bosh-core-stemcells/1.1044/bosh-stemcell-1.1044-warden-boshlite-ubuntu-jammy-go_agent.tgz
+    sha1: 3f9a75f68ef883da79bb6dca4276c13097ab9f68
+    url: https://storage.googleapis.com/bosh-core-stemcells/1.1065/bosh-stemcell-1.1065-warden-boshlite-ubuntu-jammy-go_agent.tgz
 - path: /instance_groups/name=bosh/properties/warden_cpi/start_containers_with_systemd?
   type: replace
   value: false
