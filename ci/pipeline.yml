@@ -129,7 +129,7 @@ jobs:
   - task: test-smoke
     file: bosh-deployment/ci/tasks/test-smoke.yml
 
-- name: test-main-bosh-lite
+- name: test-main-warden-cpi
   serial: true
   build_log_retention:
     builds: 250
@@ -137,9 +137,9 @@ jobs:
   - get: bosh-deployment
     trigger: true
   - get: warden-ubuntu-noble-stemcell
-  - task: test-main-bosh-lite
+  - task: test-main-warden-cpi
     timeout: 2h
-    file: bosh-deployment/ci/tasks/test-main-bosh-lite.yml
+    file: bosh-deployment/ci/tasks/test-main-warden-cpi.yml
     input_mapping:
       stemcell: warden-ubuntu-noble-stemcell
     privileged: true
@@ -154,7 +154,7 @@ jobs:
     passed:
     - test-smoke
     - test-bosh-gcp
-#    - test-main-bosh-lite
+#    - test-main-warden-cpi
   - put: bosh-deployment-commit-status
     params:
       state: success
