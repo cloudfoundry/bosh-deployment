@@ -3,9 +3,9 @@
   type: replace
   value:
     name: bosh-docker-cpi
-    sha1: 80f206e789d6170044df9527e20a013f62fdee0d
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-docker-cpi-release?v=0.2.6
-    version: 0.2.6
+    sha1: 8a046afd4080cbab985ac8bae8514821c4a90d56
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-docker-cpi-release?v=0.2.7
+    version: 0.2.7
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
