@@ -39,7 +39,7 @@ groups:
   jobs:
   - test-bosh-gcp
   - test-smoke
-  - test-main-bosh-lite
+  - test-main-warden-cpi
   - promote
 - name: cpis
   jobs:
