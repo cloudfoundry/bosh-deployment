@@ -1,10 +1,11 @@
 ---
-on-failure-echo: &on-failure-echo
+yaml_anchors:
+- &bbl_gcp_region europe-north1
+- &on-failure-echo
   on_failure:
     task: echo-skip-message
     file: bosh-deployment/ci/tasks/echo-skip-upload-message.yml
-
-commit-when-new-asset: &commit-when-new-asset
+- &commit-when-new-asset
   try:
     do:
     - task: is-there-new-asset
@@ -16,8 +17,7 @@ commit-when-new-asset: &commit-when-new-asset
               repository: bosh-deployment
               rebase: true
       <<: *on-failure-echo
-
-commit-and-upload-when-new-release: &commit-and-upload-when-new-release
+- &commit-and-upload-when-new-release
   try:
     do:
     - task: is-there-new-asset
@@ -33,8 +33,6 @@ commit-and-upload-when-new-release: &commit-and-upload-when-new-release
               repository: bosh-deployment
               rebase: true
       <<: *on-failure-echo
-
-bbl_gcp_region: &bbl_gcp_region europe-north1
 
 groups:
 - name: bosh-deployment
