@@ -156,7 +156,7 @@ jobs:
     passed:
     - test-smoke
     - test-bosh-gcp
-#    - test-main-warden-cpi
+    - test-main-warden-cpi
   - put: bosh-deployment-commit-status
     params:
       state: success
