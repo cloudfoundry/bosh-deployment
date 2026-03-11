@@ -34,6 +34,8 @@ commit-and-upload-when-new-release: &commit-and-upload-when-new-release
               rebase: true
       <<: *on-failure-echo
 
+bbl_gcp_region: &bbl_gcp_region europe-north1
+
 groups:
 - name: bosh-deployment
   jobs:
@@ -107,7 +109,7 @@ jobs:
       file: bosh-deployment/ci/tasks/bbl-up-bosh-gcp.yml
       params:
         BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_json_key))
-        BBL_GCP_REGION: europe-north1
+        BBL_GCP_REGION: *bbl_gcp_region
     - task: test-bosh-gcp
       file: bosh-deployment/ci/tasks/test-bosh-gcp.yml
       input_mapping:
@@ -117,7 +119,7 @@ jobs:
       file: bosh-deployment/ci/tasks/bbl-down-bosh-gcp.yml
       params:
         BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_json_key))
-        BBL_GCP_REGION: europe-north1
+        BBL_GCP_REGION: *bbl_gcp_region
 
 - name: test-smoke
   serial: true
