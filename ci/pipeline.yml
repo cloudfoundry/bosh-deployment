@@ -1,5 +1,6 @@
 ---
 yaml_anchors:
+- &integration_image ghcr.io/cloudfoundry/bosh/integration
 - &bbl_gcp_region europe-north1
 - &on-failure-echo
   on_failure:
@@ -91,6 +92,10 @@ groups:
   - update-dns-release
   - update-os-conf-release
   - update-syslog-release
+- name: container-cpi-images
+  jobs:
+    - build-docker-cpi-image
+    - build-warden-cpi-image
 
 jobs:
 - name: test-bosh-gcp
@@ -985,6 +990,57 @@ jobs:
       FILE_TO_UPDATE: syslog.yml
       BOSH_IO_RELEASE: cloudfoundry/syslog-release
   - <<: *commit-when-new-asset
+
+# container cpi images
+- name: build-docker-cpi
+  public: true
+  serial: true
+  plan:
+    - in_parallel:
+        - get: bosh-deployment-main
+          trigger: true
+        - get: integration-image
+          trigger: true
+    - task: copy-dependencies
+      image: integration-image
+      run:
+        path: /bin/bash
+        args: |
+          set -eu -o pipefail
+          set -x
+
+          git archive HEAD -o bosh-deployment/ci/docker-cpi/bosh-deployment.tgz
+    - put: docker-cpi-image
+      params:
+        build: bosh-deployment/ci/docker-cpi/
+        build_args:
+          BASE_IMAGE: *integration_image
+        tag_as_latest: true
+      get_params:
+        skip_download: true
+
+- name: build-warden-cpi-image
+  public: true
+  serial: true
+  plan:
+    - in_parallel:
+        - get: bosh-deployment
+          trigger: true
+#        - get: integration-image
+#          trigger: true
+#    - task: copy-dependencies
+#      file: bosh-ci/ci/tasks/prepare-build-context-for-container-cpi-image.yml
+#      image: integration-image
+#      params:
+#        CONTAINER_CPI_TYPE: warden-cpi
+#    - put: warden-cpi-image
+#      params:
+#        build: docker-build-context
+#        build_args:
+#          BASE_IMAGE: *integration_image
+#        tag_as_latest: true
+#      get_params:
+#        skip_download: true
 
 resources:
 - name: bosh-deployment
