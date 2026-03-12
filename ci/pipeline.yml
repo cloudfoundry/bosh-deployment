@@ -1,6 +1,6 @@
 ---
 yaml_anchors:
-- &bbl_gcp_region europe-north2
+- &bbl_gcp_region europe-west1
 - &on-failure-echo
   on_failure:
     task: echo-skip-message
