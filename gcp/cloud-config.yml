@@ -1,3 +1,4 @@
+---
 azs:
 - name: z1
   cloud_properties:
@@ -12,12 +13,12 @@ azs:
 vm_types:
 - name: default
   cloud_properties:
-    machine_type: n1-standard-2
+    machine_type: &machine_type c4a-standard-1
     root_disk_size_gb: 20
     root_disk_type: pd-ssd
 - name: large
   cloud_properties:
-    machine_type: n1-standard-2
+    machine_type: *machine_type
     root_disk_size_gb: 50
     root_disk_type: pd-ssd
 
