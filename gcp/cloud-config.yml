@@ -15,12 +15,12 @@ vm_types:
   cloud_properties:
     machine_type: &machine_type e2-highcpu-2
     root_disk_size_gb: 20
-    root_disk_type: pd-ssd
+    root_disk_type: &root_disk_type hyperdisk-balanced
 - name: large
   cloud_properties:
     machine_type: *machine_type
     root_disk_size_gb: 50
-    root_disk_type: pd-ssd
+    root_disk_type: *root_disk_type
 
 disk_types:
 - name: default
