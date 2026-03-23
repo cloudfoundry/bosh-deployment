@@ -1225,7 +1225,7 @@ resources:
 
 resource_types:
 - name: github-status
-  type: docker-image
+  type: registry-image
   source:
     repository: dpb587/github-status-resource
     tag: master
