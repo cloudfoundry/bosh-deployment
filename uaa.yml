@@ -133,12 +133,24 @@
 - path: /instance_groups/name=bosh/properties/hm/director_account/client_secret?
   type: replace
   value: ((hm_password))
+- path: /instance_groups/name=bosh/properties/hm/director_account/uaa_ca_cert?
+  type: replace
+  value: ((uaa_ssl.ca))
+- path: /instance_groups/name=bosh/properties/hm/director_account/uaa_public_key?
+  type: replace
+  value: ((uaa_jwt_signing_key.public_key))
 - path: /instance_groups/name=bosh/properties/nats/director_account/client_id?
   type: replace
   value: nats
 - path: /instance_groups/name=bosh/properties/nats/director_account/client_secret?
   type: replace
   value: ((nats_sync_password))
+- path: /instance_groups/name=bosh/properties/nats/director_account/uaa_ca_cert?
+  type: replace
+  value: ((uaa_ssl.ca))
+- path: /instance_groups/name=bosh/properties/nats/director_account/uaa_public_key?
+  type: replace
+  value: ((uaa_jwt_signing_key.public_key))
 - path: /variables/-
   type: replace
   value:
