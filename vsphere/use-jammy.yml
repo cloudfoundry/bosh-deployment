@@ -2,5 +2,5 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: c3d0427267957d7e727a6ddab43de443d02f58b6
-    url: https://storage.googleapis.com/bosh-core-stemcells/1.1183/bosh-stemcell-1.1183-vsphere-esxi-ubuntu-jammy-go_agent.tgz
+    sha1: 847b5c22c43af9efafce63627f317a9351f1e811
+    url: https://storage.googleapis.com/bosh-core-stemcells/1.1193/bosh-stemcell-1.1193-vsphere-esxi-ubuntu-jammy-go_agent.tgz
