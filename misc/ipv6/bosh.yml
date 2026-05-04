@@ -25,6 +25,10 @@
   value: "nats://[((internal_ip))]:4222"
 
 - type: replace
+  path: /instance_groups/name=bosh/properties/director/address?
+  value: "[((internal_ip))]"
+
+- type: replace
   path: /instance_groups/name=bosh/properties/blobstore/address
   value: "[((internal_ip))]"
 
