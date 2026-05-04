@@ -63,7 +63,7 @@ instance_groups:
           certificate: ((blobstore_server_tls.certificate))
           private_key: ((blobstore_server_tls.private_key))
     director:
-      address: 127.0.0.1
+      address: ((internal_ip))
       db:
         adapter: postgres
         database: bosh
