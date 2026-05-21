@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-set -eu
+REPO_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
-fly -t bosh set-pipeline -p bosh-deployment \
-    -c ci/pipeline.yml
+fly -t "${CONCOURSE_TARGET:-bosh}" set-pipeline -p bosh-deployment \
+    -c "${REPO_ROOT}/ci/pipeline.yml"
