@@ -40,6 +40,7 @@ groups:
   - test-bosh-gcp
   - test-smoke
   - test-main-warden-cpi
+  - test-main-docker-cpi
   - promote
 - name: cpis
   jobs:
@@ -144,6 +145,21 @@ jobs:
       stemcell: warden-ubuntu-noble-stemcell
     privileged: true
 
+- name: test-main-docker-cpi
+  serial: true
+  build_log_retention:
+    builds: 250
+  plan:
+  - get: bosh-deployment
+    trigger: true
+  - get: warden-ubuntu-noble-stemcell
+  - task: test-main-docker-cpi
+    timeout: 2h
+    file: bosh-deployment/ci/tasks/test-main-docker-cpi.yml
+    input_mapping:
+      stemcell: warden-ubuntu-noble-stemcell
+    privileged: true
+
 - name: promote
   serial: true
   build_log_retention:
@@ -155,6 +171,7 @@ jobs:
     - test-smoke
     - test-bosh-gcp
     - test-main-warden-cpi
+    - test-main-docker-cpi
   - put: bosh-deployment-commit-status
     params:
       state: success
