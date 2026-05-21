@@ -1,4 +1,7 @@
-*.json
-creds.yml
-tmp
 .idea
+*.iml
+*.json
+
+creds.yml
+
+tmp
