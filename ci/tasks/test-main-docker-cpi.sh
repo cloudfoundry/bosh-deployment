@@ -1,15 +1,21 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-set -eu
+if [[ "${DEBUG:=}" != "" ]]; then
+  set -x
+fi
 
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 bosh_deployment="${PWD}/bosh-deployment"
+
 rm -rf "/usr/local/bosh-deployment"
 cp -r "${PWD}/bosh-deployment" "/usr/local/bosh-deployment"
 
 export USE_LOCAL_RELEASES=false
-. start-bosh
-. /tmp/local-bosh/director/env
+
+# shellcheck source=/dev/null
+source start-bosh
+# shellcheck source=/dev/null
+source /tmp/local-bosh/director/bosh-env
 
 URL=$(cat stemcell/url)
 SHA1=$(cat stemcell/sha1)
@@ -18,14 +24,14 @@ bosh upload-stemcell --sha1 "$SHA1" "$URL"
 
 bosh -n update-runtime-config "${bosh_deployment}/runtime-configs/dns.yml"
 
-echo "-----> `date`: Deploy"
-bosh -n -d zookeeper deploy "${script_dir}/../assets/zookeeper.yml"
+echo "-----> $(date): Deploy"
+bosh -n -d zookeeper deploy "${bosh_deployment}/ci/assets/zookeeper.yml"
 
-echo "-----> `date`: Exercise deployment"
+echo "-----> $(date): Exercise deployment"
 bosh -n -d zookeeper run-errand smoke-tests
 
-echo "-----> `date`: Exercise deployment"
+echo "-----> $(date): Exercise deployment"
 bosh -n -d zookeeper recreate
 
-echo "-----> `date`: Clean up disks, etc."
+echo "-----> $(date): Clean up disks, etc."
 bosh -n -d zookeeper clean-up --all
