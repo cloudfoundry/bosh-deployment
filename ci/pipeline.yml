@@ -138,9 +138,11 @@ jobs:
   - get: bosh-deployment
     trigger: true
   - get: warden-ubuntu-noble-stemcell
+  - get: bosh-warden-cpi-image
   - task: test-main-warden-cpi
     timeout: 2h
     file: bosh-deployment/ci/tasks/test-main-warden-cpi.yml
+    image: bosh-warden-cpi-image
     input_mapping:
       stemcell: warden-ubuntu-noble-stemcell
     privileged: true
@@ -153,9 +155,11 @@ jobs:
   - get: bosh-deployment
     trigger: true
   - get: warden-ubuntu-noble-stemcell
+  - get: bosh-docker-cpi-image
   - task: test-main-docker-cpi
     timeout: 2h
     file: bosh-deployment/ci/tasks/test-main-docker-cpi.yml
+    image: bosh-docker-cpi-image
     input_mapping:
       stemcell: warden-ubuntu-noble-stemcell
     privileged: true
@@ -1239,6 +1243,16 @@ resources:
   type: registry-image
   source:
     repository: ghcr.io/cloudfoundry/ubuntu-noble-stemcell
+
+- name: bosh-docker-cpi-image
+  type: registry-image
+  source:
+    repository: ghcr.io/cloudfoundry/bosh/docker-cpi
+
+- name: bosh-warden-cpi-image
+  type: registry-image
+  source:
+    repository: ghcr.io/cloudfoundry/bosh/warden-cpi
 
 resource_types:
 - name: github-status
