@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ "${DEBUG:=}" != "" ]]; then
+if [[ -n "${DEBUG-}" ]]; then
   set -x
 fi
 
