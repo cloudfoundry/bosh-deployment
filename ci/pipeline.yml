@@ -100,10 +100,11 @@ jobs:
     builds: 250
   plan:
   - do:
-    - get: bosh-deployment
-      trigger: true
-    - get: bosh-bootloader
-    - get: gcp-ubuntu-noble-stemcell
+    - in_parallel:
+      - get: bosh-deployment
+        trigger: true
+      - get: bosh-bootloader
+      - get: gcp-ubuntu-noble-stemcell
     - task: bbl-up
       file: bosh-deployment/ci/tasks/bbl-up-bosh-gcp.yml
       params:
@@ -135,10 +136,11 @@ jobs:
   build_log_retention:
     builds: 250
   plan:
-  - get: bosh-deployment
-    trigger: true
-  - get: warden-ubuntu-noble-stemcell
-  - get: bosh-warden-cpi-image
+  - in_parallel:
+    - get: bosh-deployment
+      trigger: true
+    - get: warden-ubuntu-noble-stemcell
+    - get: bosh-warden-cpi-image
   - task: test-main-warden-cpi
     timeout: 2h
     file: bosh-deployment/ci/tasks/test-main-warden-cpi.yml
@@ -152,10 +154,11 @@ jobs:
   build_log_retention:
     builds: 250
   plan:
-  - get: bosh-deployment
-    trigger: true
-  - get: warden-ubuntu-noble-stemcell
-  - get: bosh-docker-cpi-image
+  - in_parallel:
+    - get: bosh-deployment
+      trigger: true
+    - get: warden-ubuntu-noble-stemcell
+    - get: bosh-docker-cpi-image
   - task: test-main-docker-cpi
     timeout: 2h
     file: bosh-deployment/ci/tasks/test-main-docker-cpi.yml
