@@ -3,9 +3,9 @@
   type: replace
   value:
     name: bosh-google-cpi
-    sha1: 1d08f553daabd7f0b6fd3b88f7795072b6a22cb1
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-google-cpi-release?v=50.1.3
-    version: 50.1.3
+    sha1: e90ba786de19d3d37fb04dbd17345e9825e70293
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-google-cpi-release?v=50.1.4
+    version: 50.1.4
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
