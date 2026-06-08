@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 12d4a4b6cdfc467cced8f4e0438081478981b9ee
-    url: https://storage.googleapis.com/bosh-core-stemcells/1.383/bosh-stemcell-1.383-openstack-kvm-ubuntu-noble.tgz
+    sha1: 33a5bacd58294e35cdd1ba8d4641a72f3e4bafa1
+    url: https://storage.googleapis.com/bosh-core-stemcells/1.396/bosh-stemcell-1.396-openstack-kvm-ubuntu-noble.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
