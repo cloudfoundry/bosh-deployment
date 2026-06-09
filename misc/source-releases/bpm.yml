@@ -3,6 +3,6 @@
   type: replace
   value:
     name: bpm
-    sha1: e03bab4dcddae732542868f47446426c6b1a5c52
-    url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.4.32
-    version: 1.4.32
+    sha1: caceac3d35c926cfc76944d08bedf019d3fd4178
+    url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.4.33
+    version: 1.4.33
