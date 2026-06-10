@@ -3,9 +3,9 @@
   type: replace
   value:
     name: bosh-vsphere-cpi
-    sha1: 5c4c94f6e9154d79d781ca1b14fb5b321c0ea667
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-vsphere-cpi-release?v=98.0.5
-    version: 98.0.5
+    sha1: e018dc5830139df138a7bd9459b60f558afdf6a4
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-vsphere-cpi-release?v=98.0.6
+    version: 98.0.6
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
