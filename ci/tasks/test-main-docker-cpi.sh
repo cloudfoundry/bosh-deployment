@@ -13,7 +13,9 @@ cp -r "${PWD}/bosh-deployment" "/usr/local/bosh-deployment"
 export USE_LOCAL_RELEASES=false
 
 # shellcheck source=/dev/null
-source start-bosh
+source start-bosh \
+  -o /usr/local/bosh-deployment/uaa.yml \
+  -o /usr/local/bosh-deployment/credhub.yml
 # shellcheck source=/dev/null
 source /tmp/local-bosh/director/bosh-env
 
