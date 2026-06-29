@@ -9,6 +9,12 @@
   path: /instance_groups/name=bosh/properties/docker_cpi/docker/host
   value: unix:///var/run/docker.sock
 
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/cpi_additional_volumes?
+  value:
+  - path: /var/run/docker.sock
+    writable: true
+
 - type: remove
   path: /instance_groups/name=bosh/properties/docker_cpi/docker/tls
 
