@@ -38,6 +38,13 @@
 - path: /instance_groups/name=bosh/properties/director/cpi_job?
   type: replace
   value: warden_cpi
+- path: /instance_groups/name=bosh/properties/director/cpi_additional_volumes?
+  type: replace
+  value:
+  - path: /var/vcap/store/warden_cpi
+    writable: true
+    shared: true
+    allow_executions: true
 - path: /instance_groups/name=bosh/properties/warden_cpi?
   type: replace
   value:
