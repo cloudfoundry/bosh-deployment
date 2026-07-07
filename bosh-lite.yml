@@ -11,9 +11,9 @@
   type: replace
   value:
     name: bosh-warden-cpi
-    sha1: 0387678029491cb902962c695c700943c72ca45a
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-45.2.0-ubuntu-noble-1.425.tgz
-    version: 45.2.0
+    sha1: 1b3a93379bc9bf2540c53eaddcf2de2cb8bf83d8
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-45.2.1-ubuntu-noble-1.425.tgz
+    version: 45.2.1
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
@@ -41,10 +41,10 @@
 - path: /instance_groups/name=bosh/properties/director/cpi_additional_volumes?
   type: replace
   value:
-  - path: /var/vcap/store/warden_cpi
-    writable: true
+  - allow_executions: true
+    path: /var/vcap/store/warden_cpi
     shared: true
-    allow_executions: true
+    writable: true
 - path: /instance_groups/name=bosh/properties/warden_cpi?
   type: replace
   value:
