@@ -3,9 +3,9 @@
   type: replace
   value:
     name: syslog
-    sha1: babb717fc5ec6b80d4e8e4cee56de1f760123b0e
-    url: https://bosh.io/d/github.com/cloudfoundry/syslog-release?v=12.3.25
-    version: 12.3.25
+    sha1: 7d4d57bec9ce75721e6542a4bf28ca3d4f190baa
+    url: https://bosh.io/d/github.com/cloudfoundry/syslog-release?v=12.3.26
+    version: 12.3.26
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
