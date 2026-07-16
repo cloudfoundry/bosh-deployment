@@ -38,6 +38,7 @@
       ca_cert: ((uaa_ssl.ca))
       client_id: director_config_server
       client_secret: ((director_config_server_client_secret))
+      public_key: ((uaa_jwt_signing_key.public_key))
 
 # Configure UAA
 - type: replace
