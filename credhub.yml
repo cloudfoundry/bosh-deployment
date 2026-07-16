@@ -55,6 +55,7 @@
       client_id: director_to_credhub
       client_secret: ((uaa_clients_director_to_credhub))
       url: https://((internal_ip)):8443
+      public_key: ((uaa_jwt_signing_key.public_key))
     url: https://((internal_ip)):8844/api/
 - path: /instance_groups/name=bosh/jobs/name=uaa/properties/uaa/clients/director_to_credhub?
   type: replace
