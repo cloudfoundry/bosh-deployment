@@ -43,3 +43,6 @@
     warden:
       connect_address: ((garden_host)):7777
       connect_network: tcp
+- path: /instance_groups/name=bosh/properties/director/use_bpm_for_workers?
+  type: replace
+  value: false

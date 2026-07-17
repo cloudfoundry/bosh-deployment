@@ -73,6 +73,9 @@
 - path: /instance_groups/name=bosh/properties/director/ignore_missing_gateway?
   type: replace
   value: true
+- path: /instance_groups/name=bosh/properties/director/use_bpm_for_workers?
+  type: replace
+  value: false
 - path: /instance_groups/name=bosh/properties/compiled_package_cache?
   type: replace
   value:
