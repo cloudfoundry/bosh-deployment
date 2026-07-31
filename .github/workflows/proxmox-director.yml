@@ -1,0 +1,105 @@
+# Deploy / update / delete the BOSH director on Proxmox VE via CI.
+#
+# Runs on the self-hosted 'proxmox-cpi' runner (the same one the CPI repo uses),
+# which must be able to reach the Proxmox API and the director's IP. State
+# (state.json + creds.yml) is persisted to S3-compatible object storage so the
+# director survives across runs — see proxmox/ci-deploy.sh.
+#
+# Required repository secrets:
+#   PROXMOX_API_URL PROXMOX_API_TOKEN PROXMOX_NODE
+#   PROXMOX_VM_STORAGE PROXMOX_IMPORT_STORAGE PROXMOX_BRIDGE
+#   DIRECTOR_INTERNAL_CIDR DIRECTOR_INTERNAL_GW DIRECTOR_INTERNAL_IP
+#   STATE_S3_BUCKET AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
+# Optional secrets/vars:
+#   PROXMOX_INSECURE_SKIP_VERIFY  AWS_DEFAULT_REGION  AWS_S3_ENDPOINT (MinIO)
+#   DIRECTOR_NAME  STATE_S3_PREFIX
+name: proxmox-director
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "deploy (create/update) or delete the director"
+        type: choice
+        options: [deploy, delete]
+        default: deploy
+      upload_cloud_config:
+        description: "Apply proxmox/cloud-config.yml after deploy"
+        type: boolean
+        default: true
+      upload_stemcell:
+        description: "Upload a stemcell after deploy"
+        type: boolean
+        default: false
+  push:
+    branches: [master]
+    paths:
+      - proxmox/**
+      - bosh.yml
+      - .github/workflows/proxmox-director.yml
+
+# Never let two director operations run against the same state at once.
+concurrency:
+  group: proxmox-director
+  cancel-in-progress: false
+
+jobs:
+  director:
+    runs-on: proxmox-cpi
+    env:
+      BOSH_CLI_VERSION: "7.9.9"
+    steps:
+    - name: Checkout bosh-deployment (this fork)
+      uses: actions/checkout@v4
+
+    - name: Checkout bosh-proxmox-cpi
+      uses: actions/checkout@v4
+      with:
+        repository: hjaffan/bosh-proxmox-cpi
+        path: bosh-proxmox-cpi
+        # If the CPI repo is private, add a PAT here:
+        # token: ${{ secrets.CPI_REPO_TOKEN }}
+
+    - uses: actions/setup-go@v5
+      with:
+        go-version: stable
+        cache: false
+
+    - name: Install bosh CLI
+      run: |
+        curl -fsSL -o bosh "https://github.com/cloudfoundry/bosh-cli/releases/download/v${BOSH_CLI_VERSION}/bosh-cli-${BOSH_CLI_VERSION}-linux-amd64"
+        chmod +x bosh
+        sudo mv bosh /usr/local/bin/bosh
+        bosh --version
+
+    - name: Ensure aws CLI (for S3 state sync)
+      run: |
+        if command -v aws >/dev/null 2>&1; then aws --version; exit 0; fi
+        curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o /tmp/awscliv2.zip
+        (cd /tmp && unzip -q awscliv2.zip && sudo ./aws/install)
+        aws --version
+
+    - name: Deploy / update / delete the director
+      env:
+        ACTION:                 ${{ inputs.action || 'deploy' }}
+        PROXMOX_API_URL:        ${{ secrets.PROXMOX_API_URL }}
+        PROXMOX_API_TOKEN:      ${{ secrets.PROXMOX_API_TOKEN }}
+        PROXMOX_NODE:           ${{ secrets.PROXMOX_NODE }}
+        PROXMOX_VM_STORAGE:     ${{ secrets.PROXMOX_VM_STORAGE }}
+        PROXMOX_IMPORT_STORAGE: ${{ secrets.PROXMOX_IMPORT_STORAGE }}
+        PROXMOX_BRIDGE:         ${{ secrets.PROXMOX_BRIDGE }}
+        PROXMOX_INSECURE_SKIP_VERIFY: ${{ secrets.PROXMOX_INSECURE_SKIP_VERIFY || 'true' }}
+        DIRECTOR_NAME:          ${{ secrets.DIRECTOR_NAME || 'bosh-proxmox' }}
+        DIRECTOR_INTERNAL_CIDR: ${{ secrets.DIRECTOR_INTERNAL_CIDR }}
+        DIRECTOR_INTERNAL_GW:   ${{ secrets.DIRECTOR_INTERNAL_GW }}
+        DIRECTOR_INTERNAL_IP:   ${{ secrets.DIRECTOR_INTERNAL_IP }}
+        STATE_S3_BUCKET:        ${{ secrets.STATE_S3_BUCKET }}
+        STATE_S3_PREFIX:        ${{ secrets.STATE_S3_PREFIX || 'director' }}
+        AWS_ACCESS_KEY_ID:      ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION:     ${{ secrets.AWS_DEFAULT_REGION || 'us-east-1' }}
+        AWS_S3_ENDPOINT:        ${{ secrets.AWS_S3_ENDPOINT }}
+        PROXMOX_CPI_DIR:        ${{ github.workspace }}/bosh-proxmox-cpi
+        UPLOAD_CLOUD_CONFIG:    ${{ (github.event_name == 'push' || inputs.upload_cloud_config) && 'true' || '' }}
+        UPLOAD_STEMCELL:        ${{ inputs.upload_stemcell && 'true' || '' }}
+      run: ./proxmox/ci-deploy.sh

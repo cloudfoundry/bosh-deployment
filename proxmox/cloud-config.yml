@@ -1,0 +1,67 @@
+# Cloud config for a Proxmox VE installation. Vendored into this fork from
+# hjaffan/bosh-proxmox-cpi (manifests/cloud-config.yml). Adjust CIDRs, the
+# bridge, and storage names to match your environment, then apply it once the
+# director is up:
+#
+#   bosh -e proxmox update-cloud-config proxmox/cloud-config.yml -l proxmox/vars.yml
+---
+azs:
+- name: z1
+  # With a multi-node cluster, set a different node per AZ:
+  # cloud_properties:
+  #   node: pve1
+
+vm_types:
+- name: default
+  cloud_properties:
+    cpu: 2
+    ram: 4096   # MiB
+    disk: 16384 # MiB ephemeral disk (scsi1)
+- name: small
+  cloud_properties:
+    cpu: 1
+    ram: 2048
+    disk: 8192
+- name: large
+  cloud_properties:
+    cpu: 4
+    ram: 8192
+    disk: 65536
+    # cpu_type: host          # override the QEMU CPU model
+    # root_disk_size: 10240   # grow the stemcell root disk (MiB)
+    # vm_storage: fast-nvme   # per-type storage override
+
+vm_extensions:
+- name: 50GB_ephemeral_disk
+  cloud_properties:
+    disk: 51200
+
+disk_types:
+- name: default
+  disk_size: 10240 # MiB
+- name: large
+  disk_size: 102400
+  # cloud_properties:
+  #   storage: slow-hdd      # per-disk-type storage override
+
+networks:
+- name: default
+  type: manual
+  subnets:
+  - range: ((internal_cidr))
+    gateway: ((internal_gw))
+    azs: [z1]
+    dns: [8.8.8.8, 1.1.1.1]
+    reserved:
+    - ((internal_gw))/30
+    cloud_properties:
+      bridge: ((proxmox_bridge))
+      # vlan: 30              # optional VLAN tag
+      # mtu: 9000             # optional MTU
+
+compilation:
+  workers: 3
+  reuse_compilation_vms: true
+  az: z1
+  vm_type: default
+  network: default

@@ -1,0 +1,68 @@
+# Ops file to deploy the BOSH director on Proxmox VE using the Proxmox CPI.
+# Vendored into this fork from hjaffan/bosh-proxmox-cpi (manifests/cpi.yml).
+#
+# Layer it onto the vanilla bosh.yml in this repo. See proxmox/deploy.sh for a
+# ready-to-run wrapper, or invoke create-env directly:
+#
+#   bosh create-env bosh.yml \
+#     -o proxmox/cpi.yml \
+#     -o jumpbox-user.yml \
+#     --state=proxmox/state.json --vars-store=proxmox/creds.yml \
+#     -l proxmox/vars.yml \
+#     -v proxmox_cpi_release=file:///abs/path/to/bosh-proxmox-cpi
+#
+# `version: create` builds the CPI release from that checkout; run the CPI's
+# scripts/create-release.sh once first so the golang package is vendored
+# (proxmox/deploy.sh does this automatically). To use a published tarball
+# instead, also apply proxmox/use-published-release.yml.
+---
+- type: replace
+  path: /releases/-
+  value:
+    name: bosh-proxmox-cpi
+    version: create
+    url: ((proxmox_cpi_release))
+
+- type: replace
+  path: /resource_pools/name=vms/stemcell?
+  value:
+    url: https://bosh.io/d/stemcells/bosh-openstack-kvm-ubuntu-jammy-go_agent
+
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties?
+  value:
+    cpu: 2
+    ram: 4096
+    disk: 32768
+
+- type: replace
+  path: /networks/name=default/subnets/0/cloud_properties?
+  value:
+    bridge: ((proxmox_bridge))
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: proxmox_cpi
+    release: bosh-proxmox-cpi
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/proxmox?
+  value: &proxmox_properties
+    api_url: ((proxmox_api_url))
+    api_token: ((proxmox_api_token))
+    insecure_skip_verify: ((proxmox_insecure_skip_verify))
+    node: ((proxmox_node))
+    vm_storage: ((proxmox_vm_storage))
+    import_storage: ((proxmox_import_storage))
+    default_bridge: ((proxmox_bridge))
+
+- type: replace
+  path: /cloud_provider/template?
+  value:
+    name: proxmox_cpi
+    release: bosh-proxmox-cpi
+
+- type: replace
+  path: /cloud_provider/properties/proxmox?
+  value: *proxmox_properties

@@ -4,4 +4,6 @@
 
 creds.yml
 
+proxmox/vars.yml
+
 tmp

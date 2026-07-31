@@ -1,0 +1,21 @@
+# Companion ops file to proxmox/cpi.yml: use a published GitHub release tarball
+# instead of building the CPI from a local checkout. Vendored from
+# hjaffan/bosh-proxmox-cpi (manifests/use-published-release.yml).
+#
+# Apply AFTER cpi.yml and set proxmox_cpi_version / proxmox_cpi_sha1 (drop
+# proxmox_cpi_release):
+#
+#   bosh create-env bosh.yml \
+#     -o proxmox/cpi.yml \
+#     -o proxmox/use-published-release.yml \
+#     -v proxmox_cpi_version=1.0.0 \
+#     -v proxmox_cpi_sha1=<sha1 from the GitHub release notes> \
+#     ...
+---
+- type: replace
+  path: /releases/name=bosh-proxmox-cpi
+  value:
+    name: bosh-proxmox-cpi
+    version: ((proxmox_cpi_version))
+    url: https://github.com/hjaffan/bosh-proxmox-cpi/releases/download/v((proxmox_cpi_version))/bosh-proxmox-cpi-((proxmox_cpi_version)).tgz
+    sha1: ((proxmox_cpi_sha1))
