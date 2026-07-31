@@ -1,0 +1,98 @@
+# Deploy / update / delete THIS environment's BOSH director on Proxmox VE, using
+# the PUBLISHED bosh-proxmox-cpi release (no source build). Runs on the
+# self-hosted 'proxmox-cpi' runner (must reach the Proxmox API and the director
+# IP). state.json + creds.yml are persisted to Ceph S3 via
+# deployments/proxmox/deploy.sh, so the director survives across runs.
+#
+# Config is split so non-sensitive values stay visible/editable and creds stay hidden.
+# Seed both with defaults via: deployments/proxmox/seed-github-config.sh
+#
+# Repository VARIABLES (Settings -> Secrets and variables -> Actions -> Variables):
+#   PROXMOX_API_URL PROXMOX_NODE PROXMOX_VM_STORAGE PROXMOX_IMPORT_STORAGE
+#   PROXMOX_BRIDGE PROXMOX_INSECURE_SKIP_VERIFY DIRECTOR_NAME
+#   DIRECTOR_INTERNAL_CIDR DIRECTOR_INTERNAL_GW DIRECTOR_INTERNAL_IP
+#   STATE_S3_BUCKET STATE_S3_PREFIX AWS_S3_ENDPOINT AWS_DEFAULT_REGION
+# Repository SECRETS (sensitive — replace the seeded placeholders with real values):
+#   PROXMOX_API_TOKEN AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
+name: proxmox-deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "deploy (create/update) or delete the director"
+        type: choice
+        options: [deploy, delete]
+        default: deploy
+      cpi_release_version:
+        description: "Published CPI version to deploy"
+        default: "1.0.0"
+      cpi_release_sha1:
+        description: "SHA1 of the published CPI tarball"
+        default: "facc1ef0af0e421508b2db5f86f82b3726f4e030"
+      cpi_release_url:
+        description: "CPI tarball URL (blank = GitHub release URL)"
+        default: "https://cdn.cf-apps.io/bosh-proxmox-cpi-1.0.0.tgz"
+      upload_cloud_config:
+        description: "Apply proxmox/cloud-config.yml after deploy"
+        type: boolean
+        default: true
+      upload_stemcell:
+        description: "Upload a stemcell after deploy"
+        type: boolean
+        default: false
+
+# Never let two operations run against the same state at once.
+concurrency:
+  group: proxmox-deploy
+  cancel-in-progress: false
+
+jobs:
+  director:
+    runs-on: proxmox-cpi
+    env:
+      BOSH_CLI_VERSION: "7.9.9"
+    steps:
+    - name: Checkout bosh-deployment (this fork)
+      uses: actions/checkout@v4
+
+    - name: Install bosh CLI
+      run: |
+        curl -fsSL -o bosh "https://github.com/cloudfoundry/bosh-cli/releases/download/v${BOSH_CLI_VERSION}/bosh-cli-${BOSH_CLI_VERSION}-linux-amd64"
+        chmod +x bosh
+        sudo mv bosh /usr/local/bin/bosh
+        bosh --version
+
+    - name: Ensure aws CLI (for S3 state sync)
+      run: |
+        if command -v aws >/dev/null 2>&1; then aws --version; exit 0; fi
+        curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o /tmp/awscliv2.zip
+        (cd /tmp && unzip -q awscliv2.zip && sudo ./aws/install)
+        aws --version
+
+    - name: Deploy / update / delete the director
+      env:
+        ACTION:                 ${{ inputs.action || 'deploy' }}
+        CPI_RELEASE_VERSION:    ${{ inputs.cpi_release_version }}
+        CPI_RELEASE_SHA1:       ${{ inputs.cpi_release_sha1 }}
+        CPI_RELEASE_URL:        ${{ inputs.cpi_release_url }}
+        PROXMOX_API_URL:        ${{ vars.PROXMOX_API_URL }}
+        PROXMOX_API_TOKEN:      ${{ secrets.PROXMOX_API_TOKEN }}
+        PROXMOX_NODE:           ${{ vars.PROXMOX_NODE }}
+        PROXMOX_VM_STORAGE:     ${{ vars.PROXMOX_VM_STORAGE }}
+        PROXMOX_IMPORT_STORAGE: ${{ vars.PROXMOX_IMPORT_STORAGE }}
+        PROXMOX_BRIDGE:         ${{ vars.PROXMOX_BRIDGE || 'vmbr0' }}
+        PROXMOX_INSECURE_SKIP_VERIFY: ${{ vars.PROXMOX_INSECURE_SKIP_VERIFY || 'true' }}
+        DIRECTOR_NAME:          ${{ vars.DIRECTOR_NAME || 'bosh-proxmox' }}
+        DIRECTOR_INTERNAL_CIDR: ${{ vars.DIRECTOR_INTERNAL_CIDR }}
+        DIRECTOR_INTERNAL_GW:   ${{ vars.DIRECTOR_INTERNAL_GW }}
+        DIRECTOR_INTERNAL_IP:   ${{ vars.DIRECTOR_INTERNAL_IP }}
+        STATE_S3_BUCKET:        ${{ vars.STATE_S3_BUCKET }}
+        STATE_S3_PREFIX:        ${{ vars.STATE_S3_PREFIX || 'director' }}
+        AWS_S3_ENDPOINT:        ${{ vars.AWS_S3_ENDPOINT }}
+        AWS_ACCESS_KEY_ID:      ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION:     ${{ vars.AWS_DEFAULT_REGION || 'us-east-1' }}
+        UPLOAD_CLOUD_CONFIG:    ${{ inputs.upload_cloud_config && 'true' || '' }}
+        UPLOAD_STEMCELL:        ${{ inputs.upload_stemcell && 'true' || '' }}
+      run: ./deployments/proxmox/deploy.sh

@@ -1,0 +1,17 @@
+# Companion to proxmox/use-published-release.yml: override the release tarball
+# URL. use-published-release.yml defaults to the GitHub release download URL;
+# apply this AFTER it to fetch the tarball from somewhere else (e.g. a CDN /
+# blobstore mirror such as https://cdn.cf-apps.io/...).
+#
+#   bosh create-env bosh.yml \
+#     -o proxmox/cpi.yml \
+#     -o proxmox/use-published-release.yml \
+#     -o proxmox/cpi-release-url.yml \
+#     -v proxmox_cpi_version=1.0.0 \
+#     -v proxmox_cpi_sha1=<sha1> \
+#     -v proxmox_cpi_url=https://cdn.cf-apps.io/bosh-proxmox-cpi-1.0.0.tgz \
+#     ...
+---
+- type: replace
+  path: /releases/name=bosh-proxmox-cpi/url
+  value: ((proxmox_cpi_url))

@@ -1,0 +1,4 @@
+# Environment secrets + deploy state — never commit these.
+vars.yml
+creds.yml
+state.json

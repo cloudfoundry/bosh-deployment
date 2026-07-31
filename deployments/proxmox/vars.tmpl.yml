@@ -1,0 +1,25 @@
+# Deployment variables for THIS environment's Proxmox BOSH director.
+#
+#   cp deployments/proxmox/vars.tmpl.yml deployments/proxmox/vars.yml
+#   # then fill in the values below
+#
+# vars.yml is git-ignored (it holds your API token). S3 credentials do NOT go
+# here — export them / set them as CI secrets. The CPI release pin is not here
+# either; it defaults to the published v1.0.0 (override with CPI_RELEASE_* env).
+---
+# --- Director identity & networking (the director VM's static IP on your LAN) ---
+director_name: bosh-proxmox
+internal_cidr: 10.0.0.0/24     # subnet the director lives on
+internal_gw: 10.0.0.1          # gateway for that subnet
+internal_ip: 10.0.0.6          # static IP to assign the director VM
+
+# --- Proxmox API connection ---
+proxmox_api_url: https://pve.example.com:8006
+proxmox_api_token: "bosh@pve!cpi=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+proxmox_insecure_skip_verify: true   # true if the PVE API cert is self-signed
+
+# --- Proxmox placement & storage ---
+proxmox_node: pve1             # node name to create the director on
+proxmox_vm_storage: local-lvm  # storage for VM disks (content: images)
+proxmox_import_storage: local  # storage with content: import AND iso enabled
+proxmox_bridge: vmbr0          # Linux bridge / SDN vnet for the default network
