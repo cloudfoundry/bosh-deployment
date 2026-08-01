@@ -3,9 +3,9 @@
   type: replace
   value:
     name: bosh-warden-cpi
-    sha1: 6129a493036848a2fa6d5110cf35345c3d16d8d2
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-warden-cpi-release?v=45.2.3
-    version: 45.2.3
+    sha1: f819bbc22b631c6d2c3e80389c2fef39d8440400
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-warden-cpi-release?v=45.2.4
+    version: 45.2.4
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
