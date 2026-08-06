@@ -1,0 +1,19 @@
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties/PortBindings?
+  value:
+    6868/tcp: [{ HostPort: "6868", HostIp: "0.0.0.0" }] # bosh agent
+    8844/tcp: [{ HostPort: "8844", HostIp: "0.0.0.0" }] # credhub
+    8443/tcp: [{ HostPort: "8443", HostIp: "0.0.0.0" }] # uaa
+    25555/tcp: [{ HostPort: "25555", HostIp: "0.0.0.0" }] # director
+    22/tcp: [{ HostPort: "2222", HostIp: "0.0.0.0" }] # ssh
+
+# disable ipv6 so agent port forwarding works
+# when enabled curl -k -I https://localhost:6868/agent results in
+# empty response
+- type: replace
+  path: /resource_pools/name=vms/env/bosh/ipv6?/enable
+  value: false
+
+- type: replace
+  path: /instance_groups/name=bosh/networks/name=default/static_ips
+  value: [((static_ip))]
