@@ -25,7 +25,8 @@ bosh upload-stemcell --sha1 "$SHA1" "$URL"
 bosh -n update-runtime-config "${bosh_deployment}/runtime-configs/dns.yml"
 
 echo "-----> $(date): Deploy"
-bosh -n -d zookeeper deploy "${bosh_deployment}/ci/assets/zookeeper.yml"
+bosh -n -d zookeeper deploy "${bosh_deployment}/ci/assets/zookeeper.yml" \
+  -v stemcell_os="${STEMCELL_OS}"
 
 echo "-----> $(date): Exercise deployment"
 bosh -n -d zookeeper run-errand smoke-tests

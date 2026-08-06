@@ -11,5 +11,8 @@ inputs:
   - name: bbl-state
   - name: stemcell
 
+params:
+  STEMCELL_OS: 
+
 run:
   path: bosh-deployment/ci/tasks/test-bosh-gcp.sh
