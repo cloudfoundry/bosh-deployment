@@ -1,0 +1,13 @@
+---
+platform: linux
+
+inputs:
+  - name: bosh-deployment
+  - name: stemcell
+
+params:
+  DIRECTOR_OPS_FILES: "" # Space-separated, repo-relative ops files applied to the director.
+  STEMCELL_OS:
+
+run:
+  path: bosh-deployment/ci/tasks/test-warden.sh

@@ -12,7 +12,7 @@ inputs:
   - name: stemcell
 
 params:
-  STEMCELL_OS: 
+  STEMCELL_OS:
 
 run:
-  path: bosh-deployment/ci/tasks/test-bosh-gcp.sh
+  path: bosh-deployment/ci/tasks/test-gcp.sh

@@ -37,10 +37,10 @@ yaml_anchors:
 groups:
 - name: bosh-deployment
   jobs:
-  - test-bosh-gcp
+  - test-noble-gcp
   - test-smoke
-  - test-main-warden-cpi
-  - test-main-docker-cpi
+  - test-noble-warden
+  - test-noble-docker
   - promote
 - name: cpis
   jobs:
@@ -53,20 +53,20 @@ groups:
   - update-virtualbox-cpi-release
   - update-openstack-cpi-release
   - update-warden-cpi-release
-- name: stemcells
+- name: bump-stemcells-noble
   jobs:
-  - update-aws-stemcell
-  - update-alicloud-stemcell
-  - update-azure-stemcell
-  - update-docker-stemcell
-  - update-gcp-stemcell
-  - update-openstack-stemcell
-  - update-openstack-raw-stemcell
-  - update-vcloud-stemcell
-  - update-virtualbox-stemcell
-  - update-vsphere-stemcell
-  - update-warden-stemcell
-- name: stemcells-jammy
+  - update-aws-noble-stemcell
+  - update-alicloud-noble-stemcell
+  - update-azure-noble-stemcell
+  - update-docker-noble-stemcell
+  - update-gcp-noble-stemcell
+  - update-openstack-noble-stemcell
+  - update-openstack-raw-noble-stemcell
+  - update-vcloud-noble-stemcell
+  - update-virtualbox-noble-stemcell
+  - update-vsphere-noble-stemcell
+  - update-warden-noble-stemcell
+- name: bump-stemcells-jammy
   jobs:
   - update-aws-jammy-stemcell
   - update-alicloud-jammy-stemcell
@@ -79,22 +79,25 @@ groups:
   - update-virtualbox-jammy-stemcell
   - update-vsphere-jammy-stemcell
   - update-warden-jammy-stemcell
-- name: releases
+- name: compile-releases-noble
   jobs:
-  - compile-bbr-sdk-release
-  - compile-bosh-release
-  - compile-bpm-release
-  - compile-credhub-release
-  - compile-docker-cpi
-  - compile-garden-runc
-  - compile-uaa-release
-  - compile-warden-cpi
+  - compile-bbr-sdk-release-noble
+  - compile-bosh-release-noble
+  - compile-bpm-release-noble
+  - compile-credhub-release-noble
+  - compile-docker-cpi-noble
+  - compile-garden-runc-noble
+  - compile-uaa-release-noble
+  - compile-warden-cpi-noble
+- name: update-source-releases
+  jobs:
   - update-dns-release
   - update-os-conf-release
   - update-syslog-release
 
 jobs:
-- name: test-bosh-gcp
+- name: test-noble-gcp
+  old_name: test-bosh-gcp
   serial: true
   build_log_retention:
     builds: 250
@@ -109,8 +112,8 @@ jobs:
       params:
         BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_json_key))
         BBL_GCP_REGION: *bbl_gcp_region
-    - task: test-bosh-gcp
-      file: bosh-deployment/ci/tasks/test-bosh-gcp.yml
+    - task: test-gcp
+      file: bosh-deployment/ci/tasks/test-gcp.yml
       input_mapping:
         stemcell: gcp-ubuntu-noble-stemcell
       params:
@@ -132,7 +135,8 @@ jobs:
   - task: test-smoke
     file: bosh-deployment/ci/tasks/test-smoke.yml
 
-- name: test-main-warden-cpi
+- name: test-noble-warden
+  old_name: test-main-warden-cpi
   serial: true
   build_log_retention:
     builds: 250
@@ -142,9 +146,9 @@ jobs:
       trigger: true
     - get: warden-ubuntu-noble-stemcell
     - get: bosh-warden-cpi-image
-  - task: test-main-warden-cpi
+  - task: test-warden
     timeout: 2h
-    file: bosh-deployment/ci/tasks/test-main-warden-cpi.yml
+    file: bosh-deployment/ci/tasks/test-warden.yml
     image: bosh-warden-cpi-image
     input_mapping:
       stemcell: warden-ubuntu-noble-stemcell
@@ -152,7 +156,8 @@ jobs:
     params:
       STEMCELL_OS: ubuntu-noble
 
-- name: test-main-docker-cpi
+- name: test-noble-docker
+  old_name: test-main-docker-cpi
   serial: true
   build_log_retention:
     builds: 250
@@ -162,9 +167,9 @@ jobs:
       trigger: true
     - get: warden-ubuntu-noble-stemcell
     - get: bosh-docker-cpi-image
-  - task: test-main-docker-cpi
+  - task: test-docker
     timeout: 2h
-    file: bosh-deployment/ci/tasks/test-main-docker-cpi.yml
+    file: bosh-deployment/ci/tasks/test-docker.yml
     image: bosh-docker-cpi-image
     input_mapping:
       stemcell: warden-ubuntu-noble-stemcell
@@ -181,9 +186,9 @@ jobs:
     trigger: true
     passed:
     - test-smoke
-    - test-bosh-gcp
-    - test-main-warden-cpi
-    - test-main-docker-cpi
+    - test-noble-gcp
+    - test-noble-warden
+    - test-noble-docker
   - put: bosh-deployment-commit-status
     params:
       state: success
@@ -357,7 +362,8 @@ jobs:
 
 ### Releases
 
-- name: compile-bbr-sdk-release
+- name: compile-bbr-sdk-release-noble
+  old_name: compile-bbr-sdk-release
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -387,7 +393,8 @@ jobs:
       FILE_TO_UPDATE: misc/source-releases/bbr.yml
   - <<: *commit-and-upload-when-new-release
 
-- name: compile-bosh-release
+- name: compile-bosh-release-noble
+  old_name: compile-bosh-release
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -418,7 +425,8 @@ jobs:
       FILE_TO_UPDATE: misc/source-releases/bosh.yml
   - <<: *commit-and-upload-when-new-release
 
-- name: compile-bpm-release
+- name: compile-bpm-release-noble
+  old_name: compile-bpm-release
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -456,7 +464,8 @@ jobs:
       FILE_TO_UPDATE: misc/source-releases/bpm.yml
   - <<: *commit-and-upload-when-new-release
 
-- name: compile-credhub-release
+- name: compile-credhub-release-noble
+  old_name: compile-credhub-release
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -486,7 +495,8 @@ jobs:
       FILE_TO_UPDATE: misc/source-releases/credhub.yml
   - <<: *commit-and-upload-when-new-release
 
-- name: compile-docker-cpi
+- name: compile-docker-cpi-noble
+  old_name: compile-docker-cpi
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -509,7 +519,8 @@ jobs:
       FILE_TO_UPDATE: bosh-lite-docker.yml
   - <<: *commit-and-upload-when-new-release
 
-- name: compile-garden-runc
+- name: compile-garden-runc-noble
+  old_name: compile-garden-runc
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -532,7 +543,8 @@ jobs:
       FILE_TO_UPDATE: bosh-lite.yml
   - <<: *commit-and-upload-when-new-release
 
-- name: compile-uaa-release
+- name: compile-uaa-release-noble
+  old_name: compile-uaa-release
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -562,7 +574,8 @@ jobs:
       FILE_TO_UPDATE: misc/source-releases/uaa.yml
   - <<: *commit-and-upload-when-new-release
 
-- name: compile-warden-cpi
+- name: compile-warden-cpi-noble
+  old_name: compile-warden-cpi
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -587,7 +600,8 @@ jobs:
 
 ### Stemcells
 
-- name: update-alicloud-stemcell
+- name: update-alicloud-noble-stemcell
+  old_name: update-alicloud-stemcell
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -604,7 +618,8 @@ jobs:
       STEMCELL_NAME: alicloud-ubuntu-noble-stemcell
   - <<: *commit-when-new-asset
 
-- name: update-aws-stemcell
+- name: update-aws-noble-stemcell
+  old_name: update-aws-stemcell
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -621,7 +636,8 @@ jobs:
       STEMCELL_NAME: aws-ubuntu-noble-stemcell
   - <<: *commit-when-new-asset
 
-- name: update-azure-stemcell
+- name: update-azure-noble-stemcell
+  old_name: update-azure-stemcell
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -638,7 +654,8 @@ jobs:
       STEMCELL_NAME: azure-ubuntu-noble-stemcell
   - <<: *commit-when-new-asset
 
-- name: update-docker-stemcell
+- name: update-docker-noble-stemcell
+  old_name: update-docker-stemcell
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -655,7 +672,8 @@ jobs:
       STEMCELL_NAME: warden-ubuntu-noble-stemcell
   - <<: *commit-when-new-asset
 
-- name: update-gcp-stemcell
+- name: update-gcp-noble-stemcell
+  old_name: update-gcp-stemcell
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -672,7 +690,8 @@ jobs:
       STEMCELL_NAME: gcp-ubuntu-noble-stemcell
   - <<: *commit-when-new-asset
 
-- name: update-openstack-stemcell
+- name: update-openstack-noble-stemcell
+  old_name: update-openstack-stemcell
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -689,7 +708,8 @@ jobs:
       STEMCELL_NAME: openstack-ubuntu-noble-stemcell
   - <<: *commit-when-new-asset
 
-- name: update-openstack-raw-stemcell
+- name: update-openstack-raw-noble-stemcell
+  old_name: update-openstack-raw-stemcell
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -706,7 +726,8 @@ jobs:
       STEMCELL_NAME: openstack-ubuntu-noble-stemcell-raw
   - <<: *commit-when-new-asset
 
-- name: update-vcloud-stemcell
+- name: update-vcloud-noble-stemcell
+  old_name: update-vcloud-stemcell
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -723,7 +744,8 @@ jobs:
       STEMCELL_NAME: vcloud-ubuntu-noble-stemcell
   - <<: *commit-when-new-asset
 
-- name: update-virtualbox-stemcell
+- name: update-virtualbox-noble-stemcell
+  old_name: update-virtualbox-stemcell
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -740,7 +762,8 @@ jobs:
       STEMCELL_NAME: vsphere-ubuntu-noble-stemcell
   - <<: *commit-when-new-asset
 
-- name: update-vsphere-stemcell
+- name: update-vsphere-noble-stemcell
+  old_name: update-vsphere-stemcell
   plan:
   - in_parallel:
     - get: bosh-deployment
@@ -757,7 +780,8 @@ jobs:
       STEMCELL_NAME: vsphere-ubuntu-noble-stemcell
   - <<: *commit-when-new-asset
 
-- name: update-warden-stemcell
+- name: update-warden-noble-stemcell
+  old_name: update-warden-stemcell
   plan:
   - in_parallel:
     - get: bosh-deployment

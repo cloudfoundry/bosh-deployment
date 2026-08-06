@@ -12,10 +12,16 @@ cp -r "${PWD}/bosh-deployment" "/usr/local/bosh-deployment"
 
 export USE_LOCAL_RELEASES=false
 
+ops_args=()
+for f in ${DIRECTOR_OPS_FILES:-}; do
+  ops_args+=(-o "/usr/local/bosh-deployment/${f}")
+done
+
 # shellcheck source=/dev/null
 source start-bosh \
   -o /usr/local/bosh-deployment/uaa.yml \
-  -o /usr/local/bosh-deployment/credhub.yml
+  -o /usr/local/bosh-deployment/credhub.yml \
+  "${ops_args[@]+"${ops_args[@]}"}"
 # shellcheck source=/dev/null
 source /tmp/local-bosh/director/bosh-env
 
