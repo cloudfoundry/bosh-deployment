@@ -5,5 +5,8 @@ inputs:
   - name: bosh-deployment
   - name: stemcell
 
+params:
+  STEMCELL_OS:
+
 run:
   path: bosh-deployment/ci/tasks/test-main-docker-cpi.sh

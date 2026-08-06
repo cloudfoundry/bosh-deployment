@@ -13,7 +13,8 @@ pushd "${PWD}/bbl-state"
 
   echo "-----> `date`: Deploy"
   bosh -n -d zookeeper deploy "${script_dir}/../assets/zookeeper.yml" \
-    -o bosh-deployment/tests/cred-test.yml
+    -o bosh-deployment/tests/cred-test.yml \
+    -v stemcell_os="${STEMCELL_OS}"
 
   echo "-----> `date`: Exercise deployment"
   bosh -n -d zookeeper run-errand smoke-tests

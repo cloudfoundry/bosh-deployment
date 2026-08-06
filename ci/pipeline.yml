@@ -103,7 +103,6 @@ jobs:
     - in_parallel:
       - get: bosh-deployment
         trigger: true
-      - get: bosh-bootloader
       - get: gcp-ubuntu-noble-stemcell
     - task: bbl-up
       file: bosh-deployment/ci/tasks/bbl-up-bosh-gcp.yml
@@ -114,6 +113,8 @@ jobs:
       file: bosh-deployment/ci/tasks/test-bosh-gcp.yml
       input_mapping:
         stemcell: gcp-ubuntu-noble-stemcell
+      params:
+        STEMCELL_OS: ubuntu-noble
     ensure:
       task: bbl-down
       file: bosh-deployment/ci/tasks/bbl-down-bosh-gcp.yml
@@ -148,6 +149,8 @@ jobs:
     input_mapping:
       stemcell: warden-ubuntu-noble-stemcell
     privileged: true
+    params:
+      STEMCELL_OS: ubuntu-noble
 
 - name: test-main-docker-cpi
   serial: true
@@ -166,6 +169,8 @@ jobs:
     input_mapping:
       stemcell: warden-ubuntu-noble-stemcell
     privileged: true
+    params:
+      STEMCELL_OS: ubuntu-noble
 
 - name: promote
   serial: true
@@ -697,7 +702,7 @@ jobs:
     input_mapping:
       stemcell: openstack-ubuntu-noble-stemcell-raw
     params:
-      CPI_OPS_FILE: openstack/use-openstack-raw-stemcell.yml
+      CPI_OPS_FILE: openstack/use-noble-raw.yml
       STEMCELL_NAME: openstack-ubuntu-noble-stemcell-raw
   - <<: *commit-when-new-asset
 
@@ -884,7 +889,7 @@ jobs:
     input_mapping:
       stemcell: openstack-ubuntu-jammy-stemcell-raw
     params:
-      CPI_OPS_FILE: openstack/use-openstack-raw-stemcell.yml
+      CPI_OPS_FILE: openstack/use-jammy-raw.yml
       STEMCELL_NAME: openstack-ubuntu-jammy-stemcell-raw
   - <<: *commit-when-new-asset
 
@@ -1023,13 +1028,6 @@ resources:
   source:
     uri: git@github.com:cloudfoundry/bosh-deployment.git
     branch: master
-    private_key: ((github_deploy_key_bosh-deployment.private_key))
-
-- name: bosh-bootloader
-  type: git
-  source:
-    uri: git@github.com:cloudfoundry/bosh-bootloader.git
-    branch: main  
     private_key: ((github_deploy_key_bosh-deployment.private_key))
 
 # stemcells
