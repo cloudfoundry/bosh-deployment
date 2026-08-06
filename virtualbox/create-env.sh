@@ -101,6 +101,7 @@ STEP "Updating Runtime Config"
 ####
 
 bosh -n update-runtime-config "${bosh_deployment}/runtime-configs/dns.yml" \
+  --ops-file "${bosh_deployment}/warden/noble-dns.yml" \
   > /dev/null
 
 echo Succeeded

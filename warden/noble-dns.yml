@@ -1,0 +1,18 @@
+---
+# Overrides bosh-dns configuration for ubuntu-noble on warden/bosh-lite.
+#
+# On non-warden noble VMs, disable_recursors=true is correct — systemd-resolved
+# handles external DNS via DHCP-provided upstream (e.g. 169.254.169.254 on GCP).
+#
+# On warden containers there is no physical NIC and no DHCP, so systemd-resolved
+# has no global upstream. bosh-dns must handle external resolution directly via
+# an explicit recursor. 169.254.169.254 is the link-local metadata DNS available
+# on GCP, AWS, and Azure.
+- type: replace
+  path: /addons/name=bosh-dns-systemd/jobs/name=bosh-dns/properties/disable_recursors
+  value: false
+
+- type: replace
+  path: /addons/name=bosh-dns-systemd/jobs/name=bosh-dns/properties/recursors?
+  value:
+  - 169.254.169.254
