@@ -41,6 +41,9 @@ groups:
   - test-smoke
   - test-noble-warden
   - test-noble-docker
+  - test-resolute-gcp
+  - test-resolute-warden
+  - test-resolute-docker
   - promote
 - name: cpis
   jobs:
@@ -199,6 +202,77 @@ jobs:
     privileged: true
     params:
       STEMCELL_OS: ubuntu-noble
+
+- name: test-resolute-gcp
+  serial: true
+  build_log_retention:
+    builds: 250
+  plan:
+  - do:
+    - in_parallel:
+      - get: bosh-deployment
+        trigger: true
+      - get: gcp-ubuntu-resolute-stemcell
+    - task: bbl-up
+      file: bosh-deployment/ci/tasks/bbl-up-bosh-gcp.yml
+      params:
+        BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_json_key))
+        BBL_GCP_REGION: *bbl_gcp_region
+        DIRECTOR_OPS_FILES: "gcp/use-resolute.yml misc/use-compiled-resolute-releases.yml"
+    - task: test-gcp
+      file: bosh-deployment/ci/tasks/test-gcp.yml
+      input_mapping:
+        stemcell: gcp-ubuntu-resolute-stemcell
+      params:
+        STEMCELL_OS: ubuntu-resolute
+    ensure:
+      task: bbl-down
+      file: bosh-deployment/ci/tasks/bbl-down-bosh-gcp.yml
+      params:
+        BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_json_key))
+        BBL_GCP_REGION: *bbl_gcp_region
+
+- name: test-resolute-warden
+  serial: true
+  build_log_retention:
+    builds: 250
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      trigger: true
+    - get: warden-ubuntu-resolute-stemcell
+    - get: bosh-warden-cpi-image
+  - task: test-warden
+    timeout: 2h
+    file: bosh-deployment/ci/tasks/test-warden.yml
+    image: bosh-warden-cpi-image
+    input_mapping:
+      stemcell: warden-ubuntu-resolute-stemcell
+    privileged: true
+    params:
+      DIRECTOR_OPS_FILES: "warden/use-resolute.yml misc/use-compiled-resolute-releases.yml"
+      STEMCELL_OS: ubuntu-resolute
+
+- name: test-resolute-docker
+  serial: true
+  build_log_retention:
+    builds: 250
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      trigger: true
+    - get: warden-ubuntu-resolute-stemcell
+    - get: bosh-docker-cpi-image
+  - task: test-docker
+    timeout: 2h
+    file: bosh-deployment/ci/tasks/test-docker.yml
+    image: bosh-docker-cpi-image
+    input_mapping:
+      stemcell: warden-ubuntu-resolute-stemcell
+    privileged: true
+    params:
+      DIRECTOR_OPS_FILES: "docker/use-resolute.yml misc/use-compiled-resolute-releases.yml"
+      STEMCELL_OS: ubuntu-resolute
 
 - name: promote
   serial: true
