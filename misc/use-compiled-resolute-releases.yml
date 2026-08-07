@@ -11,8 +11,8 @@
   type: replace
   value:
     name: bpm
-    sha1: 455fcdb91a9e0c559acbc09354a959bf226a0e34
-    url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.4.36
+    sha1: 60b4afb46923b4240dcac65478578918bd6c53c8
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.4.36-ubuntu-resolute-0.59.tgz
     version: 1.4.36
 - path: /releases/name=backup-and-restore-sdk?
   release: backup-and-restore-sdk
