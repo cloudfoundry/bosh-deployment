@@ -26,6 +26,7 @@ addons:
 - include:
     stemcell:
     - os: ubuntu-noble
+    - os: ubuntu-resolute
   jobs:
   - name: bosh-dns
     properties:
