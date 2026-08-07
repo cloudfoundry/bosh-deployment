@@ -79,6 +79,19 @@ groups:
   - update-virtualbox-jammy-stemcell
   - update-vsphere-jammy-stemcell
   - update-warden-jammy-stemcell
+- name: bump-stemcells-resolute
+  jobs:
+  - update-aws-resolute-stemcell
+  - update-alicloud-resolute-stemcell
+  - update-azure-resolute-stemcell
+  - update-docker-resolute-stemcell
+  - update-gcp-resolute-stemcell
+  - update-openstack-resolute-stemcell
+  - update-openstack-raw-resolute-stemcell
+  - update-vcloud-resolute-stemcell
+  - update-virtualbox-resolute-stemcell
+  - update-vsphere-resolute-stemcell
+  - update-warden-resolute-stemcell
 - name: compile-releases-noble
   jobs:
   - compile-bbr-sdk-release-noble
@@ -89,6 +102,16 @@ groups:
   - compile-garden-runc-noble
   - compile-uaa-release-noble
   - compile-warden-cpi-noble
+- name: compile-releases-resolute
+  jobs:
+  - compile-bbr-sdk-release-resolute
+  - compile-bosh-release-resolute
+  - compile-bpm-release-resolute
+  - compile-credhub-release-resolute
+  - compile-docker-cpi-resolute
+  - compile-garden-runc-resolute
+  - compile-uaa-release-resolute
+  - compile-warden-cpi-resolute
 - name: update-source-releases
   jobs:
   - update-dns-release
@@ -598,6 +621,190 @@ jobs:
       FILE_TO_UPDATE: bosh-lite.yml
   - <<: *commit-and-upload-when-new-release
 
+- name: compile-bbr-sdk-release-resolute
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: backup-and-restore-sdk-release
+      trigger: true
+    - get: registry-image-ubuntu-resolute-stemcell
+      trigger: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
+    image: registry-image-ubuntu-resolute-stemcell
+    input_mapping:
+      release: backup-and-restore-sdk-release
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: misc/use-compiled-resolute-releases.yml
+  - <<: *commit-and-upload-when-new-release
+
+- name: compile-bosh-release-resolute
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: bosh-release
+      trigger: true
+    - get: registry-image-ubuntu-resolute-stemcell
+      trigger: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
+    image: registry-image-ubuntu-resolute-stemcell
+    input_mapping:
+      release: bosh-release
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: misc/use-compiled-resolute-releases.yml
+  - <<: *commit-and-upload-when-new-release
+
+- name: compile-bpm-release-resolute
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: bpm-release
+      trigger: true
+    - get: registry-image-ubuntu-resolute-stemcell
+      trigger: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
+    image: registry-image-ubuntu-resolute-stemcell
+    input_mapping:
+      release: bpm-release
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: misc/use-compiled-resolute-releases.yml
+  - <<: *commit-and-upload-when-new-release
+
+- name: compile-credhub-release-resolute
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: credhub-release
+      trigger: true
+    - get: registry-image-ubuntu-resolute-stemcell
+      trigger: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
+    image: registry-image-ubuntu-resolute-stemcell
+    input_mapping:
+      release: credhub-release
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: misc/use-compiled-resolute-releases.yml
+  - <<: *commit-and-upload-when-new-release
+
+- name: compile-docker-cpi-resolute
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: docker-cpi
+      trigger: true
+    - get: registry-image-ubuntu-resolute-stemcell
+      trigger: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
+    image: registry-image-ubuntu-resolute-stemcell
+    input_mapping:
+      release: docker-cpi
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: misc/use-compiled-resolute-releases.yml
+  - <<: *commit-and-upload-when-new-release
+
+- name: compile-garden-runc-resolute
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: garden-runc
+      trigger: true
+    - get: registry-image-ubuntu-resolute-stemcell
+      trigger: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
+    image: registry-image-ubuntu-resolute-stemcell
+    input_mapping:
+      release: garden-runc
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: misc/use-compiled-resolute-releases.yml
+  - <<: *commit-and-upload-when-new-release
+
+- name: compile-uaa-release-resolute
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: uaa-release
+      trigger: true
+    - get: registry-image-ubuntu-resolute-stemcell
+      trigger: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
+    image: registry-image-ubuntu-resolute-stemcell
+    input_mapping:
+      release: uaa-release
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: misc/use-compiled-resolute-releases.yml
+  - <<: *commit-and-upload-when-new-release
+
+- name: compile-warden-cpi-resolute
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: warden-cpi
+      trigger: true
+    - get: registry-image-ubuntu-resolute-stemcell
+      trigger: true
+  - task: compile-release
+    file: bosh-deployment/ci/tasks/shared/bosh-agent-compile.yml
+    image: registry-image-ubuntu-resolute-stemcell
+    input_mapping:
+      release: warden-cpi
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-release.yml
+    input_mapping:
+      release: compiled-release
+    params:
+      FILE_TO_UPDATE: misc/use-compiled-resolute-releases.yml
+  - <<: *commit-and-upload-when-new-release
+
 ### Stemcells
 
 - name: update-alicloud-noble-stemcell
@@ -985,6 +1192,193 @@ jobs:
       STEMCELL_NAME: warden-ubuntu-jammy-stemcell
   - <<: *commit-when-new-asset
 
+- name: update-alicloud-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: alicloud-ubuntu-resolute-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: alicloud-ubuntu-resolute-stemcell
+    params:
+      CPI_OPS_FILE: alicloud/use-resolute.yml
+      STEMCELL_NAME: alicloud-ubuntu-resolute-stemcell
+  - <<: *commit-when-new-asset
+
+- name: update-aws-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: aws-ubuntu-resolute-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: aws-ubuntu-resolute-stemcell
+    params:
+      CPI_OPS_FILE: aws/use-resolute.yml
+      STEMCELL_NAME: aws-ubuntu-resolute-stemcell
+  - <<: *commit-when-new-asset
+
+- name: update-azure-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: azure-ubuntu-resolute-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: azure-ubuntu-resolute-stemcell
+    params:
+      CPI_OPS_FILE: azure/use-resolute.yml
+      STEMCELL_NAME: azure-ubuntu-resolute-stemcell
+  - <<: *commit-when-new-asset
+
+- name: update-docker-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: warden-ubuntu-resolute-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: warden-ubuntu-resolute-stemcell
+    params:
+      CPI_OPS_FILE: docker/use-resolute.yml
+      STEMCELL_NAME: warden-ubuntu-resolute-stemcell
+  - <<: *commit-when-new-asset
+
+- name: update-gcp-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: gcp-ubuntu-resolute-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: gcp-ubuntu-resolute-stemcell
+    params:
+      CPI_OPS_FILE: gcp/use-resolute.yml
+      STEMCELL_NAME: gcp-ubuntu-resolute-stemcell
+  - <<: *commit-when-new-asset
+
+- name: update-openstack-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: openstack-ubuntu-resolute-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: openstack-ubuntu-resolute-stemcell
+    params:
+      CPI_OPS_FILE: openstack/use-resolute.yml
+      STEMCELL_NAME: openstack-ubuntu-resolute-stemcell
+  - <<: *commit-when-new-asset
+
+- name: update-openstack-raw-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: openstack-ubuntu-resolute-stemcell-raw
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: openstack-ubuntu-resolute-stemcell-raw
+    params:
+      CPI_OPS_FILE: openstack/use-resolute-raw.yml
+      STEMCELL_NAME: openstack-ubuntu-resolute-stemcell-raw
+  - <<: *commit-when-new-asset
+
+- name: update-vcloud-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: vcloud-ubuntu-resolute-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: vcloud-ubuntu-resolute-stemcell
+    params:
+      CPI_OPS_FILE: vcloud/use-resolute.yml
+      STEMCELL_NAME: vcloud-ubuntu-resolute-stemcell
+  - <<: *commit-when-new-asset
+
+- name: update-virtualbox-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: vsphere-ubuntu-resolute-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: vsphere-ubuntu-resolute-stemcell
+    params:
+      CPI_OPS_FILE: virtualbox/use-resolute.yml
+      STEMCELL_NAME: vsphere-ubuntu-resolute-stemcell
+  - <<: *commit-when-new-asset
+
+- name: update-vsphere-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: vsphere-ubuntu-resolute-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: vsphere-ubuntu-resolute-stemcell
+    params:
+      CPI_OPS_FILE: vsphere/use-resolute.yml
+      STEMCELL_NAME: vsphere-ubuntu-resolute-stemcell
+  - <<: *commit-when-new-asset
+
+- name: update-warden-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: warden-ubuntu-resolute-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: warden-ubuntu-resolute-stemcell
+    params:
+      CPI_OPS_FILE: warden/use-resolute.yml
+      STEMCELL_NAME: warden-ubuntu-resolute-stemcell
+  - <<: *commit-when-new-asset
+
 # Source releases
 
 - name: update-dns-release
@@ -1153,6 +1547,55 @@ resources:
   source:
     name: bosh-vsphere-esxi-ubuntu-jammy-go_agent
 
+- name: aws-ubuntu-resolute-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-aws-xen-hvm-ubuntu-resolute
+
+- name: alicloud-ubuntu-resolute-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-alicloud-kvm-ubuntu-resolute
+
+- name: azure-ubuntu-resolute-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-azure-hyperv-ubuntu-resolute
+    force_regular: true
+
+- name: gcp-ubuntu-resolute-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-resolute
+
+- name: openstack-ubuntu-resolute-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-openstack-kvm-ubuntu-resolute
+    force_regular: true
+
+- name: openstack-ubuntu-resolute-stemcell-raw
+  type: bosh-io-stemcell
+  source:
+    name: bosh-openstack-kvm-ubuntu-resolute-raw
+    force_regular: true
+
+- name: vcloud-ubuntu-resolute-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-openstack-kvm-ubuntu-resolute
+    force_regular: true
+
+- name: warden-ubuntu-resolute-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-warden-boshlite-ubuntu-resolute
+
+- name: vsphere-ubuntu-resolute-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-vsphere-esxi-ubuntu-resolute
+
 # releases
 - name: backup-and-restore-sdk-release
   type: bosh-io-release
@@ -1268,6 +1711,11 @@ resources:
   type: registry-image
   source:
     repository: ghcr.io/cloudfoundry/ubuntu-noble-stemcell
+
+- name: registry-image-ubuntu-resolute-stemcell
+  type: registry-image
+  source:
+    repository: ghcr.io/cloudfoundry/ubuntu-resolute-stemcell
 
 - name: bosh-docker-cpi-image
   type: registry-image
