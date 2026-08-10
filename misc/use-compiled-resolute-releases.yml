@@ -51,8 +51,8 @@
   type: replace
   value:
     name: bosh-warden-cpi
-    sha1: 8ed7b81ca14331ab86c8d7cfc177e1305167f80a
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-45.2.4-ubuntu-resolute-0.59.tgz
+    sha1: 1e85d2d300f45f04a534f3ef501e36c262244be4
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-45.2.4-ubuntu-resolute-0.93.tgz
     version: 45.2.4
 - path: /releases/name=bosh-docker-cpi?
   release: bosh-docker-cpi
