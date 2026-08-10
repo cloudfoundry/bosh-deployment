@@ -11,6 +11,8 @@
   value:
     name: credhub
     properties:
+      bpm:
+        enabled: true
       credhub:
         authentication:
           uaa:
