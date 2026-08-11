@@ -807,7 +807,7 @@ jobs:
     input_mapping:
       release: compiled-release
     params:
-      FILE_TO_UPDATE: misc/use-compiled-resolute-releases.yml
+      FILE_TO_UPDATE: docker/use-resolute.yml
   - <<: *commit-and-upload-when-new-release
 
 - name: compile-garden-runc-resolute
@@ -876,7 +876,7 @@ jobs:
     input_mapping:
       release: compiled-release
     params:
-      FILE_TO_UPDATE: misc/use-compiled-resolute-releases.yml
+      FILE_TO_UPDATE: warden/use-resolute.yml
   - <<: *commit-and-upload-when-new-release
 
 ### Stemcells

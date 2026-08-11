@@ -46,19 +46,3 @@
     sha1: 0db72e203c4418e9b46cf8f987ca383da6a8888b
     url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.93.0
     version: 1.93.0
-- path: /releases/name=bosh-warden-cpi?
-  release: bosh-warden-cpi
-  type: replace
-  value:
-    name: bosh-warden-cpi
-    sha1: 1e85d2d300f45f04a534f3ef501e36c262244be4
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-warden-cpi-45.2.4-ubuntu-resolute-0.93.tgz
-    version: 45.2.4
-- path: /releases/name=bosh-docker-cpi?
-  release: bosh-docker-cpi
-  type: replace
-  value:
-    name: bosh-docker-cpi
-    sha1: d612511d45df3179d7ce4ce49aecbf7bd2d819da
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-docker-cpi-0.2.17-ubuntu-resolute-0.93.tgz
-    version: 0.2.17
