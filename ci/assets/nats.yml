@@ -1,0 +1,164 @@
+---
+name: nats
+
+releases:
+  - name: nats
+    version: 57.16.0
+    url: https://bosh.io/d/github.com/cloudfoundry/nats-release?v=57.16.0
+    sha1: 4bcea83c094aeb555471689ec4372520634a34f1
+  - name: bpm
+    version: 1.4.36
+    url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.4.36
+    sha1: 455fcdb91a9e0c559acbc09354a959bf226a0e34
+  - name: bosh-dns-aliases
+    version: 0.0.4
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-aliases-release?v=0.0.4
+    sha1: 55b3dced813ff9ed92a05cda02156e4b5604b273
+
+stemcells:
+  - alias: default
+    os: ((stemcell_os))
+    version: latest
+
+update:
+  canaries: 1
+  max_in_flight: 1
+  canary_watch_time: 5000-60000
+  update_watch_time: 5000-60000
+
+addons:
+  - name: bpm
+    jobs:
+      - name: bpm
+        release: bpm
+
+  # nats-tls serves on nats.service.internal and its certificates are issued for
+  # that name, so the deployment needs the alias to resolve.
+  - name: bosh-dns-aliases
+    jobs:
+      - name: bosh-dns-aliases
+        release: bosh-dns-aliases
+        properties:
+          aliases:
+            - domain: nats.service.internal
+              targets:
+                - query: '*'
+                  instance_group: nats
+                  deployment: nats
+                  network: default
+                  domain: bosh
+            - domain: _.nats.service.internal
+              targets:
+                - query: '_'
+                  instance_group: nats
+                  deployment: nats
+                  network: default
+                  domain: bosh
+
+instance_groups:
+  - name: nats
+    azs: [z1, z2, z3]
+    instances: 2
+    jobs:
+      - name: nats-tls
+        release: nats
+        provides:
+          nats-tls: {as: nats-tls, shared: true}
+        properties:
+          nats:
+            hostname: nats.service.internal
+            user: nats
+            password: "((nats_password))"
+            fail_deployment_if_v1: true
+            internal:
+              tls:
+                enabled: true
+                ca: "((nats_internal_cert.ca))"
+                certificate: "((nats_internal_cert.certificate))"
+                private_key: "((nats_internal_cert.private_key))"
+            external:
+              tls:
+                ca: "((nats_server_cert.ca))"
+                certificate: "((nats_server_cert.certificate))"
+                private_key: "((nats_server_cert.private_key))"
+            client:
+              tls:
+                ca: "((nats_client_cert.ca))"
+                certificate: "((nats_client_cert.certificate))"
+                private_key: "((nats_client_cert.private_key))"
+    vm_type: default
+    stemcell: default
+    networks:
+      - name: default
+
+  - name: smoke-tests
+    azs: [z1]
+    lifecycle: errand
+    instances: 1
+    jobs:
+      # Deliberately no nats.hostname/user/password here: those properties only
+      # configure the plaintext leg of the errand, which this deployment does
+      # not run. The TLS leg is configured off the nats-tls link.
+      - name: smoke-tests
+        release: nats
+        properties:
+          nats:
+            client:
+              tls:
+                certificate: "((nats_client_cert.certificate))"
+                private_key: "((nats_client_cert.private_key))"
+    vm_type: default
+    stemcell: default
+    networks:
+      - name: default
+
+variables:
+  - name: nats_password
+    type: password
+
+  - name: nats_internal_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: nats_internal
+
+  - name: nats_internal_cert
+    type: certificate
+    options:
+      ca: nats_internal_ca
+      common_name: "*.nats.service.internal"
+      alternative_names:
+        - "*.nats.service.internal"
+        - nats.service.internal
+      extended_key_usage:
+        - client_auth
+        - server_auth
+
+  - name: nats_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: nats
+
+  - name: nats_server_cert
+    type: certificate
+    update_mode: converge
+    options:
+      ca: nats_ca
+      common_name: nats.service.internal
+      alternative_names:
+        - "*.nats.service.internal"
+        - nats.service.internal
+      extended_key_usage:
+        - server_auth
+
+  - name: nats_client_cert
+    type: certificate
+    update_mode: converge
+    options:
+      ca: nats_ca
+      common_name: nats_client
+      alternative_names:
+        - nats_client
+      extended_key_usage:
+        - client_auth
