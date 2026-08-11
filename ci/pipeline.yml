@@ -1794,11 +1794,13 @@ resources:
 - name: bosh-docker-cpi-image
   type: registry-image
   source:
+    tag: main
     repository: ghcr.io/cloudfoundry/bosh/docker-cpi
 
 - name: bosh-warden-cpi-image
   type: registry-image
   source:
+    tag: main
     repository: ghcr.io/cloudfoundry/bosh/warden-cpi
 
 resource_types:
