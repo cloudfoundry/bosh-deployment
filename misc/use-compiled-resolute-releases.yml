@@ -19,9 +19,9 @@
   type: replace
   value:
     name: backup-and-restore-sdk
-    sha1: 3959e2eaf954003cbcb843ed36bf6d536f0e00b4
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/backup-and-restore-sdk-release?v=1.19.61
-    version: 1.19.61
+    sha1: 2de0a19288761712db9733c512b215e0555e6226
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/backup-and-restore-sdk-1.20.1-ubuntu-resolute-0.93.tgz
+    version: 1.20.1
 - path: /releases/name=credhub?
   release: credhub
   type: replace
