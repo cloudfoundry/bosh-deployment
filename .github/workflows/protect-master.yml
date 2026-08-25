@@ -1,0 +1,17 @@
+name: Master Branch Protection
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+
+permissions: {}
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch
+        if: github.event.pull_request.base.ref == 'master'
+        run: |
+          echo "Error: Pull request against master is prohibited"
+          exit 1
