@@ -1,0 +1,11 @@
+# Point the Director's resolver at Docker's embedded DNS server.
+#
+# The agent writes the network's dns value into
+# /etc/systemd/resolved.conf.d/10-bosh.conf inside the Director's container. The
+# bosh.yml default of 8.8.8.8 fails on networks that block public resolvers, and
+# the Director then cannot download remote releases or stemcells. 127.0.0.11 is
+# present in every container's network namespace and forwards to the Docker
+# host's own resolvers.
+- type: replace
+  path: /networks/name=default/subnets/0/dns
+  value: [127.0.0.11]
