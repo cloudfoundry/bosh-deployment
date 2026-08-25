@@ -43,6 +43,6 @@
   type: replace
   value:
     name: garden-runc
-    sha1: 0db72e203c4418e9b46cf8f987ca383da6a8888b
-    url: https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.93.0
-    version: 1.93.0
+    sha1: fc3a274a89f2ab51249055ab44764beec9b262e5
+    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.94.0-ubuntu-resolute-0.93.tgz
+    version: 1.94.0
