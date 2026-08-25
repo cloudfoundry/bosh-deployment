@@ -34,6 +34,7 @@ Other releases such as [UAA](https://github.com/cloudfoundry/uaa-release), [Cred
 
 * [Create an environment](https://bosh.io/docs/init.html)
     * [On Local machine (BOSH Lite)](https://bosh.io/docs/bosh-lite.html)
+    * [On Docker](docs/bosh-on-docker.md)
     * [On Alibaba Cloud](https://bosh.io/docs/init-alicloud.html)
     * [On AWS](https://bosh.io/docs/init-aws.html)
     * [On Azure](https://bosh.io/docs/init-azure.html)
@@ -69,11 +70,13 @@ Other releases such as [UAA](https://github.com/cloudfoundry/uaa-release), [Cred
 - `uaa.yml`: Deploys UAA and enables UAA user management in the Director
 - `credhub.yml`: Deploys CredHub and enables CredHub integration in the Director
 - `bosh-lite.yml`: Configures Director to use Garden CPI within the Director VM (see [BOSH Lite](docs/bosh-lite-on-vbox.md))
+- `docker/unix-sock.yml`: Talk to the Docker daemon over a bind-mounted Unix socket instead of TLS (see [BOSH on Docker](docs/bosh-on-docker.md))
 - `syslog.yml`: Configures syslog to forward logs to some destination
 - `local-dns.yml`: Enables Director DNS beta functionality
 - `misc/config-server.yml`: Deploys config-server (see `credhub.yml`)
 - `misc/proxy.yml`: Configure HTTP proxy for Director and CPI
 - `misc/dns.yml`: Configure your upstream DNS (NOTE: by default bosh-deployment uses Google DNS: 8.8.8.8)
+- `docker/dns.yml`: Point the Director at Docker's embedded DNS server (127.0.0.11) instead of 8.8.8.8. Required on networks that block public resolvers, otherwise the Director cannot download remote releases
 - `misc/ntp.yml`: Configure your NTP Servers (NOTE: by default bosh-deployment uses Google NTP servers: time{1-4}.google.com
 - `runtime-configs/syslog.yml`: Runtime config to enable syslog forwarding
 
