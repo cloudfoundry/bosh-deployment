@@ -24,15 +24,15 @@
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
-    name: openstack_cpi
+    name: openstack_cpi_golang
     release: bosh-openstack-cpi
 - path: /instance_groups/name=bosh/properties/director/cpi_job?
   type: replace
-  value: openstack_cpi
+  value: openstack_cpi_golang
 - path: /cloud_provider/template?
   type: replace
   value:
-    name: openstack_cpi
+    name: openstack_cpi_golang
     release: bosh-openstack-cpi
 - path: /instance_groups/name=bosh/properties/openstack?
   type: replace

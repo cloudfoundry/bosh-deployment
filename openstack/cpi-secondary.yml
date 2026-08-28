@@ -10,7 +10,7 @@
 - type: replace
   path: /instance_groups/name=bosh/jobs/-
   value:
-    name: openstack_cpi
+    name: openstack_cpi_golang
     release: bosh-openstack-cpi
 
 # unused values should be overwritten via Director's cpi config
