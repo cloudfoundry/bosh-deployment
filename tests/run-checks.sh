@@ -444,7 +444,6 @@ bosh create-env bosh.yml \
   -v client_id=test \
   -v client_secret=test \
   -v resource_group_name=test \
-  -v storage_account_name=test \
   -v default_security_group=nsg-bosh
 
 echo "- Azure (custom-environment)"
@@ -465,7 +464,6 @@ bosh create-env bosh.yml \
   -v client_id=test \
   -v client_secret=test \
   -v resource_group_name=test \
-  -v storage_account_name=test \
   -v default_security_group=nsg-bosh
 
 echo "- Azure (managed-identity)"
@@ -483,7 +481,6 @@ bosh create-env bosh.yml \
   -v subscription_id=test \
   -v azure-managed-identity=test \
   -v resource_group_name=test \
-  -v storage_account_name=test \
   -v default_security_group=nsg-bosh
 
 echo "- Azure (managed-identity-for-bosh-managed-vms)"
@@ -502,7 +499,6 @@ bosh create-env bosh.yml \
   -v subscription_id=test \
   -v azure-managed-identity=test \
   -v resource_group_name=test \
-  -v storage_account_name=test \
   -v default_security_group=nsg-bosh
 
 echo "- Azure (cloud-config)"

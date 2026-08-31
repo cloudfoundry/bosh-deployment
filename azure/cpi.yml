@@ -44,9 +44,9 @@
     resource_group_name: ((resource_group_name))
     ssh_public_key: ((ssh.public_key))
     ssh_user: vcap
-    storage_account_name: ((storage_account_name))
     subscription_id: ((subscription_id))
     tenant_id: ((tenant_id))
+    use_managed_disks: true
 - path: /cloud_provider/properties/azure?
   type: replace
   value:
@@ -57,9 +57,9 @@
     resource_group_name: ((resource_group_name))
     ssh_public_key: ((ssh.public_key))
     ssh_user: vcap
-    storage_account_name: ((storage_account_name))
     subscription_id: ((subscription_id))
     tenant_id: ((tenant_id))
+    use_managed_disks: true
 - path: /variables/-
   type: replace
   value:
