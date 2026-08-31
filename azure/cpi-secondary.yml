@@ -21,6 +21,6 @@
     resource_group_name: unused
     ssh_public_key: unused
     ssh_user: unused
-    storage_account_name: unused
     subscription_id: unused
     tenant_id: unused
+    use_managed_disks: true
