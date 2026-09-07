@@ -11,7 +11,7 @@ git clone bosh-deployment bosh-deployment-output
 
 if [[ `grep compiled_packages release.MF` ]]; then
   TARBALL_NAME="$(basename release/*.tgz)"
-  URL="https://s3.amazonaws.com/bosh-compiled-release-tarballs/${TARBALL_NAME}"
+  URL="https://bosh-compiled-release-tarballs.s3.amazonaws.com/${TARBALL_NAME}"
 else
   URL="https://bosh.io/d/github.com/${BOSH_IO_RELEASE}?v=${VERSION}"
   test_bosh_io_release_exists $URL

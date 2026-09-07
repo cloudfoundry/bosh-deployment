@@ -145,11 +145,11 @@ networks:
 releases:
 - name: bosh
   sha1: aea8b3ff96f5f8f4352c7438c18b23e96a2d7e99
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-283.1.8-ubuntu-noble-1.562.tgz
+  url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-283.1.8-ubuntu-noble-1.562.tgz
   version: 283.1.8
 - name: bpm
   sha1: 5dbc7e2b20c08836df7c44d08d25b008caf03b9a
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.4.39-ubuntu-noble-1.562.tgz
+  url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bpm-1.4.39-ubuntu-noble-1.562.tgz
   version: 1.4.39
 resource_pools:
 - env:

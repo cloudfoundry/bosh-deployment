@@ -4,7 +4,7 @@
   value:
     name: bosh
     sha1: 2891764ac0d129d6252703a07e2ced966de8d7d1
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-283.1.8-ubuntu-resolute-0.93.tgz
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-283.1.8-ubuntu-resolute-0.93.tgz
     version: 283.1.8
 - path: /releases/name=bpm?
   release: bpm
@@ -12,7 +12,7 @@
   value:
     name: bpm
     sha1: 9ccc5e94a6cee7192edca5d016fe1ef2fbac212d
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.4.39-ubuntu-resolute-0.93.tgz
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bpm-1.4.39-ubuntu-resolute-0.93.tgz
     version: 1.4.39
 - path: /releases/name=backup-and-restore-sdk?
   release: backup-and-restore-sdk
@@ -20,7 +20,7 @@
   value:
     name: backup-and-restore-sdk
     sha1: daf090b5c6b7801d475b921912f5a727f5697dcf
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/backup-and-restore-sdk-1.20.3-ubuntu-resolute-0.93.tgz
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/backup-and-restore-sdk-1.20.3-ubuntu-resolute-0.93.tgz
     version: 1.20.3
 - path: /releases/name=credhub?
   release: credhub
@@ -28,7 +28,7 @@
   value:
     name: credhub
     sha1: 8603a8b31f06392a6f22a0b5800875b36c46dbae
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/credhub-2.15.21-ubuntu-resolute-0.93.tgz
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/credhub-2.15.21-ubuntu-resolute-0.93.tgz
     version: 2.15.21
 - path: /releases/name=uaa?
   release: uaa
@@ -36,7 +36,7 @@
   value:
     name: uaa
     sha1: 4aac2d52761fbe5dccfa133118411608cb9ad88f
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/uaa-79.7.0-ubuntu-resolute-0.93.tgz
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/uaa-79.7.0-ubuntu-resolute-0.93.tgz
     version: 79.7.0
 - path: /releases/name=garden-runc?
   release: garden-runc
@@ -44,5 +44,5 @@
   value:
     name: garden-runc
     sha1: bf65726f1f7e9281de9998e417078f9aab066b06
-    url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/garden-runc-1.96.0-ubuntu-resolute-0.93.tgz
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/garden-runc-1.96.0-ubuntu-resolute-0.93.tgz
     version: 1.96.0

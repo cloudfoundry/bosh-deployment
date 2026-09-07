@@ -25,7 +25,7 @@ echo -e "\nCheck YAML syntax\n"
 find . -type "f" -name "*.yml" -print | tee /dev/stderr | xargs -n1 bosh interpolate > /dev/null
 
 echo -e "\nUsed compiled releases\n"
-grep -r -i s3.amazonaws.com/bosh-compiled-release-tarballs . | grep -v grep | grep -v ./.git
+grep -r -i bosh-compiled-release-tarballs.s3.amazonaws.com . | grep -v grep | grep -v ./.git
 
 echo -e "\nUsed stemcells\n"
 grep -r -i d/stemcells . | grep -v grep | grep -v ./.git
