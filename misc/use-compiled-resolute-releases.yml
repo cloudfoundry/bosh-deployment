@@ -35,8 +35,8 @@
   type: replace
   value:
     name: uaa
-    sha1: 4aac2d52761fbe5dccfa133118411608cb9ad88f
-    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/uaa-79.7.0-ubuntu-resolute-0.93.tgz
+    sha1: e69c089d80e89e3e1dccc9ca56206add186fdc2c
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/uaa-79.7.0-ubuntu-resolute-0.146.tgz
     version: 79.7.0
 - path: /releases/name=garden-runc?
   release: garden-runc
