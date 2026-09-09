@@ -2,5 +2,5 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 0ec7aab3b08cf20e3879cebeb713657843ba97ee
-    url: https://storage.googleapis.com/bosh-core-stemcells/0.93/bosh-stemcell-0.93-alicloud-kvm-ubuntu-resolute.tgz
+    sha1: b6761bb249c9bcdb3f5a1f7f5dda161476370a62
+    url: https://storage.googleapis.com/bosh-core-stemcells/0.146/bosh-stemcell-0.146-alicloud-kvm-ubuntu-resolute.tgz
