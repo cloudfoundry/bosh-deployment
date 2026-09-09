@@ -27,8 +27,8 @@
   type: replace
   value:
     name: credhub
-    sha1: 8603a8b31f06392a6f22a0b5800875b36c46dbae
-    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/credhub-2.15.21-ubuntu-resolute-0.93.tgz
+    sha1: 7580d99c68f7ac74b808427a1e16b19e69b6d39f
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/credhub-2.15.21-ubuntu-resolute-0.146.tgz
     version: 2.15.21
 - path: /releases/name=uaa?
   release: uaa
