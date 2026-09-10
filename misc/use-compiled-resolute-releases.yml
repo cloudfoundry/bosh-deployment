@@ -3,8 +3,8 @@
   type: replace
   value:
     name: bosh
-    sha1: 2891764ac0d129d6252703a07e2ced966de8d7d1
-    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-283.1.8-ubuntu-resolute-0.93.tgz
+    sha1: 5f3637cfccea9a50d99efbd7cfd7a51701cdb818
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-283.1.8-ubuntu-resolute-0.146.tgz
     version: 283.1.8
 - path: /releases/name=bpm?
   release: bpm
