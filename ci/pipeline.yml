@@ -88,6 +88,7 @@ groups:
   - update-alicloud-resolute-stemcell
   - update-azure-resolute-stemcell
   - update-docker-resolute-stemcell
+  - update-docker-resolute-rosetta-stemcell
   - update-gcp-resolute-stemcell
   - update-openstack-resolute-stemcell
   - update-openstack-raw-resolute-stemcell
@@ -1334,6 +1335,23 @@ jobs:
       STEMCELL_NAME: warden-ubuntu-resolute-stemcell
   - <<: *commit-when-new-asset
 
+- name: update-docker-resolute-rosetta-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: warden-ubuntu-resolute-rosetta-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: warden-ubuntu-resolute-rosetta-stemcell
+    params:
+      CPI_OPS_FILE: docker/use-resolute-rosetta.yml
+      STEMCELL_NAME: warden-ubuntu-resolute-rosetta-stemcell
+  - <<: *commit-when-new-asset
+
 - name: update-gcp-resolute-stemcell
   plan:
   - in_parallel:
@@ -1664,6 +1682,14 @@ resources:
   type: bosh-io-stemcell
   source:
     name: bosh-warden-boshlite-ubuntu-resolute
+
+# Keeps an x86_64 userland but ships native arm64 systemd daemons, so Resolute
+# bootstraps under Rosetta 2 on Apple Silicon. Only docker/create-env consumes
+# it; see docs/bosh-on-docker.md.
+- name: warden-ubuntu-resolute-rosetta-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: bosh-warden-boshlite-ubuntu-resolute-rosetta
 
 - name: vsphere-ubuntu-resolute-stemcell
   type: bosh-io-stemcell

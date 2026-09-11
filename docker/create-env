@@ -1,0 +1,1013 @@
+#!/usr/bin/env bash
+#
+# Stand up a local BOSH Director on the Docker CPI.
+#
+# Run it from the directory you want your deployment files in -- state.json,
+# creds.yml and bosh.env are written to $PWD, the same way
+# virtualbox/create-env.sh works. Run with --help for the full flag list.
+
+# -E matters: without errtrace the ERR trap does not fire inside function bodies,
+# and since every phase here is a function, a failure would exit silently --
+# which under --silent means no error, no log path, just a non-zero status.
+set -Eeu -o pipefail
+
+# With BOSH_TTY=true the CLI appends a decorative "Succeeded" line to *stdout*,
+# which silently corrupts everything this script captures with $( ) -- a CA cert
+# with a trailing "Succeeded" fails as "Parsing certificate 2: Missing PEM
+# block", and a --path lookup returns a value with a second line glued on. The
+# progress output that BOSH_TTY exists for is requested explicitly with --tty on
+# the create-env/delete-env calls instead, which is the only place it belongs.
+export BOSH_TTY=false
+
+bosh_deployment="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# The Director's own address, the Docker bridge it lives on, and the socket the
+# CPI talks to. These match the range in docker/cloud-config.yml; change them
+# together or not at all.
+NETWORK_NAME=${NETWORK_NAME:-bosh-net}
+NETWORK_SUBNET=${NETWORK_SUBNET:-10.245.0.0/16}
+INTERNAL_IP=${INTERNAL_IP:-10.245.0.10}
+INTERNAL_GW=${INTERNAL_GW:-10.245.0.1}
+DIRECTOR_NAME=${DIRECTOR_NAME:-bosh-docker}
+# The daemon-side path, not the client's DOCKER_HOST. docker/unix-sock.yml
+# bind-mounts this into the Director's container, and the CPI strips the
+# unix:// prefix (vm.Factory.cleanMounts) before handing it to the daemon, which
+# resolves it against its own filesystem. On Docker Desktop and Colima alike
+# that is the Linux VM's /var/run/docker.sock, whatever socket your CLI uses.
+DOCKER_HOST_URI=${DOCKER_HOST_URI:-unix:///var/run/docker.sock}
+
+# Where the CLI on *this* machine reaches the daemon, which is not the same
+# thing. bosh create-env runs a CPI locally to build the Director's container,
+# and that one is configured from /cloud_provider, so it needs the client
+# endpoint. They coincide on Linux and Docker Desktop and diverge under Colima,
+# whose socket lives in ~/.colima. Detected in preflight; empty means "same as
+# DOCKER_HOST_URI, nothing to override".
+CLIENT_DOCKER_HOST=
+
+# Whether the containers need the systemd drop-ins that let Rosetta translate an
+# x86_64 stemcell. Decided once the stemcell is known.
+ROSETTA_COMPAT_FIX=false
+
+# Overridable so --dry-run can render both host branches from any machine; see
+# the --dry-run checks in tests/run-checks.sh.
+HOST_OS=${CREATE_ENV_OS:-$(uname -s)}
+HOST_ARCH=${CREATE_ENV_ARCH:-$(uname -m)}
+
+# Generated ops files and the record of how the Director was created. Kept out of
+# the way of state.json/creds.yml, and read back by --destroy so the ops list
+# cannot drift between create and delete.
+WORK_DIR="${PWD}/.create-env"
+RUN_RECORD="${WORK_DIR}/run"
+LOG_FILE="${PWD}/create-env.log"
+
+FLAVOR=default
+SILENT=false
+RECREATE=false
+DRY_RUN=false
+DESTROY=false
+STEMCELL_OVERRIDE=
+BOSH_RELEASE=
+USER_OPS=()
+USER_VARS=()
+
+# ---------------------------------------------------------------------------
+# output
+# ---------------------------------------------------------------------------
+
+if [ -t 2 ]; then red=$'\033[31m'; yellow=$'\033[33m'; reset=$'\033[0m'
+else red=; yellow=; reset=; fi
+
+# fd 4 is the real stderr. --silent redirects everything else into $LOG_FILE, so
+# errors and the final hint still need somewhere to go.
+exec 4>&2
+
+STEP() { echo; echo "==\\"; echo "===> $*"; echo "==/"; echo; }
+say()  { echo "     $*"; }
+warn() { echo "${yellow}warning: $*${reset}" >&4; }
+die()  { echo "${red}error: $*${reset}" >&4; exit 1; }
+
+on_err() {
+  local status=$1 command=$2
+  # A failing $( ) fires ERR twice under errtrace: once inside the substitution's
+  # subshell and once for the assignment that contains it. Report only the outer
+  # one, so a single failure is not printed twice with the log tail each time.
+  [ "$BASH_SUBSHELL" -eq 0 ] || return 0
+  echo "${red}error: command failed (exit ${status}): ${command}${reset}" >&4
+  if $SILENT; then
+    echo "${red}last 20 lines of ${LOG_FILE}:${reset}" >&4
+    tail -20 "$LOG_FILE" >&4 2>/dev/null || true
+    echo "${red}full log: ${LOG_FILE}${reset}" >&4
+  fi
+}
+
+usage() {
+  cat <<EOF
+Usage: docker/create-env [OPTIONS]
+       docker/create-env --destroy
+       docker/create-env --help
+
+Stands up a local BOSH Director on the Docker CPI, targets it, and uploads a
+cloud config, a stemcell and the bosh-dns runtime config. Run it from the
+directory you want your deployment files in -- it writes state.json, creds.yml,
+bosh.env and the stemcell tarball to \$PWD, and refuses to run inside the
+bosh-deployment checkout so credentials cannot land in the repo.
+
+
+Options:
+  --resolute            Use the Resolute stemcell and the compiled Resolute
+                        releases (docker/use-resolute.yml plus
+                        misc/use-compiled-resolute-releases.yml). On Apple
+                        Silicon this also applies
+                        docker/use-resolute-rosetta.yml, which is required --
+                        see the note below.
+  --stemcell URL|PATH   Use this stemcell instead of the one the ops files pin.
+                        Overrides the Apple Silicon auto-detection.
+  --bosh-release PATH   Use a local bosh release. A directory uses
+                        local-bosh-release.yml (version: create); a .tgz uses
+                        local-bosh-release-tarball.yml (version: latest).
+  -o, --ops-file FILE   Extra ops file, applied after everything above.
+                        Repeatable.
+  -v, --var k=v         Extra variable, applied after everything above, so it
+                        overrides the script's own. Repeatable.
+  --recreate            Pass --recreate to bosh create-env. Use this to recover
+                        from an interrupted run that left the VM without a spec.
+  --silent              Errors only on the terminal; everything else goes to
+                        ${LOG_FILE##*/}.
+  --dry-run             Print what would run, resolve and report the stemcell,
+                        and exit. Touches neither Docker nor the network.
+  --destroy             bosh delete-env with the same ops files and vars the
+                        create used, then remove creds.yml. Reads the flavor
+                        back from .create-env/run, so no other flags are needed.
+  -h, --help            This.
+EOF
+}
+
+# ---------------------------------------------------------------------------
+# flags
+# ---------------------------------------------------------------------------
+
+parse_args() {
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --resolute)      FLAVOR=resolute; shift ;;
+      --stemcell)      STEMCELL_OVERRIDE=${2:?--stemcell needs a URL or path}; shift 2 ;;
+      --stemcell=*)    STEMCELL_OVERRIDE=${1#*=}; shift ;;
+      --bosh-release)  BOSH_RELEASE=${2:?--bosh-release needs a path}; shift 2 ;;
+      --bosh-release=*) BOSH_RELEASE=${1#*=}; shift ;;
+      -o|--ops-file)   USER_OPS+=("${2:?-o needs a file}"); shift 2 ;;
+      --ops-file=*)    USER_OPS+=("${1#*=}"); shift ;;
+      -v|--var)        USER_VARS+=("${2:?--var needs k=v}"); shift 2 ;;
+      --var=*)         USER_VARS+=("${1#*=}"); shift ;;
+      --recreate)      RECREATE=true; shift ;;
+      --silent)        SILENT=true; shift ;;
+      --dry-run)       DRY_RUN=true; shift ;;
+      --destroy)       DESTROY=true; shift ;;
+      -h|--help)       usage; exit 0 ;;
+      *)               usage >&2; die "unknown argument '$1'" ;;
+    esac
+  done
+}
+
+# ---------------------------------------------------------------------------
+# the ops/vars builder both create and destroy render from
+# ---------------------------------------------------------------------------
+
+# Absolutise a path without requiring it to exist yet.
+abspath() {
+  case "$1" in
+    /*) echo "$1" ;;
+    *)  echo "${PWD}/${1#./}" ;;
+  esac
+}
+
+resolute_rosetta_needed() {
+  [ "$FLAVOR" = resolute ] && [ "$HOST_OS" = Darwin ] && [ "$HOST_ARCH" = arm64 ]
+}
+
+# OPS_ARGS and VAR_ARGS, in the one order that works. The constraints are real:
+#
+#   - use-resolute.yml replaces the bosh-docker-cpi release cpi.yml appends, so
+#     it has to come after it.
+#   - use-compiled-resolute-releases.yml replaces /releases/name=uaa and
+#     /releases/name=credhub, so it has to come after uaa.yml and credhub.yml,
+#     which append their own uncompiled entries.
+#   - use-resolute-rosetta.yml overrides only the stemcell, on top of
+#     use-resolute.yml.
+#
+# Everything the caller passes lands after all of it.
+build_ops() {
+  OPS_ARGS=()
+  VAR_ARGS=()
+
+  local ops=(docker/cpi.yml)
+
+  if [ "$FLAVOR" = resolute ]; then
+    ops+=(docker/use-resolute.yml)
+    if resolute_rosetta_needed; then
+      ops+=(docker/use-resolute-rosetta.yml)
+    fi
+  fi
+
+  ops+=(uaa.yml credhub.yml)
+
+  if [ "$FLAVOR" = resolute ]; then
+    ops+=(misc/use-compiled-resolute-releases.yml)
+  fi
+
+  ops+=(docker/unix-sock.yml docker/dns.yml jumpbox-user.yml)
+
+  local f
+  for f in "${ops[@]}"; do
+    OPS_ARGS+=(-o "${bosh_deployment}/${f}")
+  done
+
+  if [ -n "$BOSH_RELEASE" ]; then
+    local release_path
+    release_path=$(abspath "$BOSH_RELEASE")
+    case "$BOSH_RELEASE" in
+      *.tgz|*.tar.gz) OPS_ARGS+=(-o "${bosh_deployment}/local-bosh-release-tarball.yml") ;;
+      *)              OPS_ARGS+=(-o "${bosh_deployment}/local-bosh-release.yml") ;;
+    esac
+    VAR_ARGS+=(-v "local_bosh_release=${release_path}")
+  fi
+
+  VAR_ARGS+=(
+    -v "director_name=${DIRECTOR_NAME}"
+    -v "internal_ip=${INTERNAL_IP}"
+    -v "internal_gw=${INTERNAL_GW}"
+    -v "internal_cidr=${NETWORK_SUBNET}"
+    -v "docker_host=${DOCKER_HOST_URI}"
+    -v "network=${NETWORK_NAME}"
+  )
+
+  # After everything the script adds, so a caller can override any of it.
+  for f in ${USER_OPS[@]+"${USER_OPS[@]}"}; do
+    OPS_ARGS+=(-o "$(abspath "$f")")
+  done
+  for f in ${USER_VARS[@]+"${USER_VARS[@]}"}; do
+    VAR_ARGS+=(-v "$f")
+  done
+
+  # An explicit --stemcell wins over the ops files, including the rosetta one.
+  if [ -n "$STEMCELL_OVERRIDE" ]; then
+    OPS_ARGS+=(-o "$(write_stemcell_opsfile "$STEMCELL_OVERRIDE" stemcell-override.yml)")
+  fi
+
+  # Point only the create-env/delete-env CPI at the client's socket. The
+  # Director's own CPI job keeps talking to the bind-mounted
+  # unix:///docker/docker.sock that docker/unix-sock.yml sets up, and the bind
+  # source keeps the daemon-side DOCKER_HOST_URI -- a virtiofs-mounted socket
+  # from the Mac side is not connectable from inside the VM.
+  if [ -n "$CLIENT_DOCKER_HOST" ]; then
+    OPS_ARGS+=(-o "$(write_bootstrap_cpi_opsfile)")
+  fi
+
+  if $ROSETTA_COMPAT_FIX; then
+    OPS_ARGS+=(-o "$(write_rosetta_compat_opsfile)")
+  fi
+}
+
+# An x86_64 stemcell on Apple Silicon cannot boot without this. See the comment
+# in the generated drop-in for why, and the troubleshooting section of
+# docs/bosh-on-docker.md. Not needed for a stemcell whose systemd is native
+# arm64, which is the whole point of the rosetta stemcell.
+needs_rosetta_compat() {
+  [ "$HOST_OS" = Darwin ] && [ "$HOST_ARCH" = arm64 ] || return 1
+  case "$STEMCELL_URL" in
+    *resolute-rosetta*) return 1 ;;
+  esac
+  return 0
+}
+
+# The drop-in itself, shared by the Director's VM and every VM the Director
+# creates. Echoes its path.
+write_rosetta_compat_conf() {
+  # The mount source is resolved by the Docker daemon, inside its own Linux VM,
+  # which only shares part of the host filesystem -- $HOME under both Colima and
+  # Docker Desktop. A deployment directory outside that is invisible to the
+  # daemon, and the mount would silently become an empty directory.
+  #
+  # Not fatal: the boot-critical half of this is the masks, and those mount
+  # /dev/null, which exists in the VM regardless. Only log rotation is lost.
+  case "$PWD" in
+    "$HOME"/*) ;;
+    *)
+      warn "${PWD} is outside ${HOME}, which the Docker VM cannot see, so the ${ROSETTA_COMPAT_UNITS[*]} drop-in is being skipped -- logs will not be rotated in the Director. Run from a directory under your home directory to get it."
+      return 1
+      ;;
+  esac
+
+  local conf="${WORK_DIR}/rosetta-compat.conf"
+
+  # Named after the drop-ins the stemcell already ships for six other units
+  # (systemd-journald, -resolved, -networkd, -logind, -timesyncd, auditd); this
+  # covers the two it misses.
+  cat > "$conf" <<'CONF'
+# Generated by docker/create-env and bind-mounted into every container.
+#
+# Rosetta 2 has to mmap a writable+executable heap to translate the stemcell's
+# x86_64 binaries, so a unit with MemoryDenyWriteExecute cannot start at all --
+# the mmap fails with EACCES and the process dies before main():
+#
+#   systemd-udevd[...]: rosetta error: unable to mmap ExecutableHeap: 13
+#
+# Applied to logrotate, which the stemcell's own list misses because it spells
+# the option MemoryDenyWriteExecute=true rather than =yes. Not fatal -- it is a
+# timer-driven oneshot -- but logs are never rotated, which a long-lived dev
+# Director notices.
+#
+# Units that should not run in a container at all are skipped instead, with
+# warden-skip-in-container.conf; there is nothing to relax for those.
+#
+# This is a stemcell/Rosetta incompatibility, not a BOSH one, and the durable
+# fix belongs in base_warden. See docs/bosh-on-docker.md.
+[Service]
+MemoryDenyWriteExecute=no
+CONF
+
+  echo "$conf"
+}
+
+# Two mechanisms, one per intent -- not one per unit.
+#
+# Units that must run, but whose hardening blocks Rosetta's JIT. Only the
+# MemoryDenyWriteExecute relaxation matters; the stemcell already ships the same
+# drop-in for six others.
+ROSETTA_COMPAT_UNITS=(logrotate.service)
+
+# Units with no function in a container image, which is the only thing a warden
+# stemcell is run as -- so there is nothing to relax, and they are masked. udevd's
+# activating sockets need no entry of their own: a masked service cannot be
+# activated, so they go inactive rather than retrying until they hit their
+# trigger limit.
+CONTAINER_MASK_UNITS=(
+  systemd-udevd.service
+  chrony.service
+  systemd-binfmt.service
+)
+
+
+# Append one bind-mount entry per drop-in to a generated ops file. Shared by the
+# Director's manifest (/resource_pools) and the cloud config (/vm_types), which
+# differ only in that path.
+append_dropin_mounts() {
+  local file=$1 yaml_path=$2 conf unit
+
+  # Skipped rather than fatal when the deployment directory is somewhere the
+  # Docker VM cannot see; write_rosetta_compat_conf says so and returns non-zero.
+  if conf=$(write_rosetta_compat_conf); then
+    for unit in "${ROSETTA_COMPAT_UNITS[@]}"; do
+      append_mount "$file" "$yaml_path" "$conf" \
+        "/etc/systemd/system/${unit}.d/rosetta-compat.conf"
+    done
+  fi
+
+  for unit in "${CONTAINER_MASK_UNITS[@]}"; do
+    append_mount "$file" "$yaml_path" /dev/null "/etc/systemd/system/${unit}"
+  done
+}
+
+append_mount() {
+  local file=$1 yaml_path=$2 source=$3 target=$4
+  cat >> "$file" <<EOF
+- type: replace
+  path: ${yaml_path}
+  value:
+    type: bind
+    source: ${source}
+    target: ${target}
+EOF
+}
+
+# For the Director itself, which create-env builds from /resource_pools.
+write_rosetta_compat_opsfile() {
+  local path="${WORK_DIR}/rosetta-compat.yml"
+  cat > "$path" <<EOF
+# Generated by docker/create-env. Not checked in -- tests/run-checks.sh
+# interpolates every .yml in the repo.
+EOF
+  append_dropin_mounts "$path" "/resource_pools/name=vms/cloud_properties/mounts?/-"
+  echo "$path"
+}
+
+# And for every VM the Director goes on to create -- compilation VMs included,
+# which is where this bites first. Those take their cloud_properties from the
+# cloud config, not from the create-env manifest, so the Director's own drop-in
+# does nothing for them: a deploy fails with "Timed out pinging VM ... after 600
+# seconds" for each compilation VM. Patched at upload time rather than in the
+# tracked docker/cloud-config.yml, which CI uses on amd64 and must not carry a
+# Mac-only workaround.
+write_rosetta_compat_cc_opsfile() {
+  local path="${WORK_DIR}/rosetta-compat-cloud-config.yml"
+  cat > "$path" <<EOF
+# Generated by docker/create-env. Not checked in -- tests/run-checks.sh
+# interpolates every .yml in the repo.
+EOF
+  append_dropin_mounts "$path" "/vm_types/name=default/cloud_properties?/mounts?/-"
+  echo "$path"
+}
+
+write_bootstrap_cpi_opsfile() {
+  local path="${WORK_DIR}/bootstrap-cpi-socket.yml"
+  cat > "$path" <<EOF
+# Generated by docker/create-env. Not checked in -- tests/run-checks.sh
+# interpolates every .yml in the repo.
+#
+# bosh create-env runs its own CPI on this machine, configured from
+# /cloud_provider, so it has to reach the daemon the way the CLI does. Only the
+# Director's in-container CPI can use the bind-mounted socket.
+- type: replace
+  path: /cloud_provider/properties/docker_cpi/docker/host
+  value: ${CLIENT_DOCKER_HOST}
+EOF
+  echo "$path"
+}
+
+# A plain `name=(...)` assignment rather than `declare -p`: load_run_record
+# sources the record from inside a function, and `declare` there would scope the
+# array to that function -- so --destroy would silently drop the caller's -o and
+# -v arguments and delete with a different ops stack than it created.
+emit_array() {
+  local name=$1 v
+  shift
+  printf '%s=(' "$name"
+  for v in "$@"; do printf ' %q' "$v"; done
+  printf ' )\n'
+}
+
+save_run_record() {
+  {
+    echo "# Written by docker/create-env. Read back by --destroy so the ops list"
+    echo "# and vars cannot drift between create and delete. Do not edit."
+    printf 'FLAVOR=%q\n' "$FLAVOR"
+    printf 'STEMCELL_OVERRIDE=%q\n' "$STEMCELL_OVERRIDE"
+    printf 'BOSH_RELEASE=%q\n' "$BOSH_RELEASE"
+    # Discovered by preflight, not passed in. delete-env runs the same local CPI
+    # as create-env, so it needs the same socket and the same internal_cidr.
+    printf 'CLIENT_DOCKER_HOST=%q\n' "$CLIENT_DOCKER_HOST"
+    printf 'NETWORK_SUBNET=%q\n' "$NETWORK_SUBNET"
+    printf 'NETWORK_NAME=%q\n' "$NETWORK_NAME"
+    # Environment-overridable and baked into the manifest by build_ops, so
+    # --destroy has to replay them rather than fall back to the defaults. A
+    # DOCKER_HOST_URI pointing at a non-default daemon matters most: without it
+    # delete-env would talk to the wrong one.
+    printf 'INTERNAL_IP=%q\n' "$INTERNAL_IP"
+    printf 'INTERNAL_GW=%q\n' "$INTERNAL_GW"
+    printf 'DIRECTOR_NAME=%q\n' "$DIRECTOR_NAME"
+    printf 'DOCKER_HOST_URI=%q\n' "$DOCKER_HOST_URI"
+    printf 'ROSETTA_COMPAT_FIX=%q\n' "$ROSETTA_COMPAT_FIX"
+    emit_array USER_OPS ${USER_OPS[@]+"${USER_OPS[@]}"}
+    emit_array USER_VARS ${USER_VARS[@]+"${USER_VARS[@]}"}
+  } > "$RUN_RECORD"
+}
+
+load_run_record() {
+  [ -f "$RUN_RECORD" ] || die "no ${RUN_RECORD#"${PWD}"/} here -- run --destroy from the directory you created the Director in."
+  # shellcheck source=/dev/null
+  . "$RUN_RECORD"
+}
+
+# ---------------------------------------------------------------------------
+# stemcell
+# ---------------------------------------------------------------------------
+
+# An ops file replacing the stemcell the manifest pinned. Used for --stemcell and
+# for pointing create-env at the tarball we already downloaded.
+write_stemcell_opsfile() {
+  local source=$1 name=$2 path url sha1
+  path="${WORK_DIR}/${name}"
+
+  case "$source" in
+    http://*|https://*|file://*) url=$source ;;
+    *)
+      [ -f "$source" ] || die "no such stemcell: ${source}"
+      url="file://$(abspath "$source")"
+      ;;
+  esac
+
+  if [ "${url#file://}" != "$url" ]; then
+    sha1=$(sha1_of "${url#file://}")
+  else
+    # Remote and unverifiable without downloading it first; the CLI uploads it
+    # unverified, which is what `bosh upload-stemcell URL` does anyway.
+    sha1=
+  fi
+
+  {
+    echo "# Generated by docker/create-env. Not checked in -- tests/run-checks.sh"
+    echo "# interpolates every .yml in the repo."
+    echo "- name: stemcell"
+    echo "  path: /resource_pools/name=vms/stemcell?"
+    echo "  type: replace"
+    echo "  value:"
+    [ -n "$sha1" ] && echo "    sha1: ${sha1}"
+    echo "    url: ${url}"
+  } > "$path"
+
+  echo "$path"
+}
+
+sha1_of() {
+  if command -v shasum > /dev/null; then
+    shasum -a 1 "$1" | cut -d' ' -f1
+  else
+    sha1sum "$1" | cut -d' ' -f1
+  fi
+}
+
+# Read the stemcell the current ops stack resolves to, into STEMCELL_URL and
+# STEMCELL_SHA1. Never a table in this script -- CI keeps the ops files current
+# and this reads them back.
+resolve_stemcell() {
+  local manifest
+  manifest=$(bosh int "${bosh_deployment}/bosh.yml" \
+    "${OPS_ARGS[@]}" ${VAR_ARGS[@]+"${VAR_ARGS[@]}"} \
+    --path /resource_pools/name=vms/stemcell)
+
+  STEMCELL_URL=$(echo "$manifest" | sed -n 's/^url: *//p')
+  STEMCELL_SHA1=$(echo "$manifest" | sed -n 's/^sha1: *//p')
+
+  [ -n "$STEMCELL_URL" ] || die "could not read a stemcell url out of the interpolated manifest"
+}
+
+# The stemcell is needed twice: create-env builds the Director from it, and the
+# upload step pushes the same tarball to that Director. Fetch it once, into $PWD
+# next to state.json, and point both at that copy. --destroy leaves it alone, so
+# recreating in the same directory does not re-download.
+cache_stemcell() {
+  STEMCELL_LOCAL=
+
+  if [ "${STEMCELL_URL#file://}" != "$STEMCELL_URL" ]; then
+    STEMCELL_LOCAL=${STEMCELL_URL#file://}
+    [ -f "$STEMCELL_LOCAL" ] || die "the manifest pins a local stemcell that is not here: ${STEMCELL_LOCAL}
+Nothing tracked in this repo pins a file:// stemcell, so this is either a
+--stemcell you passed or an ops file of your own. Build that tarball, or point
+--stemcell somewhere that exists."
+    say "using the local stemcell already pinned: ${STEMCELL_LOCAL}"
+    return
+  fi
+
+  STEMCELL_LOCAL="${PWD}/$(basename "${STEMCELL_URL%%\?*}")"
+  case "$STEMCELL_LOCAL" in
+    *.tgz|*.tar.gz) ;;
+    *) STEMCELL_LOCAL="${STEMCELL_LOCAL}.tgz" ;;
+  esac
+
+  # A non-empty sha1 is required to reuse: a remote --stemcell override has none,
+  # and then a same-named file left from a previous run would be served for a URL
+  # that may now point at something else.
+  if [ -f "$STEMCELL_LOCAL" ] && [ -n "$STEMCELL_SHA1" ] && stemcell_matches; then
+    say "reusing ${STEMCELL_LOCAL##*/} (sha1 matches the manifest)"
+  elif [ -f "$STEMCELL_LOCAL" ] && [ -z "$STEMCELL_SHA1" ]; then
+    say "re-downloading ${STEMCELL_LOCAL##*/}: the manifest pins no sha1 for it, so the cached copy cannot be verified"
+    download_stemcell
+  else
+    download_stemcell
+    stemcell_matches || {
+      warn "sha1 mismatch on ${STEMCELL_LOCAL##*/}; re-downloading once"
+      download_stemcell
+      stemcell_matches || die "sha1 mismatch on ${STEMCELL_LOCAL} after re-download (wanted ${STEMCELL_SHA1})"
+    }
+  fi
+
+  OPS_ARGS+=(-o "$(write_stemcell_opsfile "$STEMCELL_LOCAL" stemcell-local.yml)")
+}
+
+stemcell_matches() {
+  # No sha1 to check against means nothing to disagree with.
+  [ -n "$STEMCELL_SHA1" ] || return 0
+  [ "$(sha1_of "$STEMCELL_LOCAL")" = "$STEMCELL_SHA1" ]
+}
+
+download_stemcell() {
+  say "downloading ${STEMCELL_URL}"
+  curl --fail --location --retry 3 --retry-delay 5 \
+    --output "${STEMCELL_LOCAL}.part" "$STEMCELL_URL"
+  mv "${STEMCELL_LOCAL}.part" "$STEMCELL_LOCAL"
+}
+
+# ---------------------------------------------------------------------------
+# preflight
+# ---------------------------------------------------------------------------
+
+preflight() {
+  STEP "Preflight"
+
+  command -v bosh > /dev/null || die "no bosh CLI on PATH"
+  say "bosh: $(bosh --version | head -1)"
+
+  command -v docker > /dev/null || die "no docker CLI on PATH"
+  docker info > /dev/null 2>&1 || die "cannot reach the Docker daemon. Start it (on macOS with Colima: colima start) and try again."
+  say "docker: $(docker version --format '{{.Server.Version}}')"
+
+  # The CLI's endpoint, which the local create-env CPI needs. Left empty when it
+  # already agrees with the daemon-side path, so Linux and Docker Desktop render
+  # exactly the upstream ops stack.
+  local endpoint
+  endpoint=${DOCKER_HOST:-$(docker context inspect --format '{{.Endpoints.docker.Host}}' 2>/dev/null || true)}
+  if [ -n "$endpoint" ] && [ "$endpoint" != "$DOCKER_HOST_URI" ]; then
+    CLIENT_DOCKER_HOST=$endpoint
+    say "this CLI reaches the daemon at ${CLIENT_DOCKER_HOST}; the Director's CPI keeps using ${DOCKER_HOST_URI} through the bind mount"
+  else
+    say "docker socket: ${DOCKER_HOST_URI}"
+  fi
+
+  if docker network inspect "$NETWORK_NAME" > /dev/null 2>&1; then
+    # One line per pool, then the first IPv4 one. A network with IPv6 enabled or
+    # with two pools has several, and concatenating them would hand bosh
+    # something like "10.245.0.0/16fd00::/64" as internal_cidr.
+    local subnet
+    subnet=$(docker network inspect "$NETWORK_NAME" \
+      --format '{{range .IPAM.Config}}{{println .Subnet}}{{end}}' 2> /dev/null \
+      | grep -m1 '\.' || true)
+    if [ -z "$subnet" ]; then
+      warn "could not read an IPv4 subnet from docker network '${NETWORK_NAME}'; leaving internal_cidr at ${NETWORK_SUBNET}"
+    elif [ "$subnet" != "$NETWORK_SUBNET" ]; then
+      # An unrelated range cannot carry the Director's address at all -- which is
+      # what `docker network create bosh-net` without --subnet leaves behind,
+      # since Docker then picks something in 172.16/12. Adopting it would defer
+      # the failure to a create_vm networking error that explains none of this.
+      if ! cidr_contains "$subnet" "$INTERNAL_IP" || ! cidr_contains "$subnet" "$INTERNAL_GW"; then
+        die "docker network '${NETWORK_NAME}' is ${subnet}, which does not contain ${INTERNAL_IP} and ${INTERNAL_GW}.
+Recreate it on ${NETWORK_SUBNET}:
+
+    docker network rm ${NETWORK_NAME}
+
+and let create-env make it, or set INTERNAL_IP and INTERNAL_GW to addresses inside ${subnet}."
+      fi
+      # Otherwise adopt it rather than carry on with a netmask that disagrees
+      # with the bridge the Director is actually on.
+      say "docker network '${NETWORK_NAME}' already exists as ${subnet}; using that as internal_cidr instead of ${NETWORK_SUBNET}"
+      warn "'${NETWORK_NAME}' is ${subnet}, which differs from docker/cloud-config.yml's 10.245.0.0/16 range. The Director allocates from the bottom of that range, so a narrower subnet works until it hands out an address Docker's does not contain. Recreate the network to match."
+      NETWORK_SUBNET=$subnet
+    else
+      say "docker network '${NETWORK_NAME}': ${subnet}"
+    fi
+  else
+    say "creating docker network '${NETWORK_NAME}' (${NETWORK_SUBNET}, gateway ${INTERNAL_GW})"
+    docker network create \
+      --subnet="$NETWORK_SUBNET" --gateway="$INTERNAL_GW" "$NETWORK_NAME" > /dev/null
+  fi
+
+  # A Director already sitting on our IP -- typically one created from a
+  # different deployment directory -- otherwise surfaces as a create_vm failure
+  # deep in the CPI ("failed to set up container networking: Address already in
+  # use"), which says nothing about what is holding it.
+  # Read from a process substitution rather than a pipeline: a `while` loop whose
+  # last iteration does not match exits non-zero, which under errexit/pipefail
+  # would abort preflight with nothing but "command failed" whenever some other
+  # container happens to be on the network.
+  local squatter='' name ip
+  while read -r name; do
+    ip=$(docker inspect \
+      -f "{{(index .NetworkSettings.Networks \"${NETWORK_NAME}\").IPAddress}}" \
+      "$name" 2> /dev/null || true)
+    if [ "$ip" = "$INTERNAL_IP" ]; then
+      squatter=$name
+      break
+    fi
+  done < <(docker ps --filter "network=${NETWORK_NAME}" --format '{{.Names}}')
+  if [ -n "$squatter" ] && [ "$squatter" != "$(current_vm_cid)" ]; then
+    die "${INTERNAL_IP} is already taken on the '${NETWORK_NAME}' network by container '${squatter}', which this deployment directory does not own.
+That is usually a Director created from another directory. Destroy it there
+first, or point this one somewhere else with INTERNAL_IP and NETWORK_NAME."
+  fi
+
+  if [ "$HOST_OS" = Darwin ]; then
+    # Docker's bridge networks live inside a Linux VM that is not routable from
+    # macOS, so every step from create-env onward talks to an unreachable IP
+    # without a tunnel. docker-mac-net-connect adds host routes for the subnet.
+    #
+    # Ask the gateway rather than reading the routing table: macOS netstat
+    # abbreviates destinations (10.245.0.0/24 prints as "10.245/24"), so
+    # grepping for the subnet as written gives a false negative, and a VPN's
+    # own route can cover the subnet without carrying traffic to Docker.
+    if ping -c1 -t2 "$INTERNAL_GW" > /dev/null 2>&1; then
+      say "docker network reachable from the host (${INTERNAL_GW} answers)"
+    else
+      warn "cannot reach ${INTERNAL_GW} from this host. On macOS the Docker bridge lives inside a Linux VM and is not reachable without a tunnel, so create-env will fail waiting for the agent on ${INTERNAL_IP}. Install and start docker-mac-net-connect:
+
+    brew install chipmk/tap/docker-mac-net-connect
+    sudo brew services start chipmk/tap/docker-mac-net-connect
+"
+    fi
+  fi
+}
+
+# IPv4 containment, in bash: adding a python3 dependency for this would be a
+# strange trade in a script that otherwise needs only bash, docker and bosh.
+ipv4_to_int() {
+  local IFS=. o1 o2 o3 o4
+  read -r o1 o2 o3 o4 <<< "$1"
+  case "${o1}${o2}${o3}${o4}" in
+    '' | *[!0-9]*) return 1 ;;
+  esac
+  echo $(((o1 << 24) + (o2 << 16) + (o3 << 8) + o4))
+}
+
+cidr_contains() {
+  local cidr=$1 addr=$2 net bits mask net_int addr_int
+  net=${cidr%/*}
+  bits=${cidr#*/}
+  case "$bits" in
+    '' | *[!0-9]*) return 1 ;;
+  esac
+  [ "$bits" -le 32 ] || return 1
+  net_int=$(ipv4_to_int "$net") || return 1
+  addr_int=$(ipv4_to_int "$addr") || return 1
+  [ "$bits" -eq 0 ] && return 0
+  mask=$(((0xFFFFFFFF << (32 - bits)) & 0xFFFFFFFF))
+  [ $((net_int & mask)) -eq $((addr_int & mask)) ]
+}
+
+# The VM this directory's state.json already owns, if any -- so a plain re-run
+# against our own Director is not mistaken for a collision.
+current_vm_cid() {
+  [ -f "${PWD}/state.json" ] || return 0
+  # sed rather than a JSON parser: this keeps the script's dependencies to bash,
+  # docker and bosh. A python3 one-liner here that silently returned empty when
+  # python3 was missing would make preflight report this directory's own
+  # Director as somebody else's.
+  sed -n 's/.*"current_vm_cid"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
+    "${PWD}/state.json" | head -1
+}
+
+guard_repo() {
+  # Compared as a path component: a bare prefix test also matches siblings such
+  # as ../bosh-deployment-work, which is a perfectly good place to run this.
+  if [ "$PWD" = "$bosh_deployment" ] \
+    || [ "${PWD##"${bosh_deployment}"/}" != "${PWD}" ] \
+    || [ -e docker/create-env ]; then
+    die "It looks like you are running this inside ${bosh_deployment}.
+Run it from the directory you want your deployment files in, so creds.yml does
+not end up in the repo."
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# phases
+# ---------------------------------------------------------------------------
+
+announce_flavor() {
+  case "$FLAVOR" in
+    resolute)
+      say "flavor: resolute (docker/use-resolute.yml + misc/use-compiled-resolute-releases.yml)"
+      if resolute_rosetta_needed; then
+        say "host: ${HOST_OS}/${HOST_ARCH} -- adding docker/use-resolute-rosetta.yml, because Resolute's systemd 259 uses pidfd syscalls Rosetta 2 does not translate"
+      else
+        say "host: ${HOST_OS}/${HOST_ARCH} -- no rosetta stemcell needed"
+      fi
+      ;;
+    *)
+      say "flavor: default (the stemcell docker/cpi.yml pins)"
+      say "host: ${HOST_OS}/${HOST_ARCH}"
+      ;;
+  esac
+  [ -n "$STEMCELL_OVERRIDE" ] && say "--stemcell ${STEMCELL_OVERRIDE} overrides the stemcell the ops files pin"
+  [ -n "$BOSH_RELEASE" ] && say "--bosh-release ${BOSH_RELEASE}"
+  return 0
+}
+
+print_invocation() {
+  local verb=$1
+  printf 'bosh %s %s/bosh.yml\n' "$verb" "$bosh_deployment"
+  printf '  --state %s/state.json\n' "$PWD"
+  printf '  --vars-store %s/creds.yml\n' "$PWD"
+  local i
+  for ((i = 0; i < ${#OPS_ARGS[@]}; i += 2)); do
+    printf '  %s %s\n' "${OPS_ARGS[i]}" "${OPS_ARGS[i + 1]}"
+  done
+  for ((i = 0; i < ${#VAR_ARGS[@]}; i += 2)); do
+    printf '  %s %s\n' "${VAR_ARGS[i]}" "${VAR_ARGS[i + 1]}"
+  done
+  $RECREATE && printf '  --recreate\n'
+  return 0
+}
+
+do_create_env() {
+  STEP "Creating the Director"
+  # create-env writes progress to /dev/tty, so it prints nothing at all when
+  # redirected -- a 15 minute run then looks exactly like a hang. Always ask for
+  # it: it is what you would see on a terminal anyway, and it is the only way a
+  # piped or --silent run reports progress.
+  local extra=(--tty)
+  $RECREATE && extra+=(--recreate)
+
+  bosh create-env "${bosh_deployment}/bosh.yml" \
+    --state "${PWD}/state.json" \
+    --vars-store "${PWD}/creds.yml" \
+    "${OPS_ARGS[@]}" ${VAR_ARGS[@]+"${VAR_ARGS[@]}"} \
+    ${extra[@]+"${extra[@]}"}
+}
+
+write_env_file() {
+  STEP "Writing bosh.env"
+
+  # bosh.env is shell, and this path is interpolated into commands inside it, so
+  # a deployment directory containing a space or a shell metacharacter has to be
+  # escaped -- otherwise sourcing it hands `bosh interpolate` a truncated path.
+  local creds
+  printf -v creds '%q' "${PWD}/creds.yml"
+
+  # No secrets in here: it interpolates out of creds.yml at source time.
+  cat > "${PWD}/bosh.env" <<EOF
+# Generated by docker/create-env. Source it, do not commit it -- it reads
+# creds.yml, which holds the Director's credentials.
+#
+export BOSH_ENVIRONMENT=${INTERNAL_IP}
+export BOSH_CLIENT=admin
+export BOSH_CLIENT_SECRET=\$( BOSH_TTY=false bosh interpolate ${creds} --path /admin_password )
+export BOSH_CA_CERT=\$( BOSH_TTY=false bosh interpolate ${creds} --path /director_ssl/ca )
+
+export CREDHUB_SERVER=https://${INTERNAL_IP}:8844
+export CREDHUB_CA_CERT="\$( BOSH_TTY=false bosh interpolate ${creds} --path /credhub_tls/ca )
+\$( BOSH_TTY=false bosh interpolate ${creds} --path /uaa_ssl/ca )"
+export CREDHUB_CLIENT=credhub-admin
+export CREDHUB_SECRET=\$( BOSH_TTY=false bosh interpolate ${creds} --path /credhub_admin_client_secret )
+
+export BOSH_AGENT_ENDPOINT=https://mbus:\$( BOSH_TTY=false bosh interpolate ${creds} --path /mbus_bootstrap_password )@${INTERNAL_IP}:6868
+export BOSH_AGENT_CERTIFICATE=\$( BOSH_TTY=false bosh interpolate ${creds} --path /mbus_bootstrap_ssl/ca )
+
+export BOSH_DEPLOYMENT_SHA=$(cd "$bosh_deployment" && git rev-parse --short HEAD)
+EOF
+
+  # direnv users get the same thing without the file being named after one tool.
+  # Only ever created when there is nothing there, or when the link is already
+  # ours: a directory that links .envrc to shared configuration keeps it.
+  if [ ! -e .envrc ] && [ ! -L .envrc ]; then
+    ln -s bosh.env .envrc
+    say "bosh.env written, .envrc -> bosh.env"
+  elif [ "$(readlink .envrc 2> /dev/null || true)" = bosh.env ]; then
+    say "bosh.env written, .envrc -> bosh.env already"
+  else
+    warn "leaving the existing .envrc here alone -- it is not ours. Source bosh.env yourself."
+  fi
+
+  # shellcheck source=/dev/null
+  . "${PWD}/bosh.env"
+
+  STEP "Targeting the Director"
+  bosh env
+}
+
+update_cloud_config() {
+  STEP "Uploading the cloud config"
+  # -v network is not optional: the Director stores cloud configs verbatim, so
+  # without it every create_vm looks for a Docker network literally named
+  # ((network)).
+  local extra=()
+  if $ROSETTA_COMPAT_FIX; then
+    extra+=(-o "$(write_rosetta_compat_cc_opsfile)")
+    say "patching the cloud config so the VMs the Director creates get the same drop-ins"
+  fi
+  bosh -n update-cloud-config "${bosh_deployment}/docker/cloud-config.yml" \
+    -v "network=${NETWORK_NAME}" ${extra[@]+"${extra[@]}"}
+  say "uploaded with network=${NETWORK_NAME}"
+}
+
+upload_stemcell() {
+  STEP "Uploading the stemcell"
+  local extra=()
+  [ -n "$STEMCELL_SHA1" ] && extra+=(--sha1 "$STEMCELL_SHA1")
+  bosh -n upload-stemcell "$STEMCELL_LOCAL" ${extra[@]+"${extra[@]}"}
+  bosh stemcells
+}
+
+update_runtime_config() {
+  STEP "Uploading the bosh-dns runtime config"
+  bosh -n update-runtime-config "${bosh_deployment}/runtime-configs/dns.yml"
+  say "uploaded"
+}
+
+# ---------------------------------------------------------------------------
+# entry points
+# ---------------------------------------------------------------------------
+
+create() {
+
+  if $SILENT; then
+    : > "$LOG_FILE"
+    exec >> "$LOG_FILE" 2>&1
+    echo "non-error output for this run only; see the terminal for failures" >&4
+  fi
+
+  STEP "Configuration"
+  announce_flavor
+
+  # Preflight first: it discovers the docker socket and the network's real
+  # subnet, both of which build_ops bakes into the ops files and vars. Skipped
+  # for --dry-run, which promises to touch neither Docker nor the network.
+  $DRY_RUN || preflight
+
+  STEP "Rendering the deployment"
+  build_ops
+
+  STEP "Resolving the stemcell"
+  resolve_stemcell
+  say "stemcell: ${STEMCELL_URL}"
+  [ -n "$STEMCELL_SHA1" ] && say "sha1: ${STEMCELL_SHA1}"
+
+  # Whether the udev drop-in is needed depends on the stemcell, which depends on
+  # the ops files -- so decide it here and render once more. build_ops rebuilds
+  # both arrays from scratch, so this is just a second pass, not an append.
+  if needs_rosetta_compat; then
+    ROSETTA_COMPAT_FIX=true
+    say "x86_64 stemcell on ${HOST_OS}/${HOST_ARCH}: relaxing ${ROSETTA_COMPAT_UNITS[*]} for Rosetta, masking ${CONTAINER_MASK_UNITS[*]}"
+    build_ops
+  fi
+
+  # Written before the dry-run bails out, so `--destroy --dry-run` can render the
+  # same ops list and tests/run-checks.sh can compare the two -- but never over a
+  # record that describes a Director this directory already owns, because
+  # --destroy replays it to delete that Director.
+  if ! $DRY_RUN || [ ! -f "${PWD}/state.json" ]; then
+    save_run_record
+  else
+    say "leaving ${RUN_RECORD#"${PWD}"/} alone: it records the Director this directory already owns"
+  fi
+
+  if $DRY_RUN; then
+    if [ "${STEMCELL_URL#file://}" != "$STEMCELL_URL" ] && [ ! -f "${STEMCELL_URL#file://}" ]; then
+      warn "the pinned stemcell ${STEMCELL_URL#file://} is not on this machine; a real run would fail here"
+    fi
+    STEP "Would run"
+    print_invocation create-env
+    return 0
+  fi
+
+  cache_stemcell
+
+  do_create_env
+  write_env_file
+  update_cloud_config
+  upload_stemcell
+  update_runtime_config
+
+  STEP "Done"
+  say "Credentials are in ${PWD}/creds.yml and VM state in ${PWD}/state.json. Keep both."
+  say "To use the Director:"
+  echo
+  echo "    source bosh.env"
+  echo
+  say "That also sets BOSH_AGENT_ENDPOINT/BOSH_AGENT_CERTIFICATE, so"
+  say "'bosh ssh --director' can get onto the Director itself." 
+  $SILENT && echo "done -- source bosh.env" >&4
+  return 0
+}
+
+destroy() {
+  load_run_record
+
+  STEP "Configuration"
+  say "replaying the ops files and vars recorded in ${RUN_RECORD#"${PWD}"/}"
+  announce_flavor
+  build_ops
+
+  # No stemcell handling here: delete-env does not fetch one, and the cached
+  # tarball stays so recreating in this directory does not re-download it.
+  if $DRY_RUN; then
+    STEP "Would run"
+    print_invocation delete-env
+    return 0
+  fi
+
+  STEP "Deleting the Director"
+  local extra=(--tty)
+  bosh delete-env "${bosh_deployment}/bosh.yml" \
+    --state "${PWD}/state.json" \
+    --vars-store "${PWD}/creds.yml" \
+    "${OPS_ARGS[@]}" ${VAR_ARGS[@]+"${VAR_ARGS[@]}"} \
+    ${extra[@]+"${extra[@]}"}
+
+  # These now name a Director that does not exist; keeping them only invites
+  # confusion with the next run. state.json needs no handling here -- delete-env
+  # removes it once the deployment is fully deleted.
+  rm -f "${PWD}/creds.yml" "${PWD}/bosh.env"
+  # Only the symlink we made, never one that was already here pointing elsewhere.
+  if [ "$(readlink .envrc 2> /dev/null || true)" = bosh.env ]; then
+    rm -f .envrc
+  fi
+
+  # And the whole working directory, rather than the files this version happens
+  # to generate: that is what prunes output left by an older create-env whose
+  # generated files had different names. Everything in here is regenerated on the
+  # next create, and the run record it holds describes a Director that is now
+  # gone. The stemcell tarball lives in $PWD, not in here, so it survives.
+  rm -rf "$WORK_DIR"
+
+  STEP "Done"
+  say "Director deleted. creds.yml, bosh.env and ${WORK_DIR##*/}/ removed, and delete-env took state.json with it. The stemcell tarball is still here, so recreating in this directory will not re-download it."
+  return 0
+}
+
+main() {
+  parse_args "$@"
+  trap 'on_err $? "$BASH_COMMAND"' ERR
+
+  guard_repo
+  mkdir -p "$WORK_DIR"
+
+  if $DESTROY; then destroy; else create; fi
+}
+
+main "$@"
