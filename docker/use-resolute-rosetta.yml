@@ -1,0 +1,6 @@
+- name: stemcell
+  path: /resource_pools/name=vms/stemcell?
+  type: replace
+  value:
+    sha1: 44fb230d0a930516976fa49de99091ee84943a9f
+    url: https://storage.googleapis.com/bosh-core-stemcells/0.149/bosh-stemcell-0.149-warden-boshlite-ubuntu-resolute-rosetta.tgz
