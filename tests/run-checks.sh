@@ -8,9 +8,16 @@ cd "${script_dir}/.."
 tmp_file="/tmp/bosh-deployment-test"
 touch "${tmp_file}"
 
+# create-env's checks need a deployment directory under $HOME: it warns when the
+# deployment directory is somewhere the Docker VM cannot see, and the Rosetta
+# drop-ins it renders live there. One mktemp root per invocation, removed whole,
+# so cleanup never globs over paths this run does not own.
+create_env_dir=$(mktemp -d "${HOME}/.bosh-deployment-create-env-check.XXXXXX")
+
 function clean_tmp() {
   rm -f "${tmp_file}"
   rm -f "${tmp_file}."*
+  rm -rf -- "${create_env_dir}"
 }
 
 trap clean_tmp EXIT
@@ -29,6 +36,181 @@ grep -r -i bosh-compiled-release-tarballs.s3.amazonaws.com . | grep -v grep | gr
 
 echo -e "\nUsed stemcells\n"
 grep -r -i d/stemcells . | grep -v grep | grep -v ./.git
+
+echo -e "\ndocker/create-env\n"
+
+# The script refuses to run inside this checkout, and it writes generated ops
+# files into $PWD, so every check below runs from create_env_dir (created above,
+# alongside the cleanup that owns it).
+create_env="${PWD}/docker/create-env"
+
+if command -v shellcheck > /dev/null; then
+  echo "- shellcheck"
+  shellcheck "${create_env}"
+else
+  echo "- shellcheck (SKIPPED: not installed in this image)"
+fi
+
+echo "- --help exits 0"
+"${create_env}" --help > /dev/null
+
+# Render the create-env invocation for one flavor/host and print just the ops
+# files, relative to the checkout, one per line.
+function create_env_ops() {
+  local os=$1 arch=$2
+  shift 2
+  (
+    cd "${create_env_dir}"
+    CREATE_ENV_OS="${os}" CREATE_ENV_ARCH="${arch}" "${create_env}" --dry-run "$@"
+  ) | sed -n "s|^  -o ${PWD}/||p"
+}
+
+function create_env_dry_run() {
+  local os=$1 arch=$2
+  shift 2
+  (
+    cd "${create_env_dir}"
+    CREATE_ENV_OS="${os}" CREATE_ENV_ARCH="${arch}" "${create_env}" --dry-run "$@"
+  )
+}
+
+# Ops-file *ordering* is otherwise completely silent: whether
+# misc/use-compiled-resolute-releases.yml lands after credhub.yml, and whether
+# docker/use-resolute-rosetta.yml lands after docker/use-resolute.yml, only
+# shows up as the wrong release or stemcell URL in the deployed Director.
+function assert_ops() {
+  local label=$1 expected=$2 actual=$3
+  if [ "${expected}" != "${actual}" ]; then
+    echo "ERROR: ${label} ops files are not what we expect" >&2
+    diff -u <(echo "${expected}") <(echo "${actual}") >&2 || true
+    exit 1
+  fi
+  echo "- ${label} ops files"
+}
+
+default_ops="docker/cpi.yml
+uaa.yml
+credhub.yml
+docker/unix-sock.yml
+docker/dns.yml
+jumpbox-user.yml"
+
+resolute_ops="docker/cpi.yml
+docker/use-resolute.yml
+uaa.yml
+credhub.yml
+misc/use-compiled-resolute-releases.yml
+docker/unix-sock.yml
+docker/dns.yml
+jumpbox-user.yml"
+
+resolute_rosetta_ops="docker/cpi.yml
+docker/use-resolute.yml
+docker/use-resolute-rosetta.yml
+uaa.yml
+credhub.yml
+misc/use-compiled-resolute-releases.yml
+docker/unix-sock.yml
+docker/dns.yml
+jumpbox-user.yml"
+
+assert_ops "default (Linux/x86_64)"  "${default_ops}"  "$(create_env_ops Linux x86_64)"
+assert_ops "default (Darwin/arm64)"  "${default_ops}"  "$(create_env_ops Darwin arm64)"
+assert_ops "--resolute (Linux/x86_64)" "${resolute_ops}" "$(create_env_ops Linux x86_64 --resolute)"
+assert_ops "--resolute (Darwin/arm64)" "${resolute_rosetta_ops}" "$(create_env_ops Darwin arm64 --resolute)"
+
+# --destroy has to delete with exactly what create built, and it reads the
+# flavor back out of .create-env/run rather than being told again.
+echo "- --destroy renders the same ops files as create"
+# Re-render the create record first: each --dry-run rewrites .create-env/run, so
+# without this the assertion below depends on which case ran last.
+create_env_ops Darwin arm64 --resolute > /dev/null
+destroy_ops=$(
+  cd "${create_env_dir}"
+  CREATE_ENV_OS=Darwin CREATE_ENV_ARCH=arm64 "${create_env}" --destroy --dry-run
+)
+assert_ops "--destroy after --resolute (Darwin/arm64)" \
+  "${resolute_rosetta_ops}" "$(echo "${destroy_ops}" | sed -n "s|^  -o ${PWD}/||p")"
+echo "${destroy_ops}" | grep -q '^bosh delete-env ' \
+  || { echo "ERROR: --destroy did not render a delete-env invocation" >&2; exit 1; }
+
+# --dry-run has to render what a real run would apply, including the host-specific
+# drop-ins. The generated file lives in the deployment directory, so it does not
+# show up in the repo-relative ops lists compared above.
+echo "- --dry-run renders the Rosetta drop-ins only on Apple Silicon"
+if ! create_env_dry_run Darwin arm64 | grep -q 'rosetta-compat\.yml'; then
+  echo "ERROR: Darwin/arm64 --dry-run did not render the Rosetta compatibility ops file" >&2
+  exit 1
+fi
+if create_env_dry_run Linux x86_64 | grep -q 'rosetta-compat\.yml'; then
+  echo "ERROR: Linux/x86_64 --dry-run rendered a Rosetta compatibility ops file" >&2
+  exit 1
+fi
+
+# The run record is sourced from inside a function, so the arrays in it have to
+# be plain assignments; `declare -a` would scope them to that function and
+# --destroy would delete with a different ops stack than it created.
+echo "- --destroy replays the caller's -o and -v arguments"
+custom_ops="${tmp_file}.custom-ops.yml"
+echo '[]' > "${custom_ops}"
+create_env_ops Linux x86_64 -o "${custom_ops}" -v custom_check=1 > /dev/null
+destroy_custom=$(
+  cd "${create_env_dir}"
+  CREATE_ENV_OS=Linux CREATE_ENV_ARCH=x86_64 "${create_env}" --destroy --dry-run
+)
+for expected in "-o ${custom_ops}" "-v custom_check=1"; do
+  if ! echo "${destroy_custom}" | grep -q -- "${expected}"; then
+    echo "ERROR: --destroy dropped '${expected}' from the replayed invocation" >&2
+    echo "${destroy_custom}" >&2
+    exit 1
+  fi
+done
+
+# The script must never carry its own stemcell table -- CI bumps the ops files,
+# and create-env reads the pin back out of the interpolated manifest.
+echo "- stemcell pins come from the ops files"
+function assert_stemcell_url() {
+  local label=$1 expected=$2 actual=$3
+  [ "${expected}" = "${actual}" ] \
+    || { echo "ERROR: ${label} stemcell is '${actual}', expected '${expected}'" >&2; exit 1; }
+  echo "  ${label}: ${actual}"
+}
+
+noble_url=$(command bosh int bosh.yml -o docker/cpi.yml --path /resource_pools/name=vms/stemcell/url)
+resolute_url=$(command bosh int bosh.yml -o docker/cpi.yml -o docker/use-resolute.yml \
+  --path /resource_pools/name=vms/stemcell/url)
+
+function create_env_stemcell() {
+  local os=$1 arch=$2
+  shift 2
+  (
+    cd "${create_env_dir}"
+    CREATE_ENV_OS="${os}" CREATE_ENV_ARCH="${arch}" "${create_env}" --dry-run "$@"
+  ) | sed -n 's|^ *stemcell: ||p'
+}
+
+assert_stemcell_url "default"   "${noble_url}"    "$(create_env_stemcell Linux x86_64)"
+assert_stemcell_url "--resolute" "${resolute_url}" "$(create_env_stemcell Linux x86_64 --resolute)"
+
+# On Apple Silicon the rosetta ops file has to win, and it may only change the
+# stemcell -- the compiled-for-resolute docker CPI from use-resolute.yml stays.
+rosetta_url=$(command bosh int bosh.yml -o docker/cpi.yml -o docker/use-resolute.yml \
+  -o docker/use-resolute-rosetta.yml --path /resource_pools/name=vms/stemcell/url)
+assert_stemcell_url "--resolute on Apple Silicon" \
+  "${rosetta_url}" "$(create_env_stemcell Darwin arm64 --resolute)"
+[ "${rosetta_url}" != "${resolute_url}" ] \
+  || { echo "ERROR: docker/use-resolute-rosetta.yml did not override the stemcell" >&2; exit 1; }
+cpi_url=$(command bosh int bosh.yml -o docker/cpi.yml -o docker/use-resolute.yml \
+  -o docker/use-resolute-rosetta.yml --path /releases/name=bosh-docker-cpi/url)
+case "${cpi_url}" in
+  *ubuntu-resolute*) echo "  --resolute on Apple Silicon keeps the resolute docker CPI" ;;
+  *) echo "ERROR: rosetta ops file clobbered the resolute docker CPI: ${cpi_url}" >&2; exit 1 ;;
+esac
+
+echo "- an explicit --stemcell overrides the pin"
+override=$(create_env_stemcell Darwin arm64 --resolute --stemcell https://example.com/my.tgz)
+[ "${override}" = "https://example.com/my.tgz" ] \
+  || { echo "ERROR: --stemcell did not win, got '${override}'" >&2; exit 1; }
 
 echo -e "\nExamples\n"
 
