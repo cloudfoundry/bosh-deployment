@@ -78,6 +78,7 @@ Other releases such as [UAA](https://github.com/cloudfoundry/uaa-release), [Cred
 - `misc/dns.yml`: Configure your upstream DNS (NOTE: by default bosh-deployment uses Google DNS: 8.8.8.8)
 - `docker/dns.yml`: Point the Director at Docker's embedded DNS server (127.0.0.11) instead of 8.8.8.8. Required on networks that block public resolvers, otherwise the Director cannot download remote releases
 - `misc/ntp.yml`: Configure your NTP Servers (NOTE: by default bosh-deployment uses Google NTP servers: time{1-4}.google.com
+- `misc/tags.yml`: Apply deployment tags to every instance in a deployment (var: `deployment_tags`; on GCP these are surfaced as resource labels)
 - `runtime-configs/syslog.yml`: Runtime config to enable syslog forwarding
 
 See [tests/run-checks.sh](tests/run-checks.sh) for example usage of different ops files.
