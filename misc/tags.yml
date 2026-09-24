@@ -1,0 +1,26 @@
+---
+
+# Apply metadata tags to every instance in the deployment.
+#
+# The BOSH Director forwards deployment tags to the CPI as instance metadata.
+# On GCP the google CPI surfaces them as resource labels, which makes them
+# visible in billing/cost reports; other CPIs map them onto their own resource
+# metadata (for example AWS EC2 tags).
+#
+# Usage:
+#
+#   bosh deploy ... -o misc/tags.yml --vars-file tags.yml
+#
+# where tags.yml defines a map, for example:
+#
+#   tags:
+#     pipeline: bosh-deployment
+#     environment: my-env
+#
+# `tags` is a map, so it must be supplied with --vars-file (a --var/-v value is
+# always a string). Any tags defined directly in the deployment manifest are
+# replaced by this ops file.
+
+- type: replace
+  path: /tags?
+  value: ((tags))
