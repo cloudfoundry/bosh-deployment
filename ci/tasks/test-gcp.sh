@@ -20,7 +20,9 @@ pushd "${PWD}/bbl-state"
   echo "-----> `date`: Deploy"
   bosh -n -d nats deploy "${script_dir}/../assets/nats.yml" \
     -o bosh-deployment/tests/cred-test.yml \
-    -v stemcell_os="${STEMCELL_OS}"
+    -o bosh-deployment/misc/tags.yml \
+    -v stemcell_os="${STEMCELL_OS}" \
+    -v 'deployment_tags={"pipeline":"bosh-deployment"}'
 
   echo "-----> `date`: Exercise deployment"
   bosh -n -d nats run-errand smoke-tests

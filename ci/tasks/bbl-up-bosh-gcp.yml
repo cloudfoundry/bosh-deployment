@@ -17,6 +17,7 @@ params:
   BBL_IAAS: gcp
   BBL_GCP_REGION: replace-me
   DIRECTOR_OPS_FILES: "" # Space-separated, repo-relative ops files applied to the director
+  BBL_GCP_LABELS: "" # Comma-separated key=value GCP resource labels applied by bbl
 
 run:
   path: bosh-deployment/ci/tasks/bbl-up-bosh-gcp.sh
