@@ -56,6 +56,7 @@ groups:
   - update-virtualbox-cpi-release
   - update-openstack-cpi-release
   - update-warden-cpi-release
+  - update-stackit-cpi
 - name: bump-stemcells-noble
   jobs:
   - update-aws-noble-stemcell
@@ -65,6 +66,7 @@ groups:
   - update-gcp-noble-stemcell
   - update-openstack-noble-stemcell
   - update-openstack-raw-noble-stemcell
+  - update-stackit-noble-stemcell
   - update-vcloud-noble-stemcell
   - update-virtualbox-noble-stemcell
   - update-vsphere-noble-stemcell
@@ -78,6 +80,7 @@ groups:
   - update-gcp-jammy-stemcell
   - update-openstack-jammy-stemcell
   - update-openstack-raw-jammy-stemcell
+  - update-stackit-jammy-stemcell
   - update-vcloud-jammy-stemcell
   - update-virtualbox-jammy-stemcell
   - update-vsphere-jammy-stemcell
@@ -91,6 +94,7 @@ groups:
   - update-gcp-resolute-stemcell
   - update-openstack-resolute-stemcell
   - update-openstack-raw-resolute-stemcell
+  - update-stackit-resolute-stemcell
   - update-vcloud-resolute-stemcell
   - update-virtualbox-resolute-stemcell
   - update-vsphere-resolute-stemcell
@@ -440,6 +444,24 @@ jobs:
     params:
       CPI_NAME: bosh-warden-cpi
       CPI_OPS_FILE: warden/cpi.yml
+  - <<: *commit-when-new-asset
+
+- name: update-stackit-cpi
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: stackit-cpi-release
+      trigger: true
+  - task: update-release
+    file: bosh-deployment/ci/tasks/update-cpi.yml
+    input_mapping:
+      cpi: stackit-cpi-release
+    params:
+      CPI_OPS_FILE: stackit/cpi.yml
+      CPI_NAME: bosh-stackit-cpi
+      GITHUB_RELEASE: true
   - <<: *commit-when-new-asset
 
 - name: update-docker-cpi-release
@@ -1009,6 +1031,23 @@ jobs:
       STEMCELL_NAME: openstack-ubuntu-noble-stemcell-raw
   - <<: *commit-when-new-asset
 
+- name: update-stackit-noble-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: openstack-ubuntu-noble-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: openstack-ubuntu-noble-stemcell
+    params:
+      CPI_OPS_FILE: stackit/cpi.yml
+      STEMCELL_NAME: openstack-ubuntu-noble-stemcell
+  - <<: *commit-when-new-asset
+
 - name: update-vcloud-noble-stemcell
   old_name: update-vcloud-stemcell
   plan:
@@ -1200,6 +1239,23 @@ jobs:
       STEMCELL_NAME: openstack-ubuntu-jammy-stemcell-raw
   - <<: *commit-when-new-asset
 
+- name: update-stackit-jammy-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: openstack-ubuntu-jammy-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: openstack-ubuntu-jammy-stemcell
+    params:
+      CPI_OPS_FILE: stackit/use-jammy.yml
+      STEMCELL_NAME: openstack-ubuntu-jammy-stemcell
+  - <<: *commit-when-new-asset
+
 - name: update-vcloud-jammy-stemcell
   plan:
   - in_parallel:
@@ -1382,6 +1438,23 @@ jobs:
     file: bosh-deployment/ci/tasks/update-stemcell.yml
     input_mapping:
       stemcell: openstack-ubuntu-resolute-stemcell-raw
+    params:
+      CPI_OPS_FILE: openstack/use-resolute-raw.yml
+      STEMCELL_NAME: openstack-ubuntu-resolute-stemcell-raw
+  - <<: *commit-when-new-asset
+
+- name: update-stackit-resolute-stemcell
+  plan:
+  - in_parallel:
+    - get: bosh-deployment
+      params:
+        clean_tags: true
+    - get: openstack-ubuntu-resolute-stemcell
+      trigger: true
+  - task: update-stemcell
+    file: bosh-deployment/ci/tasks/update-stemcell.yml
+    input_mapping:
+      stemcell: openstack-ubuntu-resolute-stemcell
     params:
       CPI_OPS_FILE: openstack/use-resolute-raw.yml
       STEMCELL_NAME: openstack-ubuntu-resolute-stemcell-raw
@@ -1755,6 +1828,14 @@ resources:
   type: bosh-io-release
   source:
     repository: cloudfoundry/bosh-openstack-cpi-release
+
+- name: stackit-cpi-release
+  type: github-release
+  source:
+    access_token: ((github_public_repo_token))
+    owner: stackitcloud
+    repository: bosh-stackit-cpi-release
+    tag_filter: "v(.*)"
 
 - name: os-conf-release
   type: bosh-io-release
