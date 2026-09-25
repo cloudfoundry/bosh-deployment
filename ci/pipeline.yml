@@ -138,6 +138,7 @@ jobs:
       params:
         BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_json_key))
         BBL_GCP_REGION: *bbl_gcp_region
+        BBL_GCP_LABELS: pipeline=bosh-deployment
     - task: test-gcp
       file: bosh-deployment/ci/tasks/test-gcp.yml
       input_mapping:
@@ -218,6 +219,7 @@ jobs:
       params:
         BBL_GCP_SERVICE_ACCOUNT_KEY: ((gcp_json_key))
         BBL_GCP_REGION: *bbl_gcp_region
+        BBL_GCP_LABELS: pipeline=bosh-deployment
         DIRECTOR_OPS_FILES: "gcp/use-resolute.yml misc/use-compiled-resolute-releases.yml"
     - task: test-gcp
       file: bosh-deployment/ci/tasks/test-gcp.yml
