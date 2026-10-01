@@ -1,0 +1,59 @@
+- name: cpi
+  path: /releases/-
+  type: replace
+  value:
+    name: bosh-stackit-cpi
+    sha1: bc73949e3e34478c155d130d8568f2ba6d7cd883
+    url: https://github.com/stackitcloud/bosh-stackit-cpi-release/releases/download/v0.1.30/bosh-stackit-cpi-release-0.1.30.tgz
+    version: 0.1.30
+- name: stemcell
+  path: /resource_pools/name=vms/stemcell?
+  type: replace
+  value:
+    sha1: 2109697759f220cf161243a5489a9144bd54935b
+    url: https://storage.googleapis.com/bosh-core-stemcells/1.585/bosh-stemcell-1.585-openstack-kvm-ubuntu-noble.tgz
+- path: /resource_pools/name=vms/cloud_properties?
+  type: replace
+  value:
+    availability_zone: ((az))
+    instance_type: g2i.2
+    root_disk:
+      size: 50
+- path: /networks/name=default/subnets/0/cloud_properties?
+  type: replace
+  value:
+    net_id: ((net_id))
+    security_groups: ((default_security_groups))
+- path: /instance_groups/name=bosh/jobs/-
+  type: replace
+  value:
+    name: stackit_cpi
+    release: bosh-stackit-cpi
+- path: /instance_groups/name=bosh/properties/director/cpi_job?
+  type: replace
+  value: stackit_cpi
+- path: /cloud_provider/template?
+  type: replace
+  value:
+    name: stackit_cpi
+    release: bosh-stackit-cpi
+- path: /instance_groups/name=bosh/properties/stackit?
+  type: replace
+  value:
+    project_id: ((stackit_project_id))
+    service_account_json: ((stackit_service_account_json))
+    region: ((region))
+    default_security_groups: ((default_security_groups))
+    default_ssh_key_name: ((default_key_name))
+    human_readable_vm_names: true
+    auto_fix_name_and_labels: true
+- path: /cloud_provider/properties/stackit?
+  type: replace
+  value:
+    project_id: ((stackit_project_id))
+    service_account_json: ((stackit_service_account_json))
+    region: ((region))
+    default_security_groups: ((default_security_groups))
+    default_ssh_key_name: ((default_key_name))
+    human_readable_vm_names: true
+    auto_fix_name_and_labels: true
