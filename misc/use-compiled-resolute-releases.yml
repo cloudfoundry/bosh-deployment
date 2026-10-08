@@ -11,9 +11,9 @@
   type: replace
   value:
     name: bpm
-    sha1: 99bab67ef99279b831e346719ae54b54e6abaa22
-    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bpm-1.4.41-ubuntu-resolute-0.184.tgz
-    version: 1.4.41
+    sha1: 7910b42ff6fc90618c449c9571e9b51e2b19f478
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bpm-1.4.42-ubuntu-resolute-0.184.tgz
+    version: 1.4.42
 - path: /releases/name=backup-and-restore-sdk?
   release: backup-and-restore-sdk
   type: replace
