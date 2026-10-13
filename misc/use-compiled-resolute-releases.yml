@@ -43,6 +43,6 @@
   type: replace
   value:
     name: garden-runc
-    sha1: 28ba49405ea10b2da148fcbb6deee09270c5057f
-    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/garden-runc-1.101.0-ubuntu-resolute-1.0.tgz
-    version: 1.101.0
+    sha1: 57874eb8ad6e18884532075ee0056b144aac84d4
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/garden-runc-1.102.0-ubuntu-resolute-1.0.tgz
+    version: 1.102.0
