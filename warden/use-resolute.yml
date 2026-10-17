@@ -3,9 +3,9 @@
   type: replace
   value:
     name: bosh-warden-cpi
-    sha1: 68b9cfaa77d245ddf70a91aedca78c2ae3468164
-    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-warden-cpi-45.2.9-ubuntu-resolute-1.0.tgz
-    version: 45.2.9
+    sha1: 4193470ecd883e7c5f425833a86090789b362b00
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-warden-cpi-45.2.10-ubuntu-resolute-1.0.tgz
+    version: 45.2.10
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
