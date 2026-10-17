@@ -11,9 +11,9 @@
   type: replace
   value:
     name: bosh-warden-cpi
-    sha1: e4ceeeacf92d187ddeb0163767358b9a06f360c2
-    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-warden-cpi-45.2.9-ubuntu-noble-1.630.tgz
-    version: 45.2.9
+    sha1: 5b3f59ab328f3d08ac798d464f2120fcde568c2c
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-warden-cpi-45.2.10-ubuntu-noble-1.630.tgz
+    version: 45.2.10
 - path: /instance_groups/name=bosh/jobs/-
   type: replace
   value:
