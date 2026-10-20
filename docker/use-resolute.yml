@@ -3,9 +3,9 @@
   type: replace
   value:
     name: bosh-docker-cpi
-    sha1: 37f975b45f03ba1c1e883f2bbed111c9b4e0cbb3
-    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-docker-cpi-0.2.23-ubuntu-resolute-1.0.tgz
-    version: 0.2.23
+    sha1: b6f4966744193155d0fe54242e8a0ba771bf8151
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-docker-cpi-0.2.24-ubuntu-resolute-1.0.tgz
+    version: 0.2.24
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
