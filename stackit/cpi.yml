@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 2109697759f220cf161243a5489a9144bd54935b
-    url: https://storage.googleapis.com/bosh-core-stemcells/1.585/bosh-stemcell-1.585-openstack-kvm-ubuntu-noble.tgz
+    sha1: fc9a3931b054c5f973c63dd944f66ca194d4e64e
+    url: https://storage.googleapis.com/bosh-core-stemcells/1.630/bosh-stemcell-1.630-openstack-kvm-ubuntu-noble.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
@@ -40,20 +40,20 @@
 - path: /instance_groups/name=bosh/properties/stackit?
   type: replace
   value:
-    project_id: ((stackit_project_id))
-    service_account_json: ((stackit_service_account_json))
-    region: ((region))
+    auto_fix_name_and_labels: true
     default_security_groups: ((default_security_groups))
     default_ssh_key_name: ((default_key_name))
     human_readable_vm_names: true
-    auto_fix_name_and_labels: true
+    project_id: ((stackit_project_id))
+    region: ((region))
+    service_account_json: ((stackit_service_account_json))
 - path: /cloud_provider/properties/stackit?
   type: replace
   value:
-    project_id: ((stackit_project_id))
-    service_account_json: ((stackit_service_account_json))
-    region: ((region))
+    auto_fix_name_and_labels: true
     default_security_groups: ((default_security_groups))
     default_ssh_key_name: ((default_key_name))
     human_readable_vm_names: true
-    auto_fix_name_and_labels: true
+    project_id: ((stackit_project_id))
+    region: ((region))
+    service_account_json: ((stackit_service_account_json))
