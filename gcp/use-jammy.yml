@@ -2,5 +2,5 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: 59aea797cabd4d1a9c8085bb4a1c30454dbcc43a
-    url: https://storage.googleapis.com/bosh-gce-light-stemcells/1.1431/light-bosh-stemcell-1.1431-google-kvm-ubuntu-jammy-go_agent.tgz
+    sha1: 2941d9d340cab0a4646577446032e440d352f4eb
+    url: https://storage.googleapis.com/bosh-gce-light-stemcells/1.1474/light-bosh-stemcell-1.1474-google-kvm-ubuntu-jammy-go_agent.tgz
