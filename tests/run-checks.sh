@@ -188,6 +188,7 @@ bosh create-env bosh.yml \
   -v external_db_user=test \
   -v external_db_password=test \
   -v external_db_adapter=test \
+  -v db_ca=test \
   -v external_db_name=test
 
 echo "- AWS with UAA + CredHub + External dbs for all"
@@ -217,6 +218,7 @@ bosh create-env bosh.yml \
   -v external_db_user=test \
   -v external_db_password=test \
   -v external_db_adapter=test \
+  -v db_ca=test \
   -v external_db_name=test \
   -v external_db_host_credhub=test \
   -v external_db_port_credhub=test \
@@ -347,6 +349,7 @@ bosh create-env bosh.yml \
   -v external_db_user=test \
   -v external_db_password=test \
   -v external_db_adapter=test \
+  -v db_ca=test \
   -v external_db_name=test
 
 echo "- GCP (cloud-config)"

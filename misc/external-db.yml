@@ -19,3 +19,7 @@
     password: ((external_db_password))
     adapter: ((external_db_adapter))
     database: ((external_db_name))
+    tls:
+      enabled: true
+      cert:
+        ca: ((db_ca))

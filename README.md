@@ -113,3 +113,10 @@ SSH                  TCP      22          <((internal_cidr))>        BOSH SSH (o
 Custom TCP Rule      TCP      4222        <((internal_cidr))>        NATS
 Custom TCP Rule      TCP      25250       <((internal_cidr))>        Blobstore
 ```
+
+## External director database TLS
+
+`misc/external-db.yml` requires the `db_ca` variable containing the external
+server's trusted CA certificate. The external database must support TLS. The UAA
+release pinned by `uaa.yml` already enables verified database TLS by default;
+configure its `uaa.ca_certs` when the external UAA database uses a private CA.

@@ -80,7 +80,7 @@
 
 - type: replace
   path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores/provider=dav/options/endpoint?
-  value: http://((internal_ip)):25250
+  value: https://((internal_ip)):25250
   
 - type: replace
   path: /cloud_provider/template?

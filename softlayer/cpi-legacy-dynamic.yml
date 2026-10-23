@@ -84,7 +84,7 @@
 
 - type: replace
   path: /instance_groups/name=bosh/properties/agent/env/bosh/blobstores/provider=dav/options/endpoint?
-  value: http://((director_ip)):25250
+  value: https://((director_ip)):25250
 
 - type: replace
   path: /cloud_provider/template?
@@ -115,6 +115,10 @@
 - type: replace
   path: /variables/name=blobstore_server_tls/options/alternative_names/-
   value: "127.0.0.1"
+
+- type: replace
+  path: /variables/name=blobstore_server_tls/options/alternative_names/-
+  value: ((director_ip))
 
 - type: replace
   path: /variables/name=nats_server_tls/options/alternative_names?/-

@@ -72,7 +72,7 @@
   value:
     provider: dav
     options:
-      endpoint: http://((internal_ip)):25250
+      endpoint: https://((internal_ip)):25250
       user: agent
       password: ((blobstore_agent_password))
       tls:
