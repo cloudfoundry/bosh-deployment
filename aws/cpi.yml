@@ -10,8 +10,8 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: b734c1fe78873b523252174145c76370d3c94b77
-    url: https://storage.googleapis.com/bosh-aws-light-stemcells/1.630/light-bosh-stemcell-1.630-aws-xen-hvm-ubuntu-noble.tgz
+    sha1: 99d3b42b03c5dbe2d7c8313010164e8fd2d37f1d
+    url: https://storage.googleapis.com/bosh-aws-light-stemcells/1.647/light-bosh-stemcell-1.647-aws-xen-hvm-ubuntu-noble.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
