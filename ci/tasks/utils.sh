@@ -3,7 +3,12 @@
 test_bosh_io_release_exists() {
   BOSH_IO_URL=$1
   echo "Testing source release url: ${BOSH_IO_URL}"
-  if ! curl --output /dev/null --silent --head --fail "$BOSH_IO_URL"; then exit 1; fi
+  if ! curl --head --location --fail \
+            --silent --show-error --output /dev/null \
+            --retry 3 --connect-timeout 10 --max-time 60 \
+            "$BOSH_IO_URL"; then
+    exit 1
+  fi
 }
 
 git_commit() {
