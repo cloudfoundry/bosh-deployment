@@ -17,11 +17,9 @@ for f in ${DIRECTOR_OPS_FILES:-}; do
   ops_args+=(-o "/usr/local/bosh-deployment/${f}")
 done
 
+# start-bosh already applies the UAA and CredHub ops files.
 # shellcheck source=/dev/null
-source start-bosh \
-  -o /usr/local/bosh-deployment/uaa.yml \
-  -o /usr/local/bosh-deployment/credhub.yml \
-  "${ops_args[@]+"${ops_args[@]}"}"
+source start-bosh "${ops_args[@]+"${ops_args[@]}"}"
 # shellcheck source=/dev/null
 source /tmp/local-bosh/director/bosh-env
 
