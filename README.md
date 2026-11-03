@@ -1,6 +1,6 @@
 # bosh-deployment
 
-This repository is intended to serve as a reference and starting point for developer-friendly configuration of the Bosh Director. Consume the `master` branch. Any changes should be made against the `develop` branch (it will be automatically promoted once it passes tests).
+This repository is intended to serve as a reference and starting point for developer-friendly configuration of the Bosh Director. Consume the `main` branch. Any changes should be made against the `develop` branch (it will be automatically promoted once it passes tests).
 
 ## Important notice for users of bosh-deployment and Bosh DNS versions older than 1.28
 
@@ -26,7 +26,7 @@ An automatic process updates Bosh, and other releases within bosh-deployment
 1. A new release of [bosh](https://github.com/cloudfoundry/bosh) is created.
 1. A CI pipeline updates bosh-deployment on `develop` with a compiled bosh release.
 1. Smoke tests are performed to ensure `create-env` works with this potential collection of resources and the new release.
-1. A commit to `master` is made.
+1. A commit to `main` is made.
 
 Other releases such as [UAA](https://github.com/cloudfoundry/uaa-release), [CredHub](https://github.com/pivotal-cf/credhub-release), and various CPIs are also updated automatically.
 
