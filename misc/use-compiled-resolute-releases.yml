@@ -19,9 +19,9 @@
   type: replace
   value:
     name: backup-and-restore-sdk
-    sha1: 58661329e4e13ad4dff2b3dd379e2682b84d3b00
-    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/backup-and-restore-sdk-1.20.8-ubuntu-resolute-1.20.tgz
-    version: 1.20.8
+    sha1: 1a4816147fb2cbbb419f1a92c0b4689dcf1acc96
+    url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/backup-and-restore-sdk-1.20.9-ubuntu-resolute-1.20.tgz
+    version: 1.20.9
 - path: /releases/name=credhub?
   release: credhub
   type: replace
