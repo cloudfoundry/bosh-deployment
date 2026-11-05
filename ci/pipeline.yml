@@ -296,7 +296,7 @@ jobs:
     params:
       state: success
       commit: bosh-deployment
-  - put: bosh-deployment-master
+  - put: bosh-deployment-main
     params:
       repository: bosh-deployment
 
@@ -1590,7 +1590,7 @@ resources:
     branch: develop
     private_key: ((github_deploy_key_bosh-deployment.private_key))
 
-- name: bosh-deployment-master
+- name: bosh-deployment-main
   type: git
   source:
     uri: git@github.com:cloudfoundry/bosh-deployment.git
