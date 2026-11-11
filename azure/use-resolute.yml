@@ -2,5 +2,5 @@
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: f4d1c0d89118b9f029e57a70c106be30f1d66204
-    url: https://storage.googleapis.com/bosh-core-stemcells/1.20/bosh-stemcell-1.20-azure-hyperv-ubuntu-resolute.tgz
+    sha1: b13055c447592af27caffafe15bfd17397eba94b
+    url: https://storage.googleapis.com/bosh-core-stemcells/1.69/bosh-stemcell-1.69-azure-hyperv-ubuntu-resolute.tgz
