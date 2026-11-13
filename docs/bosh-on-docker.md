@@ -1,25 +1,14 @@
 # BOSH on Docker
 
-These steps bring up a local BOSH Director on the Docker CPI and deploy the
-`nats` test deployment against it. They are the interactive equivalent of what
-[`ci/tasks/test-docker.sh`](../ci/tasks/test-docker.sh) runs in CI.
+`docker/create-env` stands up a local BOSH Director on the Docker CPI, on macOS
+or Linux, and leaves you with a file you can `source`. It is the interactive
+equivalent of what [`ci/tasks/test-docker.sh`](../ci/tasks/test-docker.sh) runs
+in CI.
 
 ## Prerequisites
 
-- A running Docker daemon reachable at `unix:///var/run/docker.sock`
+- A running Docker daemon
 - The `bosh` CLI (7.x)
-- A user-defined bridge network for the Director and its VMs:
-
-  ```bash
-  docker network create --subnet=10.245.0.0/16 --gateway=10.245.0.1 bosh-net
-  ```
-
-  The gateway must match the `internal_gw` you pass to `create-env` and the
-  `gateway` in `docker/cloud-config.yml`. Size the subnet to cover that file's
-  `range` (`10.245.0.0/16`) — the Director allocates from the bottom of the
-  range, so a `/24` works for small deployments, but once you have enough VMs
-  the Director will hand out an address that Docker's subnet does not contain.
-
 - **On macOS**, [`docker-mac-net-connect`](https://github.com/chipmk/docker-mac-net-connect)
   running in the background:
 
@@ -30,16 +19,111 @@ These steps bring up a local BOSH Director on the Docker CPI and deploy the
 
   Docker runs inside a Linux VM on macOS, and that VM's bridge networks are not
   routable from the host — so without it there is no IP-level access from the Mac
-  to any container. Every step from step 2 onward talks to the Director at
-  `10.245.0.10` directly, so all of them fail. `docker-mac-net-connect` opens a
-  WireGuard tunnel into the VM and adds host routes for the Docker subnets.
-  Verify before continuing:
+  to any container, and everything after `create-env` times out against
+  `10.245.0.10`. `docker-mac-net-connect` opens a WireGuard tunnel into the VM
+  and adds host routes for the Docker subnets. `create-env` checks this by
+  pinging the bridge's gateway and warns if it does not answer. 
 
-  ```bash
-  docker run --rm -d --name nettest --network bosh-net busybox sleep 60
-  ping -c1 "$(docker inspect -f '{{(index .NetworkSettings.Networks "bosh-net").IPAddress}}' nettest)"
-  docker rm -f nettest
-  ```
+The Docker bridge network the Director and its VMs live on (`bosh-net`,
+`10.245.0.0/16`, gateway `10.245.0.1`) is created for you if it does not exist.
+
+## Deploy the Director
+
+Run it from the directory you want your deployment files in — `state.json`,
+`creds.yml`, `bosh.env` and the stemcell tarball are written to `$PWD`, and the
+script refuses to run inside this checkout so credentials cannot land in the
+repo.
+
+```bash
+mkdir -p ~/bosh-docker && cd ~/bosh-docker
+/path/to/bosh-deployment/docker/create-env
+```
+
+That does the whole thing: preflight, `bosh create-env`, write and source
+`bosh.env`, `bosh env`, upload the cloud config, upload the stemcell the
+manifest pinned, upload the bosh-dns runtime config. When it finishes:
+
+```bash
+source bosh.env
+```
+
+`bosh.env` holds no secrets — it interpolates out of `creds.yml` at source time.
+A `.envrc` symlink to it is created so direnv users get the same behaviour.
+
+It also exports `BOSH_AGENT_ENDPOINT` and `BOSH_AGENT_CERTIFICATE`, so you can get
+a shell on the Director itself:
+
+```bash
+bosh ssh --director
+```
+
+To tear it down, from the same directory:
+
+```bash
+/path/to/bosh-deployment/docker/create-env --destroy
+```
+
+`--destroy` reads the flavor and ops files back out of `.create-env/run`, so it
+deletes with exactly what the create built — no flags to remember, and no list
+to keep in sync. It removes `creds.yml` and `bosh.env` afterwards, because both
+now describe a Director that no longer exists. `bosh delete-env` removes
+`state.json` itself once the deployment is gone. The stemcell tarball stays, so
+recreating in the same directory does not re-download ~1GB.
+
+### Flags
+
+```
+docker/create-env [--resolute] [--silent] [--recreate] [--dry-run]
+                  [--bosh-release PATH] [--stemcell URL_OR_PATH]
+                  [-o FILE] [--var k=v]
+docker/create-env --destroy
+docker/create-env --help
+```
+
+- `--resolute` uses the Resolute stemcell and the compiled Resolute releases —
+  `docker/use-resolute.yml` plus `misc/use-compiled-resolute-releases.yml`,
+  which is the combination the `test-resolute` job in `ci/pipeline.yml` already
+  uses. On Apple Silicon it also applies `docker/use-resolute-rosetta.yml`,
+  whose stemcell keeps an x86_64 userland but ships native arm64 systemd
+  daemons — Resolute's systemd 259 stops services with pidfd syscalls that
+  Rosetta 2 does not translate.
+- `--bosh-release PATH` points the bosh release at a local build. A directory
+  uses `local-bosh-release.yml` (`version: create`); a `.tgz` uses
+  `local-bosh-release-tarball.yml` (`version: latest`).
+- `--stemcell URL_OR_PATH` overrides the stemcell the ops files pin, including
+  the Apple Silicon auto-detection. Use it for "I just built a stemcell, use
+  it", rather than editing a tracked ops file.
+- `-o FILE` and `--var k=v` are applied after everything the script adds, so
+  they override any of it. This is the escape hatch for anything there is no
+  flag for — a different `docker_host` for a remote TLS daemon, say.
+- `--recreate` passes `--recreate` through to `bosh create-env`. See
+  [Recovering from an interrupted create-env](#recovering-from-an-interrupted-create-env).
+- `--silent` puts everything but errors into `create-env.log` and prints the
+  failing command plus the tail of that log if the run fails. It passes `--tty`
+  to `create-env`, which otherwise writes its progress to `/dev/tty` and so
+  logs nothing at all when redirected.
+- `--dry-run` prints the `create-env` invocation and the stemcell it resolved,
+  and touches neither Docker nor the network.
+
+### Ops-file ordering
+
+The script owns this, and that is most of the reason for it to exist:
+
+- `docker/use-resolute.yml` replaces the `bosh-docker-cpi` release that
+  `docker/cpi.yml` appends, so it must come after it.
+- `misc/use-compiled-resolute-releases.yml` replaces `/releases/name=uaa` and
+  `/releases/name=credhub`, so it must come after `uaa.yml` and `credhub.yml`,
+  which append their own uncompiled entries.
+- `docker/use-resolute-rosetta.yml` overrides only the stemcell, on top of
+  `docker/use-resolute.yml`.
+
+Get any of those wrong and nothing complains — you just get the wrong release or
+stemcell in the deployed Director. `tests/run-checks.sh` asserts the resulting
+ops list and stemcell URL for every flavor for exactly that reason.
+
+`docker/unix-sock.yml` bind-mounts the host's Docker socket into the Director so
+the CPI can create sibling containers. Pass `--var docker_tls=...` and
+`-o` your own file instead if you are talking to a remote, TLS-protected daemon.
 
 ## A note on DNS
 
@@ -59,121 +143,30 @@ the local Docker VM's NAT even when TCP and UDP port 53 are dropped. Confirm it
 from inside the Director with `resolvectl status` and `getent hosts bosh.io`
 rather than with `ping`.
 
-Use `docker/dns.yml` and the `dns` value already set in
-`docker/cloud-config.yml`, which both point at `127.0.0.11` — Docker's embedded
-DNS server. It exists in every container's own network namespace and forwards to
-whatever resolvers the Docker host is using, so it works regardless of the
+`create-env` applies `docker/dns.yml`, and `docker/cloud-config.yml` carries the
+matching value for deployed VMs. Both point at `127.0.0.11` — Docker's embedded
+DNS server, which exists in every container's own network namespace and forwards
+to whatever resolvers the Docker host is using, so it works regardless of the
 network the host is on.
 
-## 1. Deploy the Director
+## Verify it: deploy nats
+
+`create-env` stops once the Director is configured. Deploying something is the
+step that proves it works, and it is the same thing CI does:
 
 ```bash
-export DEPLOYMENT_DIR=~/bosh-docker      # holds state.json and creds.yml
-export BOSH_DEPLOYMENT=/path/to/bosh-deployment
-mkdir -p "${DEPLOYMENT_DIR}" && cd "${DEPLOYMENT_DIR}"
+source bosh.env
+bosh stemcells      # note the OS column
 
-bosh create-env "${BOSH_DEPLOYMENT}/bosh.yml" \
-  --state=state.json \
-  --vars-store=creds.yml \
-  -o "${BOSH_DEPLOYMENT}/docker/cpi.yml" \
-  -o "${BOSH_DEPLOYMENT}/uaa.yml" \
-  -o "${BOSH_DEPLOYMENT}/credhub.yml" \
-  -o "${BOSH_DEPLOYMENT}/docker/unix-sock.yml" \
-  -o "${BOSH_DEPLOYMENT}/docker/dns.yml" \
-  -o "${BOSH_DEPLOYMENT}/jumpbox-user.yml" \
-  -v director_name=bosh-docker \
-  -v internal_cidr=10.245.0.0/24 \
-  -v internal_gw=10.245.0.1 \
-  -v internal_ip=10.245.0.10 \
-  -v docker_host="unix:///var/run/docker.sock" \
-  -v network=bosh-net
-```
-
-`uaa.yml` and `credhub.yml` are not optional here: both `ci/assets/nats.yml` and
-`runtime-configs/dns.yml` declare a `variables:` block, and the Director can only
-generate those credentials with a config server. Without them the Director comes
-up reporting `config_server: disabled` and the deploy in step 6 fails to resolve
-`((nats_password))`.
-
-`docker/unix-sock.yml` bind-mounts the host's Docker socket into the Director so
-the CPI can create sibling containers. Drop it and pass `-v docker_tls=...`
-instead if you are talking to a remote, TLS-protected daemon.
-
-Ops-file order matters if you also use one of the `misc/use-compiled-*-releases.yml`
-files: those replace `/releases/name=uaa` and `/releases/name=credhub`, so they
-must come *after* `uaa.yml` and `credhub.yml`, which append their own
-uncompiled entries.
-
-`create-env` writes its progress to `/dev/tty`, so it emits **nothing** when you
-redirect it to a file or a pipe. Pass `--tty` (or set `BOSH_TTY=true`) whenever
-you capture the output — otherwise a long run looks identical to a hung one.
-
-## 2. Target the Director
-
-```bash
-bosh int creds.yml --path /director_ssl/ca > ca.crt
-
-export BOSH_ENVIRONMENT=10.245.0.10
-export BOSH_CA_CERT="${PWD}/ca.crt"
-export BOSH_CLIENT=admin
-export BOSH_CLIENT_SECRET="$(bosh int creds.yml --path /admin_password)"
-
-bosh env
-```
-
-`bosh env` should report `config_server: enabled`. If it says `disabled`, go back
-to step 1 and add `uaa.yml` and `credhub.yml`.
-
-## 3. Upload the cloud config
-
-```bash
-bosh -n update-cloud-config "${BOSH_DEPLOYMENT}/docker/cloud-config.yml" \
-  -v network=bosh-net
-
-bosh cloud-config     # verify
-```
-
-`-v network=bosh-net` is required. `docker/cloud-config.yml` uses `((network))`
-for the subnet's `cloud_properties.name`, and the Director stores cloud configs
-verbatim — omit the var and it uploads the literal string `((network))`, after
-which every `create_vm` fails looking for a Docker network by that name. The
-verification step above is worth doing: the broken config is only visible as the
-unresolved `((network))` in the output.
-
-## 4. Upload a stemcell
-
-```bash
-bosh upload-stemcell \
-  https://storage.googleapis.com/bosh-core-stemcells/1.484/bosh-stemcell-1.484-warden-boshlite-ubuntu-noble.tgz
-
-bosh stemcells
-```
-
-Use the same version referenced by `docker/cpi.yml`, or your own locally built
-warden stemcell. Note the `OS` column — step 6 needs it.
-
-## 5. Upload the bosh-dns runtime config
-
-```bash
-bosh -n update-runtime-config "${BOSH_DEPLOYMENT}/runtime-configs/dns.yml"
-```
-
-On Noble and Resolute stemcells this addon sets `configure_systemd_resolved: true`
-and `disable_recursors: true`, so bosh-dns answers only for BOSH domains and
-leaves everything else to systemd-resolved — which is exactly why the `127.0.0.11`
-value from step 3 has to be right for deployed VMs too.
-
-## 6. Deploy nats
-
-```bash
-bosh -n -d nats deploy "${BOSH_DEPLOYMENT}/ci/assets/nats.yml" \
+bosh -n -d nats deploy /path/to/bosh-deployment/ci/assets/nats.yml \
   -v stemcell_os=ubuntu-noble
 
 bosh -d nats instances --ps
 bosh -n -d nats run-errand smoke-tests
 ```
 
-`stemcell_os` must match the `OS` of the stemcell uploaded in step 4.
+`stemcell_os` must match the `OS` of the uploaded stemcell — `ubuntu-resolute`
+if you used `--resolute`.
 
 A healthy result looks like this — two `nats` instances, each running `bosh-dns`,
 `bosh-dns-healthcheck`, `nats-tls-healthcheck` and `nats-tls-wrapper`:
@@ -189,6 +182,22 @@ nats/50084029-f03c-4784-a0e0-84eaeb5ba815  -                     running        
 
 and the errand exits `0` with `Detected no non-TLS hosts` on stderr, which is
 expected — this deployment only runs the TLS leg of the smoke tests.
+
+## What CI covers, and what it does not
+
+`tests/run-checks.sh` runs on every commit in a plain container with no Docker
+daemon, so it covers `create-env` statically: shellcheck, `--help`, the
+`--dry-run` ops list for each flavor on both `uname` branches, and the stemcell
+URL each flavor resolves to.
+
+The end-to-end coverage is the `test-docker` job, which is privileged and does
+stand up a real Director — but it sources `start-bosh` from the
+`bosh-docker-cpi` image rather than running this script, because that image
+handles nested-container specifics `create-env` does not. So **CI exercises the
+ops files and the manifest, not `docker/create-env` itself.** That gap is
+deliberate for now: `create-env` in a privileged Concourse container is a
+materially different environment from a laptop, and making it work there is its
+own piece of work.
 
 ## Troubleshooting
 
