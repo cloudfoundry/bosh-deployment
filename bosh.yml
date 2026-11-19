@@ -144,9 +144,9 @@ networks:
   type: manual
 releases:
 - name: bosh
-  sha1: 68f1f0d85b4e7c2a8e3ff72e990df16c12cb3d88
-  url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-283.1.21-ubuntu-noble-1.688.tgz
-  version: 283.1.21
+  sha1: d0c03bc9b6cc1f7e98d0cf57de06d138e1e3d59c
+  url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bosh-283.1.22-ubuntu-noble-1.688.tgz
+  version: 283.1.22
 - name: bpm
   sha1: 7bb29010f61488c7eb1d587c07a3525bc004f6e1
   url: https://bosh-compiled-release-tarballs.s3.amazonaws.com/bpm-1.4.45-ubuntu-noble-1.688.tgz
